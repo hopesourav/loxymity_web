@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
 const SUPABASE_URL = 'https://szsipgfrxvvkgqtpwhso.supabase.co';
-const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN6c2lwZ2ZyeHZ2a2dxdHB3aHNvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzcxNDYsImV4cCI6MjA5MzMxMzE0Nn0.wVB1R1dsx5hbuXvuCYbgKdPDofiQApdVNeRpSIaFQrY';
 
 // Simple admin password — gate only, not a security boundary.
 // Real security is enforced by Supabase RLS on the server.
@@ -59,7 +59,7 @@ export default function AdminPage() {
   const mapRef = useRef<HTMLDivElement>(null);
   const leafletMapRef = useRef<unknown>(null);
 
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const supabase = useRef(createClient(SUPABASE_URL, SUPABASE_ANON_KEY)).current;
 
   function handleGate() {
     if (password === ADMIN_PASSWORD) {
