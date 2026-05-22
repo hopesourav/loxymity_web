@@ -9,6 +9,7 @@ export default function Home() {
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
             <a href="#features" className="hover:text-primary transition-colors">Features</a>
             <a href="#how-it-works" className="hover:text-primary transition-colors">How it works</a>
+            <a href="#pricing" className="hover:text-primary transition-colors">Pricing</a>
             <a href="#privacy" className="hover:text-primary transition-colors">Privacy</a>
           </div>
           <a
@@ -33,7 +34,7 @@ export default function Home() {
           </h1>
           <p className="text-xl text-gray-500 max-w-xl mx-auto mb-10 leading-relaxed">
             Loxymity keeps families and close friends connected through private,
-            real-time location sharing — no constant texting required.
+            real-time location sharing — plus iBeacon tokens and geo-fencing for the whole network.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center" id="download">
             <a
@@ -57,7 +58,6 @@ export default function Home() {
         <div className="mt-16 max-w-sm mx-auto">
           <div className="bg-gray-900 rounded-[3rem] p-3 shadow-2xl shadow-indigo-200">
             <div className="bg-gradient-to-br from-indigo-500 to-primary rounded-[2.4rem] h-[480px] flex flex-col items-center justify-center gap-4 relative overflow-hidden">
-              {/* Map pins simulation */}
               <div className="absolute inset-0 opacity-20">
                 {[...Array(8)].map((_, i) => (
                   <div
@@ -132,9 +132,26 @@ export default function Home() {
                 desc: 'Circle owners approve every join request. No one gets in without permission.',
               },
               {
+                icon: '📡',
+                title: 'iBeacon tokens',
+                desc: 'Attach a Loxymity iBeacon to anything valuable. Any nearby app user automatically reports its GPS location back to you.',
+                badge: 'Pro',
+              },
+              {
+                icon: '🗺️',
+                title: 'Geo-fencing',
+                desc: 'Draw virtual boundaries anywhere on the map. Get instant alerts when a person or beacon enters or exits the zone.',
+                badge: 'Pro',
+              },
+              {
                 icon: '🔔',
                 title: 'Arrival alerts',
                 desc: 'Get notified when someone arrives at or leaves a location. Stay in the loop effortlessly.',
+              },
+              {
+                icon: '⭐',
+                title: 'Pro subscription',
+                desc: 'Unlock unlimited circles, beacon tokens, geofences, and extended location history with a single Pro plan.',
               },
               {
                 icon: '🔒',
@@ -147,7 +164,12 @@ export default function Home() {
                 desc: 'Smart location updates that balance accuracy with battery life, so it runs all day.',
               },
             ].map((f) => (
-              <div key={f.title} className="bg-gray-50 rounded-2xl p-7 hover:bg-indigo-50 transition-colors group">
+              <div key={f.title} className="bg-gray-50 rounded-2xl p-7 hover:bg-indigo-50 transition-colors group relative">
+                {f.badge && (
+                  <span className="absolute top-4 right-4 bg-amber-100 text-amber-700 text-xs font-bold px-2 py-0.5 rounded-full">
+                    {f.badge}
+                  </span>
+                )}
                 <div className="text-3xl mb-4">{f.icon}</div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">{f.title}</h3>
                 <p className="text-gray-500 text-sm leading-relaxed">{f.desc}</p>
@@ -157,8 +179,50 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── iBeacon highlight ───────────────────────────────────────────── */}
+      <section className="py-24 px-6 bg-indigo-50/50">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-16 items-center">
+          <div className="flex-1">
+            <div className="inline-flex items-center gap-2 bg-indigo-100 text-primary text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
+              <span className="w-2 h-2 bg-primary rounded-full" />
+              New — iBeacon tokens
+            </div>
+            <h2 className="text-4xl font-black text-gray-900 mb-6">
+              Never lose what matters
+            </h2>
+            <p className="text-gray-500 text-lg mb-8 leading-relaxed">
+              Loxymity iBeacon tokens use your Loxymity UUID so any app user within range
+              automatically crowdsources its location — no GPS in the token required.
+              Attach one to a bag, bike, or car and see it move on your map.
+            </p>
+            <div className="flex flex-col gap-4">
+              {[
+                { icon: '📡', text: 'UUID E2C56DB5 — unique to the Loxymity network' },
+                { icon: '👥', text: 'Crowd-sourced — every Loxymity user nearby reports it' },
+                { icon: '🗺️', text: 'Last-seen location visible on your map instantly' },
+                { icon: '🛒', text: 'Purchase tokens at loxymity.com (coming soon)' },
+              ].map((item) => (
+                <div key={item.text} className="flex items-center gap-3">
+                  <span className="text-xl">{item.icon}</span>
+                  <p className="text-gray-600 text-sm">{item.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="flex-1 flex justify-center">
+            <div className="relative w-64 h-64">
+              <div className="absolute inset-0 bg-primary rounded-full opacity-10 animate-ping" style={{ animationDuration: '3s' }} />
+              <div className="absolute inset-8 bg-primary rounded-full opacity-20 animate-ping" style={{ animationDuration: '3s', animationDelay: '1s' }} />
+              <div className="absolute inset-16 bg-primary rounded-3xl flex items-center justify-center shadow-xl shadow-indigo-200">
+                <span className="text-5xl">📡</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── How it works ────────────────────────────────────────────────── */}
-      <section id="how-it-works" className="py-24 px-6 bg-indigo-50/50">
+      <section id="how-it-works" className="py-24 px-6 bg-white">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-black text-gray-900 mb-4">Up and running in minutes</h2>
@@ -169,7 +233,7 @@ export default function Home() {
               {
                 step: '01',
                 title: 'Create your account',
-                desc: 'Sign up with email, Google, or a one-time code. No password required if you prefer.',
+                desc: 'Sign up with email or a one-time code. No password required if you prefer.',
               },
               {
                 step: '02',
@@ -190,6 +254,74 @@ export default function Home() {
                 <p className="text-gray-500 text-sm leading-relaxed">{s.desc}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Pricing ─────────────────────────────────────────────────────── */}
+      <section id="pricing" className="py-24 px-6 bg-indigo-50/40">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-black text-gray-900 mb-4">Simple, honest pricing</h2>
+            <p className="text-lg text-gray-500">Start free. Upgrade when you need more.</p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Free */}
+            <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm">
+              <p className="text-sm font-semibold text-gray-500 mb-2">Free</p>
+              <p className="text-5xl font-black text-gray-900 mb-1">$0</p>
+              <p className="text-gray-400 text-sm mb-8">Forever free</p>
+              <ul className="flex flex-col gap-3 mb-8">
+                {[
+                  '1 circle (up to 5 members)',
+                  '1 day location history',
+                  '1 iBeacon token',
+                  '2 geofences',
+                  'Real-time map',
+                  'QR invite codes',
+                ].map((f) => (
+                  <li key={f} className="flex items-center gap-3 text-sm text-gray-600">
+                    <CheckIcon />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <a
+                href="#download"
+                className="block text-center bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold px-6 py-3 rounded-xl transition-colors"
+              >
+                Get started free
+              </a>
+            </div>
+            {/* Pro */}
+            <div className="bg-primary rounded-3xl p-8 shadow-xl shadow-indigo-200 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+              <p className="text-sm font-semibold text-indigo-200 mb-2">Pro</p>
+              <p className="text-5xl font-black text-white mb-1">$4.99</p>
+              <p className="text-indigo-300 text-sm mb-8">per month</p>
+              <ul className="flex flex-col gap-3 mb-8">
+                {[
+                  'Unlimited circles',
+                  'Unlimited members per circle',
+                  '30 days location history',
+                  '20 iBeacon tokens',
+                  '50 geofences',
+                  'Priority support',
+                  'Pro badge on your profile',
+                ].map((f) => (
+                  <li key={f} className="flex items-center gap-3 text-sm text-white">
+                    <CheckIcon white />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <a
+                href="#download"
+                className="block text-center bg-white hover:bg-indigo-50 text-primary font-bold px-6 py-3 rounded-xl transition-colors"
+              >
+                Upgrade to Pro
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -266,6 +398,7 @@ export default function Home() {
             <a href="/privacy" className="hover:text-white transition-colors">Privacy Policy</a>
             <a href="/terms" className="hover:text-white transition-colors">Terms of Service</a>
             <a href="mailto:hello@loxymity.com" className="hover:text-white transition-colors">Contact</a>
+            <a href="/admin" className="hover:text-white transition-colors text-gray-600">Admin</a>
           </div>
         </div>
       </footer>
@@ -287,5 +420,15 @@ function PlayIcon() {
     <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
       <path d="M3.18 23.82a2 2 0 001.76-.22l12.89-7.44-3.53-3.53-11.12 11.19zM20.83 9.58L17.96 7.9 14.1 11.76l3.87 3.87 2.89-1.67a2 2 0 000-4.38zM.46.4A2 2 0 000 1.74v20.52a2 2 0 00.46 1.34L.54 23.6l11.5-11.5v-.27L.54.4zM14.1 12.24L2.6.74l-.06.06 11.5 11.5.06-.06z" />
     </svg>
+  );
+}
+
+function CheckIcon({ white }: { white?: boolean }) {
+  return (
+    <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 ${white ? 'bg-white/20' : 'bg-indigo-100'}`}>
+      <svg className={`w-3 h-3 ${white ? 'text-white' : 'text-primary'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+      </svg>
+    </div>
   );
 }
