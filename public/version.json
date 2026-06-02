@@ -1,6 +1,6 @@
 {
-  "latest_version": "0.4.1",
+  "latest_version": "0.5.0",
   "mandatory_min_version": "0.4.1",
-  "release_notes": "Reliability fixes: token refresh deduplication, boot recovery, session persistence",
-  "download_url": "https://loxymity.com/Loxymity_v0106.apk"
+  "release_notes": "New Activity timeline, SOS countdown, UI refresh",
+  "download_url": "https://drive.google.com/file/d/10xecav3iCWFNRUeeivSPfyZgW9v2Wjv3/view?usp=sharing"
 }
