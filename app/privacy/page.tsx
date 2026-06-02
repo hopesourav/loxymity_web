@@ -1,459 +1,240 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy — Loxymity',
-  description:
-    'Loxymity Privacy Policy. Learn how we collect, use, and protect your data.',
+  description: 'How Loxymity collects, uses, and protects your personal data.',
 };
 
 export default function PrivacyPolicy() {
+  const effective = 'May 11, 2026';
+
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="bg-gradient-to-b from-indigo-50/60 to-white border-b border-gray-100">
-        <div className="max-w-3xl mx-auto px-6 py-12">
-          <a
-            href="/"
-            className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary-dark transition-colors mb-8"
-          >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-            Back to Home
-          </a>
-          <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-3">
-            Privacy Policy
-          </h1>
-          <p className="text-gray-500">
-            Last updated: May 2026
-          </p>
-          <p className="text-gray-500 text-sm mt-1">
-            Sawsib Infotech (&ldquo;we&rdquo;, &ldquo;us&rdquo;, &ldquo;our&rdquo;)
-          </p>
+
+      {/* Nav */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+          <Link href="/" className="text-xl font-bold text-indigo-600">Loxymity</Link>
+          <Link href="/" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">← Back to Home</Link>
         </div>
-      </header>
+      </nav>
 
-      {/* Content */}
-      <main className="max-w-3xl mx-auto px-6 py-16">
-        <div className="prose prose-gray max-w-none space-y-12">
-          {/* Introduction */}
-          <section>
-            <p className="text-gray-600 leading-relaxed">
-              Loxymity is a real-time location sharing app for families and close
-              friends, operated by Sawsib Infotech. This Privacy Policy explains
-              what data we collect, how we use it, and your rights regarding that
-              data. By using Loxymity, you agree to the practices described
-              below.
+      <main className="pt-28 pb-24 px-6">
+        <div className="max-w-3xl mx-auto">
+
+          <h1 className="text-4xl font-black text-gray-900 mb-3">Privacy Policy</h1>
+          <p className="text-gray-500 text-sm mb-12">Effective date: {effective}</p>
+
+          <Section title="1. Who we are">
+            <p>
+              Loxymity is operated by <strong>Sawsib Infotech</strong>. References to
+              &ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo; in this policy refer to
+              Sawsib Infotech. You can reach us at{' '}
+              <a href="mailto:privacy@loxymity.com" className="text-indigo-600 underline">
+                privacy@loxymity.com
+              </a>.
             </p>
-          </section>
+          </Section>
 
-          {/* 1. Data We Collect */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              1. Data We Collect
-            </h2>
-
-            <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-2">
-              Location Data
-            </h3>
-            <ul className="list-disc pl-6 space-y-1 text-gray-600">
+          <Section title="2. What data we collect">
+            <ul className="list-disc pl-5 space-y-2">
               <li>
-                GPS coordinates (latitude and longitude) collected in the
-                foreground and background
+                <strong>Location data</strong> — your GPS coordinates, accuracy, speed, heading,
+                battery level, and charging state. Collected continuously in the background when you
+                have enabled location sharing.
               </li>
-              <li>Speed at the time of each location update</li>
-              <li>Battery level at the time of each location update</li>
-              <li>Timestamps associated with each location reading</li>
-            </ul>
-
-            <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-2">
-              Account Information
-            </h3>
-            <ul className="list-disc pl-6 space-y-1 text-gray-600">
-              <li>Email address</li>
-              <li>Display name</li>
-              <li>Profile avatar (if provided)</li>
-            </ul>
-
-            <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-2">
-              Contact Data (Optional)
-            </h3>
-            <ul className="list-disc pl-6 space-y-1 text-gray-600">
               <li>
-                If you choose to sync your contacts, we upload names and phone
-                numbers to suggest circle members. This is entirely optional and
-                requires your explicit permission.
+                <strong>Account data</strong> — your email address and display name, provided when
+                you register.
+              </li>
+              <li>
+                <strong>Device data</strong> — anonymous device identifiers and app version used to
+                diagnose crashes and improve the service.
+              </li>
+              <li>
+                <strong>iBeacon data</strong> — UUID, major, and minor values of Bluetooth iBeacon
+                tokens you register in the app.
+              </li>
+              <li>
+                <strong>Geo-fence data</strong> — names and coordinates of geo-fences you create.
+              </li>
+              <li>
+                <strong>Contact data (optional)</strong> — if you grant contacts permission, we
+                collect names, phone numbers, and email addresses from your device contacts.
+                This data is used solely to suggest people to invite to your circle and, with your
+                consent, for marketing communications. You may revoke this permission at any time in
+                your device settings.
               </li>
             </ul>
+          </Section>
 
-            <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-2">
-              Device Information
-            </h3>
-            <ul className="list-disc pl-6 space-y-1 text-gray-600">
-              <li>Push notification token (for delivering alerts)</li>
-              <li>Device model and operating system version</li>
-              <li>App version</li>
-            </ul>
-
-            <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-2">
-              Crash Reports
-            </h3>
-            <ul className="list-disc pl-6 space-y-1 text-gray-600">
+          <Section title="3. How we use your data">
+            <ul className="list-disc pl-5 space-y-2">
+              <li>To show your location to members of circles you have joined.</li>
+              <li>To send geo-fence entry/exit notifications to your circle.</li>
+              <li>To detect your iBeacon tokens and share their presence with your circle.</li>
+              <li>To improve the reliability and performance of the service.</li>
               <li>
-                Crash logs and diagnostic data collected via Firebase Crashlytics
-                to help us identify and fix bugs
+                To suggest circle invites based on your contacts (only if permission granted).
+              </li>
+              <li>
+                To send relevant product updates to people in your contacts list who may benefit from
+                Loxymity (only if you have granted contact access and only to contacts who have not
+                opted out).
               </li>
             </ul>
-          </section>
+          </Section>
 
-          {/* 2. How We Use Your Data */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              2. How We Use Your Data
-            </h2>
-            <ul className="list-disc pl-6 space-y-2 text-gray-600">
+          <Section title="4. Location data — adaptive collection">
+            <p>
+              Loxymity uses an adaptive algorithm to balance accuracy and battery life:
+            </p>
+            <ul className="list-disc pl-5 space-y-2 mt-3">
               <li>
-                <strong>Location sharing:</strong> Your location is shared in
-                real time with members of the circles you have joined.
+                <strong>Moving</strong> — updates sent every 60 seconds or every 50 metres,
+                whichever comes first.
               </li>
               <li>
-                <strong>Geofence alerts:</strong> We process your location to
-                trigger notifications when you or a circle member enters or
-                exits a geofenced area.
+                <strong>Stationary (5+ minutes)</strong> — reduced frequency; only significant
+                position changes are reported.
               </li>
               <li>
-                <strong>SOS alerts:</strong> When you trigger an SOS, your
-                current location is immediately shared with your circle members.
+                <strong>Battery below 20 %</strong> — switches to low-power mode; only coarse
+                position changes are reported.
               </li>
               <li>
-                <strong>iBeacon tracking:</strong> If you are near a registered
-                Loxymity iBeacon token, your app may report the beacon&apos;s
-                approximate location to its owner.
-              </li>
-              <li>
-                <strong>Push notifications:</strong> We use your device token to
-                deliver arrival/departure alerts, SOS alerts, and circle
-                activity notifications.
-              </li>
-              <li>
-                <strong>App improvement:</strong> Crash reports and aggregated
-                usage data help us improve app stability and performance.
+                <strong>Charging</strong> — full precision maintained regardless of battery level.
               </li>
             </ul>
-          </section>
+            <p className="mt-3">
+              You can turn off location sharing entirely at any time from the Settings screen inside
+              the app.
+            </p>
+          </Section>
 
-          {/* 3. Background Location Tracking */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              3. Background Location Tracking
-            </h2>
-            <p className="text-gray-600 leading-relaxed mb-3">
-              Loxymity uses &ldquo;always-on&rdquo; background location
-              tracking so that your circle members can see your location even
-              when the app is not in the foreground. This is essential for
-              features like geofence alerts, arrival notifications, and SOS.
+          <Section title="5. Data sharing">
+            <p>
+              We do <strong>not</strong> sell your personal data to third parties. We share data
+              only as follows:
             </p>
-            <p className="text-gray-600 leading-relaxed mb-3">
-              We employ battery-adaptive throttling to minimize power
-              consumption. The frequency of location updates adjusts based on
-              your device&apos;s battery level and movement state.
-            </p>
-            <p className="text-gray-600 leading-relaxed">
-              You can pause or stop location sharing at any time from within the
-              app. Pausing immediately stops all location updates from being sent
-              to your circles.
-            </p>
-          </section>
-
-          {/* 4. Data Retention */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              4. Data Retention
-            </h2>
-            <div className="bg-gray-50 rounded-2xl p-6 space-y-4">
-              <div className="flex items-start gap-4">
-                <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
-                <div>
-                  <p className="font-semibold text-gray-900">Latest location</p>
-                  <p className="text-gray-600 text-sm">
-                    Overwritten in real time with each new update. Only the most
-                    recent position is stored.
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
-                <div>
-                  <p className="font-semibold text-gray-900">
-                    Location history (Free plan)
-                  </p>
-                  <p className="text-gray-600 text-sm">
-                    Retained for 24 hours, then automatically deleted.
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
-                <div>
-                  <p className="font-semibold text-gray-900">
-                    Location history (Pro plan)
-                  </p>
-                  <p className="text-gray-600 text-sm">
-                    Retained for up to 30 days, then automatically deleted.
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
-                <div>
-                  <p className="font-semibold text-gray-900">Account data</p>
-                  <p className="text-gray-600 text-sm">
-                    Retained until you delete your account.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* 5. Third-Party Services */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              5. Third-Party Services
-            </h2>
-            <p className="text-gray-600 leading-relaxed mb-4">
-              We use the following third-party services to operate Loxymity:
-            </p>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-gray-200">
-                    <th className="py-3 pr-4 font-semibold text-gray-900">
-                      Service
-                    </th>
-                    <th className="py-3 font-semibold text-gray-900">
-                      Purpose
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="text-gray-600">
-                  <tr className="border-b border-gray-100">
-                    <td className="py-3 pr-4">Supabase</td>
-                    <td className="py-3">
-                      Backend database, authentication, and real-time data sync
-                    </td>
-                  </tr>
-                  <tr className="border-b border-gray-100">
-                    <td className="py-3 pr-4">Firebase Crashlytics</td>
-                    <td className="py-3">Crash reporting and diagnostics</td>
-                  </tr>
-                  <tr className="border-b border-gray-100">
-                    <td className="py-3 pr-4">RevenueCat</td>
-                    <td className="py-3">
-                      Subscription and in-app purchase management
-                    </td>
-                  </tr>
-                  <tr className="border-b border-gray-100">
-                    <td className="py-3 pr-4">Expo Push Notifications</td>
-                    <td className="py-3">Delivering push notifications</td>
-                  </tr>
-                  <tr>
-                    <td className="py-3 pr-4">Google Maps</td>
-                    <td className="py-3">
-                      Map rendering and directions
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <p className="text-gray-600 text-sm mt-4 leading-relaxed">
-              Each of these services has its own privacy policy. We encourage you
-              to review them. We do not sell your personal data to any third
-              party.
-            </p>
-          </section>
-
-          {/* 6. Data Security */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              6. Data Security
-            </h2>
-            <ul className="list-disc pl-6 space-y-2 text-gray-600">
+            <ul className="list-disc pl-5 space-y-2 mt-3">
               <li>
-                All data is transmitted over HTTPS/TLS encrypted connections.
+                <strong>Your circle members</strong> — can see your real-time location and
+                geo-fence events as long as you are sharing.
               </li>
               <li>
-                Database access is protected by Row Level Security (RLS)
-                policies, ensuring users can only access data they are authorized
-                to see.
+                <strong>Supabase</strong> — our database provider stores your data in the EU /
+                US. Supabase processes data under a Data Processing Agreement that meets GDPR
+                requirements.
               </li>
               <li>
-                Sensitive tokens and credentials on-device are stored using
-                Expo SecureStore (encrypted local storage).
+                <strong>RevenueCat</strong> — processes in-app purchase information to validate
+                your subscription. RevenueCat does not receive location data.
               </li>
               <li>
-                No service-role or admin database keys are included in the
-                client application.
+                <strong>Law enforcement</strong> — we may disclose data where required by a court
+                order or applicable law.
               </li>
             </ul>
-          </section>
+          </Section>
 
-          {/* 7. Contact Sync */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              7. Contact Sync
-            </h2>
-            <p className="text-gray-600 leading-relaxed">
-              Loxymity offers an optional contact sync feature. If you grant
-              permission, we upload contact names and phone numbers to our
-              servers solely to suggest circle members who are already using
-              Loxymity. Contact data is not used for marketing, advertising, or
-              any other purpose. You can revoke this permission at any time
-              through your device settings.
-            </p>
-          </section>
-
-          {/* 8. Account Deletion */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              8. Account Deletion
-            </h2>
-            <p className="text-gray-600 leading-relaxed">
-              You can delete your account at any time from within the app
-              (Settings &rarr; Account &rarr; Delete Account). Upon deletion,
-              all of your data is permanently removed from our systems,
-              including your profile, location history, circle memberships, and
-              any uploaded contact data. This action is irreversible.
-            </p>
-          </section>
-
-          {/* 9. Your Rights */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              9. Your Rights
-            </h2>
-            <p className="text-gray-600 leading-relaxed mb-3">
-              Depending on your jurisdiction, you may have the following rights
-              regarding your personal data:
-            </p>
-            <ul className="list-disc pl-6 space-y-2 text-gray-600">
+          <Section title="6. Data retention">
+            <ul className="list-disc pl-5 space-y-2">
               <li>
-                <strong>Access:</strong> Request a copy of the personal data we
-                hold about you.
+                <strong>Latest location</strong> — overwritten on every update; only the most
+                recent position is stored.
               </li>
               <li>
-                <strong>Correction:</strong> Request correction of inaccurate or
-                incomplete data.
+                <strong>Location history</strong> — retained for up to 30 days (Pro subscribers)
+                or 7 days (Free), then automatically deleted.
               </li>
               <li>
-                <strong>Deletion:</strong> Request deletion of your personal
-                data (also available via self-serve account deletion).
+                <strong>Contacts</strong> — retained until you delete your account or revoke
+                contacts permission.
               </li>
               <li>
-                <strong>Data portability:</strong> Request your data in a
-                structured, commonly used format.
-              </li>
-              <li>
-                <strong>Withdraw consent:</strong> Withdraw consent for data
-                processing at any time, where consent is the legal basis.
-              </li>
-            </ul>
-            <p className="text-gray-600 leading-relaxed mt-3">
-              To exercise any of these rights, contact us at{' '}
-              <a
-                href="mailto:support@loxymity.com"
-                className="text-primary hover:text-primary-dark font-medium"
-              >
-                support@loxymity.com
-              </a>
-              .
-            </p>
-          </section>
-
-          {/* 10. Children's Privacy */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              10. Children&apos;s Privacy
-            </h2>
-            <p className="text-gray-600 leading-relaxed">
-              Loxymity is designed for family use, including the ability for
-              parents to track their children&apos;s locations. Accounts for
-              children under 13 should be created and managed by a parent or
-              guardian. We do not knowingly collect personal information from
-              children under 13 without parental consent.
-            </p>
-          </section>
-
-          {/* 11. Changes to This Policy */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              11. Changes to This Policy
-            </h2>
-            <p className="text-gray-600 leading-relaxed">
-              We may update this Privacy Policy from time to time. When we make
-              material changes, we will notify you through the app or by email.
-              The &ldquo;Last updated&rdquo; date at the top of this page
-              reflects the most recent revision.
-            </p>
-          </section>
-
-          {/* 12. Contact */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              12. Contact Us
-            </h2>
-            <p className="text-gray-600 leading-relaxed">
-              If you have any questions or concerns about this Privacy Policy or
-              our data practices, please contact us:
-            </p>
-            <div className="bg-gray-50 rounded-2xl p-6 mt-4">
-              <p className="font-semibold text-gray-900">Sawsib Infotech</p>
-              <p className="text-gray-600 mt-1">
-                Email:{' '}
-                <a
-                  href="mailto:support@loxymity.com"
-                  className="text-primary hover:text-primary-dark font-medium"
-                >
+                <strong>Account data</strong> — retained until you delete your account. Account
+                deletion requests can be sent to{' '}
+                <a href="mailto:support@loxymity.com" className="text-indigo-600 underline">
                   support@loxymity.com
                 </a>
-              </p>
-              <p className="text-gray-600 mt-1">
-                Website:{' '}
-                <a
-                  href="https://loxymity.com"
-                  className="text-primary hover:text-primary-dark font-medium"
-                >
-                  loxymity.com
-                </a>
-              </p>
-            </div>
-          </section>
+                ; data is removed within 30 days.
+              </li>
+            </ul>
+          </Section>
+
+          <Section title="7. Security">
+            <p>
+              All data is encrypted in transit (TLS 1.2+) and at rest. Authentication tokens are
+              stored in your device&apos;s secure keychain / keystore — never in plain storage.
+              We use row-level security on our database so each user can only access their own data
+              and data shared within circles they belong to.
+            </p>
+          </Section>
+
+          <Section title="8. Children">
+            <p>
+              Loxymity is not directed at children under 13 (or under 16 in the EU). We do not
+              knowingly collect personal information from children. If you believe a child has
+              provided us with personal data, please contact us and we will delete it promptly.
+            </p>
+          </Section>
+
+          <Section title="9. Your rights">
+            <p>
+              Depending on your jurisdiction, you may have the right to access, correct, delete, or
+              port your personal data, and to object to or restrict certain processing. To exercise
+              any of these rights, contact us at{' '}
+              <a href="mailto:privacy@loxymity.com" className="text-indigo-600 underline">
+                privacy@loxymity.com
+              </a>.
+            </p>
+          </Section>
+
+          <Section title="10. Changes to this policy">
+            <p>
+              We may update this policy from time to time. When we do, we will update the effective
+              date above and, where the changes are material, notify you via email or an in-app
+              notice.
+            </p>
+          </Section>
+
+          <Section title="11. Contact us">
+            <p>
+              Questions about this policy? Email{' '}
+              <a href="mailto:privacy@loxymity.com" className="text-indigo-600 underline">
+                privacy@loxymity.com
+              </a>{' '}
+              or write to: Sawsib Infotech, privacy@loxymity.com.
+            </p>
+          </Section>
+
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="py-8 px-6 border-t border-gray-100">
-        <div className="max-w-3xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
-          <p>&copy; {new Date().getFullYear()} Sawsib Infotech. All rights reserved.</p>
-          <div className="flex gap-6">
-            <a href="/terms" className="hover:text-gray-600 transition-colors">
-              Terms of Service
-            </a>
-            <a href="/" className="hover:text-gray-600 transition-colors">
-              Home
-            </a>
+      <footer className="py-10 px-6 bg-gray-950 text-gray-400">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+          <div>
+            <p className="text-white font-bold text-lg">Loxymity</p>
+            <p className="text-sm mt-1">© {new Date().getFullYear()} Sawsib Infotech. All rights reserved.</p>
+          </div>
+          <div className="flex gap-6 text-sm">
+            <Link href="/privacy" className="text-white">Privacy Policy</Link>
+            <a href="mailto:hello@loxymity.com" className="hover:text-white transition-colors">Contact</a>
           </div>
         </div>
       </footer>
+
     </div>
+  );
+}
+
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section className="mb-10">
+      <h2 className="text-xl font-bold text-gray-900 mb-3">{title}</h2>
+      <div className="text-gray-600 leading-relaxed space-y-2">{children}</div>
+    </section>
   );
 }
