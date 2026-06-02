@@ -1,0 +1,6 @@
+{
+  "latest_version": "0.4.1",
+  "mandatory_min_version": "0.4.1",
+  "release_notes": "Reliability fixes: token refresh deduplication, boot recovery, session persistence",
+  "download_url": "https://loxymity.com/Loxymity_v0106.apk"
+}
