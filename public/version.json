@@ -1,6 +1,6 @@
 {
-  "latest_version": "0.5.6",
-  "mandatory_min_version": "0.5.6",
-  "release_notes": "Background token refresh timeout fix, geofence notification dedup, activity query improvements",
-  "download_url": "https://drive.google.com/file/d/1hAgB6BI4AoxpW7CsBUK-axV1yfcxqN3B/view?usp=sharing"
+  "latest_version": "0.5.7",
+  "mandatory_min_version": "0.5.7",
+  "release_notes": "JWT background auth fix, UI strip removed from Family/Activity/Places tabs",
+  "download_url": "https://drive.google.com/file/d/1wBkEG0DUCFRJoPzIm3X2GEK4Ddvh8wwB/view?usp=sharing"
 }
