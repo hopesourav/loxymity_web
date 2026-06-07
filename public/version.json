@@ -1,6 +1,6 @@
 {
-  "latest_version": "0.5.7",
-  "mandatory_min_version": "0.5.7",
+  "latest_version": "0.6.0",
+  "mandatory_min_version": "0.6.0",
   "release_notes": "JWT background auth fix, UI strip removed from Family/Activity/Places tabs",
-  "download_url": "https://drive.google.com/file/d/1wBkEG0DUCFRJoPzIm3X2GEK4Ddvh8wwB/view?usp=sharing"
+  "download_url": "https://drive.google.com/file/d/1_nhphyyxVXaF4xhdLe9GLj9jRZ7HNznP/view?usp=sharing"
 }
