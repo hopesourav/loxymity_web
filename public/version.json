@@ -1,6 +1,6 @@
 {
-  "latest_version": "0.6.0",
-  "mandatory_min_version": "0.6.0",
-  "release_notes": "JWT background auth fix, UI strip removed from Family/Activity/Places tabs",
-  "download_url": "https://drive.google.com/file/d/1_nhphyyxVXaF4xhdLe9GLj9jRZ7HNznP/view?usp=sharing"
+  "latest_version": "0.6.1",
+  "mandatory_min_version": "0.6.1",
+  "release_notes": "Last active on phone, Doze idle indicator, daily step count",
+  "download_url": "https://drive.google.com/file/d/1dmB5KPtiQmBIXVuarD5Vwq4bKgrLJ0JT/view?usp=sharing"
 }
