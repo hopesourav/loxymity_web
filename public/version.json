@@ -1,6 +1,6 @@
 {
-  "latest_version": "0.6.1",
+  "latest_version": "0.6.2",
   "mandatory_min_version": "0.6.1",
-  "release_notes": "Last active on phone, Doze idle indicator, daily step count",
+  "release_notes": "Geofence improvements, location refresh retry, extended history retention",
   "download_url": "https://drive.google.com/file/d/1dmB5KPtiQmBIXVuarD5Vwq4bKgrLJ0JT/view?usp=sharing"
 }
