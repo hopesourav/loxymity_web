@@ -1,12 +1,6 @@
 {
-<<<<<<< HEAD
-  "latest_version": "0.6.2",
+  "latest_version": "0.7.4",
   "mandatory_min_version": "0.6.1",
-  "release_notes": "Geofence improvements, location refresh retry, extended history retention",
-=======
-  "latest_version": "0.6.1",
-  "mandatory_min_version": "0.6.1",
-  "release_notes": "Last active on phone, Doze idle indicator, daily step count",
->>>>>>> 7d577722999c92e52475940f7b40be1ce02e5f92
-  "download_url": "https://drive.google.com/file/d/1dmB5KPtiQmBIXVuarD5Vwq4bKgrLJ0JT/view?usp=sharing"
+  "release_notes": "Calling fixed (Agora token auth), duplicate call session guard, bg mode-switch dedup",
+  "download_url": ""
 }
