@@ -1,5 +1,5 @@
 {
-  "latest_version": "0.7.4",
+  "latest_version": "0.7.5",
   "mandatory_min_version": "0.6.1",
   "release_notes": "Calling fixed (Agora token auth), duplicate call session guard, bg mode-switch dedup",
   "download_url": ""
