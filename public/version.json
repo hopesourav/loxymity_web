@@ -1,6 +1,13 @@
 {
+<<<<<<< HEAD
   "latest_version": "0.7.5",
   "mandatory_min_version": "0.6.1",
   "release_notes": "Calling fixed (Agora token auth), duplicate call session guard, bg mode-switch dedup",
   "download_url": ""
+=======
+  "latest_version": "0.6.2",
+  "mandatory_min_version": "0.6.2",
+  "release_notes": "Last active on phone, Doze idle indicator, daily step count",
+  "download_url": "https://drive.google.com/file/d/1K1Y_RGDT2lhkeK5ldpx0dN6SB9Gn8ZRf/view?usp=sharing"
+>>>>>>> 480d357f8ee9e8564c8db6358188bce3a6ee9d96
 }
