@@ -8,6 +8,7 @@ export default function Home() {
           <span className="text-xl font-bold text-primary">Loxymity</span>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
             <a href="#features" className="hover:text-primary transition-colors">Features</a>
+            <a href="#safety" className="hover:text-primary transition-colors">Safety</a>
             <a href="#how-it-works" className="hover:text-primary transition-colors">How it works</a>
             <a href="#pricing" className="hover:text-primary transition-colors">Pricing</a>
             <a href="#privacy" className="hover:text-primary transition-colors">Privacy</a>
@@ -34,7 +35,8 @@ export default function Home() {
           </h1>
           <p className="text-xl text-gray-500 max-w-xl mx-auto mb-10 leading-relaxed">
             Loxymity keeps families and close friends connected through private,
-            real-time location sharing — plus iBeacon tokens and geo-fencing for the whole network.
+            real-time location sharing — with safety check-ins, emergency SOS,
+            iBeacon tracking, and geo-fencing for total peace of mind.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center" id="download">
             <a
@@ -132,6 +134,21 @@ export default function Home() {
                 desc: 'Circle owners approve every join request. No one gets in without permission.',
               },
               {
+                icon: '📋',
+                title: 'Activity feed',
+                desc: 'A live event log for your circle — who arrived where, safety check-ins, motion alerts, and emergency events, all in one place.',
+              },
+              {
+                icon: '🆘',
+                title: 'SOS emergency',
+                desc: 'One tap sends an emergency alert with your exact location to every member of your circle, instantly.',
+              },
+              {
+                icon: '🛡️',
+                title: 'Safety check-in',
+                desc: "Mark yourself safe with a single tap. Your circle sees your status update immediately — no texts needed.",
+              },
+              {
                 icon: '📡',
                 title: 'iBeacon tokens',
                 desc: 'Attach a Loxymity iBeacon to anything valuable. Any nearby app user automatically reports its GPS location back to you.',
@@ -140,28 +157,31 @@ export default function Home() {
               {
                 icon: '🗺️',
                 title: 'Geo-fencing',
-                desc: 'Draw virtual boundaries anywhere on the map. Get instant alerts when a person or beacon enters or exits the zone.',
+                desc: 'Draw virtual boundaries anywhere on the map. Set a dwell time so alerts only fire when someone actually stays inside.',
                 badge: 'Pro',
               },
               {
                 icon: '🔔',
-                title: 'Arrival alerts',
-                desc: 'Get notified when someone arrives at or leaves a location. Stay in the loop effortlessly.',
+                title: 'Arrival & departure alerts',
+                desc: 'Get notified when someone arrives at or leaves a location — school, home, work, or any custom zone you create.',
+                badge: 'Pro',
               },
               {
-                icon: '⭐',
-                title: 'Pro subscription',
-                desc: 'Unlock unlimited circles, beacon tokens, geofences, and extended location history with a single Pro plan.',
+                icon: '📞',
+                title: 'In-app voice & video',
+                desc: 'Call any circle member directly inside the app. No phone number required — just tap their name and connect.',
+                badge: 'Pro',
               },
               {
-                icon: '🔒',
-                title: 'You control your data',
-                desc: "Pause sharing anytime. Your location is only visible to circles you've joined.",
+                icon: '🔋',
+                title: 'Member battery status',
+                desc: "See each member's battery level on the map — know when someone's phone is about to die before they go dark.",
+                badge: 'Pro',
               },
               {
                 icon: '⚡',
                 title: 'Battery friendly',
-                desc: 'Smart location updates that balance accuracy with battery life, so it runs all day.',
+                desc: 'Smart adaptive tracking balances accuracy with battery life — slows down when you\'re stationary, speeds up when you\'re moving.',
               },
             ].map((f) => (
               <div key={f.title} className="bg-gray-50 rounded-2xl p-7 hover:bg-indigo-50 transition-colors group relative">
@@ -185,22 +205,22 @@ export default function Home() {
           <div className="flex-1">
             <div className="inline-flex items-center gap-2 bg-indigo-100 text-primary text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
               <span className="w-2 h-2 bg-primary rounded-full" />
-              New — iBeacon tokens
+              iBeacon tokens
             </div>
             <h2 className="text-4xl font-black text-gray-900 mb-6">
               Never lose what matters
             </h2>
             <p className="text-gray-500 text-lg mb-8 leading-relaxed">
-              Loxymity iBeacon tokens use your Loxymity UUID so any app user within range
+              Loxymity iBeacon tokens use a unique UUID so any app user within range
               automatically crowdsources its location — no GPS in the token required.
               Attach one to a bag, bike, or car and see it move on your map.
             </p>
             <div className="flex flex-col gap-4">
               {[
-                { icon: '📡', text: 'UUID E2C56DB5 — unique to the Loxymity network' },
-                { icon: '👥', text: 'Crowd-sourced — every Loxymity user nearby reports it' },
-                { icon: '🗺️', text: 'Last-seen location visible on your map instantly' },
-                { icon: '🛒', text: 'Purchase tokens at loxymity.com (coming soon)' },
+                { icon: '📡', text: 'Unique UUID — registered exclusively to the Loxymity network' },
+                { icon: '👥', text: 'Crowd-sourced — every nearby Loxymity user reports it silently' },
+                { icon: '🗺️', text: 'Last-seen location and time visible on your map instantly' },
+                { icon: '🔔', text: 'Set a geofence around a token to get alerted if it moves' },
               ].map((item) => (
                 <div key={item.text} className="flex items-center gap-3">
                   <span className="text-xl">{item.icon}</span>
@@ -221,8 +241,55 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Safety & Emergency ──────────────────────────────────────────── */}
+      <section id="safety" className="py-24 px-6 bg-white">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 bg-red-100 text-red-600 text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
+              <span className="w-2 h-2 bg-red-500 rounded-full" />
+              Safety & emergency
+            </div>
+            <h2 className="text-4xl font-black text-gray-900 mb-4">There when it counts most</h2>
+            <p className="text-lg text-gray-500 max-w-xl mx-auto">
+              Loxymity has a full safety layer built in — not bolted on.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: '🆘',
+                color: 'bg-red-50',
+                accent: 'text-red-600',
+                title: 'One-tap SOS',
+                desc: 'Press the SOS button in an emergency. Every circle member receives an immediate push notification with your exact GPS coordinates — no typing, no calling.',
+              },
+              {
+                icon: '🛡️',
+                color: 'bg-green-50',
+                accent: 'text-green-600',
+                title: 'Safety check-in',
+                desc: "Arrived safely? Tap once to mark yourself safe. Your circle sees the update instantly, with a timestamp — no anxious group texts needed.",
+              },
+              {
+                icon: '📋',
+                color: 'bg-blue-50',
+                accent: 'text-blue-600',
+                title: 'Activity feed',
+                desc: 'A chronological log of every geofence crossing, safety check-in, motion event, and SOS alert in your circle. Catch up on anything you missed.',
+              },
+            ].map((item) => (
+              <div key={item.title} className={`${item.color} rounded-2xl p-8`}>
+                <div className="text-4xl mb-5">{item.icon}</div>
+                <h3 className={`text-xl font-bold mb-3 ${item.accent}`}>{item.title}</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── How it works ────────────────────────────────────────────────── */}
-      <section id="how-it-works" className="py-24 px-6 bg-white">
+      <section id="how-it-works" className="py-24 px-6 bg-indigo-50/40">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-black text-gray-900 mb-4">Up and running in minutes</h2>
@@ -233,17 +300,17 @@ export default function Home() {
               {
                 step: '01',
                 title: 'Create your account',
-                desc: 'Sign up with email or a one-time code. No password required if you prefer.',
+                desc: 'Sign up with your email address. We send a one-time verification code — no password to remember.',
               },
               {
                 step: '02',
                 title: 'Start or join a circle',
-                desc: 'Create a circle and share the invite code or QR with the people you trust.',
+                desc: 'Create a circle and share the invite code or QR with the people you trust. Owner approval keeps it private.',
               },
               {
                 step: '03',
                 title: 'See your circle live',
-                desc: 'Everyone in the circle appears on a shared map, updated in real time.',
+                desc: 'Everyone in the circle appears on a shared map, updated in real time. SOS, check-ins, and alerts are always one tap away.',
               },
             ].map((s) => (
               <div key={s.step} className="text-center">
@@ -259,7 +326,7 @@ export default function Home() {
       </section>
 
       {/* ── Pricing ─────────────────────────────────────────────────────── */}
-      <section id="pricing" className="py-24 px-6 bg-indigo-50/40">
+      <section id="pricing" className="py-24 px-6 bg-white">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-black text-gray-900 mb-4">Simple, honest pricing</h2>
@@ -274,10 +341,13 @@ export default function Home() {
               <ul className="flex flex-col gap-3 mb-8">
                 {[
                   '1 circle (up to 5 members)',
-                  '1 day location history',
+                  '24-hour location history',
                   '1 iBeacon token',
                   '2 geofences',
                   'Real-time map',
+                  'SOS emergency alerts',
+                  'Safety check-in',
+                  'Activity feed',
                   'QR invite codes',
                 ].map((f) => (
                   <li key={f} className="flex items-center gap-3 text-sm text-gray-600">
@@ -302,10 +372,13 @@ export default function Home() {
               <ul className="flex flex-col gap-3 mb-8">
                 {[
                   'Unlimited circles',
-                  'Unlimited members per circle',
-                  '30 days location history',
+                  'Up to 20 members per circle',
+                  '30-day location history',
                   '20 iBeacon tokens',
                   '50 geofences',
+                  'Arrival & departure alerts',
+                  'Member battery status',
+                  'In-app voice & video calls',
                   'Priority support',
                   'Pro badge on your profile',
                 ].map((f) => (
@@ -327,7 +400,7 @@ export default function Home() {
       </section>
 
       {/* ── Privacy ─────────────────────────────────────────────────────── */}
-      <section id="privacy" className="py-24 px-6 bg-white">
+      <section id="privacy" className="py-24 px-6 bg-indigo-50/40">
         <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-12 items-center">
           <div className="flex-1">
             <h2 className="text-4xl font-black text-gray-900 mb-6">Privacy first, always</h2>
@@ -337,6 +410,7 @@ export default function Home() {
                 'You can pause or stop sharing at any time — instantly.',
                 'Only circle members you approve can see your location.',
                 'All data is encrypted in transit and at rest.',
+                'Location history is automatically deleted after 30 days.',
               ].map((point) => (
                 <div key={point} className="flex items-start gap-3">
                   <div className="w-5 h-5 bg-primary rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
