@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -10,13 +11,15 @@ export default function PrivacyPolicy() {
   const effective = 'May 11, 2026';
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-dark-bg">
 
       {/* Nav */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-dark-bg/90 backdrop-blur-lg border-b border-dark-border">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold text-indigo-600">Loxymity</Link>
-          <Link href="/" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">← Back to Home</Link>
+          <Link href="/" className="relative w-36 h-9 flex-shrink-0">
+            <Image src="/logo-full.png" alt="Loxymity" fill style={{ objectFit: 'contain', objectPosition: 'left center' }} className="mix-blend-screen" priority />
+          </Link>
+          <Link href="/" className="text-sm text-dark-muted hover:text-dark-text transition-colors">← Back to Home</Link>
         </div>
       </nav>
 
@@ -213,15 +216,18 @@ export default function PrivacyPolicy() {
         </div>
       </main>
 
-      <footer className="py-10 px-6 bg-gray-950 text-gray-400">
+      <footer className="py-10 px-6 bg-dark-bg border-t border-dark-border">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div>
-            <p className="text-white font-bold text-lg">Loxymity</p>
-            <p className="text-sm mt-1">© {new Date().getFullYear()} Sawsib Infotech. All rights reserved.</p>
+            <div className="relative w-36 h-9 mb-2">
+              <Image src="/logo-full.png" alt="Loxymity" fill style={{ objectFit: 'contain', objectPosition: 'left center' }} className="mix-blend-screen opacity-80" />
+            </div>
+            <p className="text-dark-muted text-sm">© {new Date().getFullYear()} Sawsib Infotech. All rights reserved.</p>
           </div>
-          <div className="flex gap-6 text-sm">
-            <Link href="/privacy" className="text-white">Privacy Policy</Link>
-            <a href="mailto:hello@loxymity.com" className="hover:text-white transition-colors">Contact</a>
+          <div className="flex gap-6 text-sm text-dark-muted">
+            <Link href="/privacy" className="text-dark-text">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-dark-text transition-colors">Terms of Service</Link>
+            <a href="mailto:hello@loxymity.com" className="hover:text-dark-text transition-colors">Contact</a>
           </div>
         </div>
       </footer>

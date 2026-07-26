@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 
 export const metadata: Metadata = {
   title: 'Terms of Service — Loxymity',
@@ -8,36 +9,27 @@ export const metadata: Metadata = {
 
 export default function TermsOfService() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="bg-gradient-to-b from-indigo-50/60 to-white border-b border-gray-100">
-        <div className="max-w-3xl mx-auto px-6 py-12">
-          <a
-            href="/"
-            className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary-dark transition-colors mb-8"
-          >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-            Back to Home
+    <div className="min-h-screen bg-dark-bg">
+      {/* Nav */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-dark-bg/90 backdrop-blur-lg border-b border-dark-border">
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+          <a href="/" className="relative w-36 h-9 flex-shrink-0">
+            <Image src="/logo-full.png" alt="Loxymity" fill style={{ objectFit: 'contain', objectPosition: 'left center' }} className="mix-blend-screen" priority />
           </a>
-          <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-3">
+          <a href="/" className="text-sm text-dark-muted hover:text-dark-text transition-colors">← Back to Home</a>
+        </div>
+      </nav>
+
+      {/* Header */}
+      <header className="pt-28 pb-10 px-6 bg-dark-bg border-b border-dark-border">
+        <div className="max-w-3xl mx-auto">
+          <h1 className="text-4xl md:text-5xl font-black text-dark-text mb-3">
             Terms of Service
           </h1>
-          <p className="text-gray-500">
+          <p className="text-dark-muted">
             Last updated: May 2026
           </p>
-          <p className="text-gray-500 text-sm mt-1">
+          <p className="text-dark-muted text-sm mt-1">
             Sawsib Infotech (&ldquo;we&rdquo;, &ldquo;us&rdquo;, &ldquo;our&rdquo;)
           </p>
         </div>
@@ -388,16 +380,18 @@ export default function TermsOfService() {
       </main>
 
       {/* Footer */}
-      <footer className="py-8 px-6 border-t border-gray-100">
-        <div className="max-w-3xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
-          <p>&copy; {new Date().getFullYear()} Sawsib Infotech. All rights reserved.</p>
-          <div className="flex gap-6">
-            <a href="/privacy" className="hover:text-gray-600 transition-colors">
-              Privacy Policy
-            </a>
-            <a href="/" className="hover:text-gray-600 transition-colors">
-              Home
-            </a>
+      <footer className="py-10 px-6 bg-dark-bg border-t border-dark-border">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+          <div>
+            <div className="relative w-36 h-9 mb-2">
+              <Image src="/logo-full.png" alt="Loxymity" fill style={{ objectFit: 'contain', objectPosition: 'left center' }} className="mix-blend-screen opacity-80" />
+            </div>
+            <p className="text-dark-muted text-sm">&copy; {new Date().getFullYear()} Sawsib Infotech. All rights reserved.</p>
+          </div>
+          <div className="flex gap-6 text-sm text-dark-muted">
+            <a href="/privacy" className="hover:text-dark-text transition-colors">Privacy Policy</a>
+            <a href="/terms" className="text-dark-text">Terms of Service</a>
+            <a href="/" className="hover:text-dark-text transition-colors">Home</a>
           </div>
         </div>
       </footer>
