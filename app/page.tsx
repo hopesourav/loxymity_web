@@ -7,7 +7,7 @@ export default function Home() {
       {/* ── Nav ─────────────────────────────────────────────────────────── */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-dark-bg/85 backdrop-blur-lg border-b border-dark-border">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="chrome-badge relative w-44 h-11 flex-shrink-0 px-2 py-1">
+          <div className="relative w-44 h-11 flex-shrink-0">
             <Image
               src="/logo-full.png"
               alt="Loxymity"
@@ -18,16 +18,15 @@ export default function Home() {
             />
           </div>
           <div className="hidden md:flex items-center gap-7 text-sm font-hud font-semibold uppercase tracking-wide text-dark-muted">
-            <a href="#features"    className="hover:text-accent-cyan hover:[text-shadow:0_0_8px_rgba(0,240,255,0.5)] transition-colors">Features</a>
-            <a href="#safety"      className="hover:text-accent-cyan hover:[text-shadow:0_0_8px_rgba(0,240,255,0.5)] transition-colors">Safety</a>
-            <a href="#how-it-works" className="hover:text-accent-cyan hover:[text-shadow:0_0_8px_rgba(0,240,255,0.5)] transition-colors">How it works</a>
-            <a href="#pricing"     className="hover:text-accent-cyan hover:[text-shadow:0_0_8px_rgba(0,240,255,0.5)] transition-colors">Pricing</a>
-            <a href="#faq"         className="hover:text-accent-cyan hover:[text-shadow:0_0_8px_rgba(0,240,255,0.5)] transition-colors">FAQ</a>
+            <a href="#features"    className="hover:text-dark-text transition-colors">Features</a>
+            <a href="#safety"      className="hover:text-dark-text transition-colors">Safety</a>
+            <a href="#how-it-works" className="hover:text-dark-text transition-colors">How it works</a>
+            <a href="#pricing"     className="hover:text-dark-text transition-colors">Pricing</a>
+            <a href="#faq"         className="hover:text-dark-text transition-colors">FAQ</a>
           </div>
           <a
             href="#download"
-            className="chrome-shine text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-transform hover:scale-[1.03]"
-            style={{ background: 'linear-gradient(135deg, #FF2E9A 0%, #FF7A18 100%)' }}
+            className="bg-primary hover:bg-primary-dark text-dark-bg text-sm font-semibold px-5 py-2.5 rounded-full transition-colors"
           >
             Get the App
           </a>
@@ -39,28 +38,25 @@ export default function Home() {
         {/* Radial glow */}
         <div
           className="absolute inset-x-0 top-0 h-[560px] pointer-events-none animate-glow-breathe"
-          style={{ background: 'radial-gradient(ellipse 80% 55% at 50% -5%, rgba(255,46,154,0.28), transparent 70%)' }}
+          style={{ background: 'radial-gradient(ellipse 80% 55% at 50% -5%, rgba(201,162,39,0.14), transparent 70%)' }}
         />
         {/* Dot grid texture */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage: 'radial-gradient(circle, rgba(185,169,224,0.06) 1px, transparent 1px)',
+            backgroundImage: 'radial-gradient(circle, rgba(168,162,158,0.06) 1px, transparent 1px)',
             backgroundSize: '28px 28px',
           }}
         />
-        {/* Retro sun + grid horizon */}
-        <div className="retro-sun absolute left-1/2 top-10 -translate-x-1/2 w-72 h-72 opacity-30 animate-glow-breathe pointer-events-none" />
-        <div className="grid-horizon" />
 
         <div className="relative max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 bg-dark-surface border border-accent-cyan/25 text-accent-cyan font-hud uppercase tracking-wide text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
-            <span className="w-2 h-2 bg-accent-cyan rounded-full animate-pulse" />
-            Live location sharing
+          <div className="inline-flex items-center gap-2 bg-dark-surface border border-dark-border text-dark-muted font-hud uppercase tracking-wide text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
+            <span className="w-1.5 h-1.5 bg-primary rounded-full" />
+            Private location sharing
           </div>
-          <h1 className="text-chrome font-display text-5xl md:text-[4.25rem] font-black tracking-tight leading-[1.08] mb-6">
+          <h1 className="font-display text-dark-text text-5xl md:text-[4.25rem] font-semibold tracking-tight leading-[1.08] mb-6">
             See where your<br />
-            <span className="text-neon-magenta">circle is</span>, right now.
+            <span className="italic text-primary">circle is</span>, right now.
           </h1>
           <p className="text-xl text-dark-muted max-w-xl mx-auto mb-10 leading-relaxed">
             Loxymity keeps families and close friends connected through private,
@@ -70,17 +66,16 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center" id="download">
             <a
               href="#"
-              className="inline-flex items-center justify-center gap-3 bg-dark-surface/60 backdrop-blur border border-accent-cyan/20 hover:border-accent-cyan/40 text-dark-text font-semibold px-7 py-4 rounded-2xl transition-colors text-base"
+              className="inline-flex items-center justify-center gap-3 bg-dark-surface hover:bg-dark-border border border-dark-border text-dark-text font-semibold px-7 py-4 rounded-2xl transition-colors text-base"
             >
               <AppleIcon />
               Download on the App Store
             </a>
             <a
               href="#"
-              className="chrome-shine inline-flex items-center justify-center gap-3 text-white font-semibold px-7 py-4 rounded-2xl transition-transform hover:scale-[1.02] text-base"
-              style={{ background: 'linear-gradient(135deg, #FF2E9A 0%, #FF7A18 100%)' }}
+              className="inline-flex items-center justify-center gap-3 bg-primary hover:bg-primary-dark text-dark-bg font-semibold px-7 py-4 rounded-2xl transition-colors text-base"
             >
-              <PlayIcon />
+              <PlayIcon dark />
               Get it on Google Play
             </a>
           </div>
@@ -88,11 +83,11 @@ export default function Home() {
 
         {/* Phone mockup */}
         <div className="relative mt-16 max-w-[285px] mx-auto animate-float" style={{ willChange: 'transform' }}>
-          <div className="absolute -inset-8 bg-primary/10 blur-3xl rounded-full" />
+          <div className="absolute -inset-8 bg-primary/8 blur-3xl rounded-full" />
           <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-dark-bg to-transparent pointer-events-none z-10" />
           {/* Chassis */}
-          <div className="relative bg-dark-surface rounded-[3rem] p-[3px] ring-1 ring-accent-cyan/25 shadow-2xl" style={{ boxShadow: '0 32px 80px rgba(255,46,154,0.22)' }}>
-            <div className="scanlines bg-[#070d19] rounded-[2.8rem] overflow-hidden">
+          <div className="relative bg-dark-surface rounded-[3rem] p-[3px] ring-1 ring-dark-border shadow-2xl" style={{ boxShadow: '0 32px 80px rgba(0,0,0,0.45)' }}>
+            <div className="bg-[#070d19] rounded-[2.8rem] overflow-hidden">
 
               {/* Status bar */}
               <div className="h-9 flex items-center justify-between px-5 pt-2">
@@ -120,7 +115,7 @@ export default function Home() {
                   <p className="text-dark-muted text-[10px] leading-tight">4 members · all active</p>
                 </div>
                 <div className="flex -space-x-2">
-                  {[['S','#FF2E9A'],['A','#00F0FF'],['R','#FFC24B'],['M','#FF3B5C']].map(([init, col]) => (
+                  {[['S','#C9A227'],['A','#5C8F6B'],['R','#C08B3E'],['M','#B5453F']].map(([init, col]) => (
                     <div
                       key={init}
                       className="w-6 h-6 rounded-full border border-[#070d19] flex items-center justify-center text-white text-[9px] font-bold flex-shrink-0"
@@ -131,33 +126,33 @@ export default function Home() {
               </div>
 
               {/* Map area */}
-              <div className="h-[168px] relative overflow-hidden" style={{ backgroundColor: '#0a0518' }}>
+              <div className="h-[168px] relative overflow-hidden" style={{ backgroundColor: '#0d0f13' }}>
                 <div className="absolute inset-0" style={{
-                  backgroundImage: 'linear-gradient(rgba(0,240,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,240,255,0.05) 1px,transparent 1px)',
+                  backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px)',
                   backgroundSize: '22px 22px',
                 }} />
-                <div className="absolute top-[41%] left-0 right-0 h-[2px]" style={{ backgroundColor: '#1c1240' }} />
-                <div className="absolute top-[68%] left-0 right-0 h-[2px]" style={{ backgroundColor: '#1c1240' }} />
-                <div className="absolute left-[27%] top-0 bottom-0 w-[2px]" style={{ backgroundColor: '#1c1240' }} />
-                <div className="absolute left-[63%] top-0 bottom-0 w-[2px]" style={{ backgroundColor: '#1c1240' }} />
+                <div className="absolute top-[41%] left-0 right-0 h-[2px]" style={{ backgroundColor: '#1a1d24' }} />
+                <div className="absolute top-[68%] left-0 right-0 h-[2px]" style={{ backgroundColor: '#1a1d24' }} />
+                <div className="absolute left-[27%] top-0 bottom-0 w-[2px]" style={{ backgroundColor: '#1a1d24' }} />
+                <div className="absolute left-[63%] top-0 bottom-0 w-[2px]" style={{ backgroundColor: '#1a1d24' }} />
 
-                {/* Sourav — active / pulsing */}
+                {/* Sourav — active */}
                 <div className="absolute" style={{ top: '28%', left: '34%' }}>
                   <div
                     className="absolute rounded-full"
-                    style={{ width: 28, height: 28, top: -11, left: -11, backgroundColor: 'rgba(255,46,154,0.22)', animation: 'beacon-ring 2.4s ease-out infinite' }}
+                    style={{ width: 28, height: 28, top: -11, left: -11, backgroundColor: 'rgba(201,162,39,0.18)', animation: 'beacon-ring 2.4s ease-out infinite' }}
                   />
-                  <div className="w-3.5 h-3.5 rounded-full border-2 border-white/25" style={{ backgroundColor: '#FF2E9A' }} />
+                  <div className="w-3.5 h-3.5 rounded-full border-2 border-white/25" style={{ backgroundColor: '#C9A227' }} />
                 </div>
                 {/* Ananya */}
-                <div className="absolute w-3 h-3 rounded-full" style={{ top: '56%', left: '61%', backgroundColor: '#00F0FF' }} />
+                <div className="absolute w-3 h-3 rounded-full" style={{ top: '56%', left: '61%', backgroundColor: '#5C8F6B' }} />
                 {/* Rohan */}
-                <div className="absolute w-3 h-3 rounded-full" style={{ top: '37%', left: '15%', backgroundColor: '#FFC24B' }} />
+                <div className="absolute w-3 h-3 rounded-full" style={{ top: '37%', left: '15%', backgroundColor: '#C08B3E' }} />
 
                 {/* Place label */}
                 <div
                   className="absolute text-[8px] text-dark-muted rounded-md px-1.5 py-0.5"
-                  style={{ top: '17%', left: '37%', backgroundColor: 'rgba(27,16,66,0.88)', border: '1px solid rgba(61,43,111,0.6)' }}
+                  style={{ top: '17%', left: '37%', backgroundColor: 'rgba(20,23,29,0.88)', border: '1px solid rgba(38,43,51,0.6)' }}
                 >
                   Home
                 </div>
@@ -166,12 +161,12 @@ export default function Home() {
               {/* Member cards */}
               <div className="flex flex-col gap-1.5 px-3 py-3">
                 {[
-                  { name: 'Sourav', place: 'Home',   time: 'Just now',  color: '#FF2E9A', bat: 82 },
-                  { name: 'Ananya', place: 'Office', time: '3 min ago', color: '#00F0FF', bat: 61 },
-                  { name: 'Rohan',  place: 'School', time: '7 min ago', color: '#FFC24B', bat: 34 },
+                  { name: 'Sourav', place: 'Home',   time: 'Just now',  color: '#C9A227', bat: 82 },
+                  { name: 'Ananya', place: 'Office', time: '3 min ago', color: '#5C8F6B', bat: 61 },
+                  { name: 'Rohan',  place: 'School', time: '7 min ago', color: '#C08B3E', bat: 34 },
                 ].map((m) => {
-                  const bc = m.bat > 50 ? '#39FF88' : m.bat > 20 ? '#FFC24B' : '#FF3B5C';
-                  const bb = m.bat > 50 ? 'rgba(57,255,136,0.12)' : m.bat > 20 ? 'rgba(255,194,75,0.12)' : 'rgba(255,59,92,0.12)';
+                  const bc = m.bat > 50 ? '#5C8F6B' : m.bat > 20 ? '#C08B3E' : '#B5453F';
+                  const bb = m.bat > 50 ? 'rgba(92,143,107,0.12)' : m.bat > 20 ? 'rgba(192,139,62,0.12)' : 'rgba(181,69,63,0.12)';
                   return (
                     <div key={m.name} className="bg-dark-surface rounded-xl px-3 py-2 flex items-center gap-2.5">
                       <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0" style={{ backgroundColor: m.color }}>
@@ -182,7 +177,7 @@ export default function Home() {
                         <p className="text-dark-muted text-[10px] leading-tight">{m.place}</p>
                       </div>
                       <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full flex-shrink-0" style={{ color: bc, backgroundColor: bb }}>{m.bat}%</span>
-                      <p className="text-[9px] flex-shrink-0" style={{ color: '#6B5A99' }}>{m.time}</p>
+                      <p className="text-[9px] flex-shrink-0" style={{ color: '#5A5F68' }}>{m.time}</p>
                     </div>
                   );
                 })}
@@ -202,8 +197,8 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
                 </svg>
                 {/* SOS */}
-                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(255,59,92,0.12)', border: '1px solid rgba(255,59,92,0.22)' }}>
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="#FF3B5C" strokeWidth="2.5">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(181,69,63,0.12)', border: '1px solid rgba(181,69,63,0.22)' }}>
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="#B5453F" strokeWidth="2.5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
                   </svg>
                 </div>
@@ -248,7 +243,7 @@ export default function Home() {
       <section id="features" className="py-24 px-6 bg-dark-bg">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="font-display text-4xl font-black text-dark-text mb-4">Everything your circle needs</h2>
+            <h2 className="font-display text-4xl font-semibold text-dark-text mb-4">Everything your circle needs</h2>
             <p className="text-lg text-dark-muted max-w-xl mx-auto">Built for real families and close friends — not strangers.</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -333,7 +328,7 @@ export default function Home() {
             ].map((f) => (
               <div key={f.title} className="bg-dark-surface border border-dark-border rounded-2xl p-7 hover:border-accent-cyan/40 hover:shadow-[0_8px_32px_rgba(0,240,255,0.08)] transition-all duration-200 group relative">
                 {f.badge && (
-                  <span className="chrome-shine absolute top-4 right-4 bg-accent-gold/12 text-accent-gold border border-accent-gold/30 font-hud uppercase text-[10px] font-bold px-2 py-0.5 rounded-full">
+                  <span className="absolute top-4 right-4 bg-accent-gold/12 text-accent-gold border border-accent-gold/30 font-hud uppercase text-[10px] font-bold px-2 py-0.5 rounded-full">
                     {f.badge}
                   </span>
                 )}
@@ -358,7 +353,7 @@ export default function Home() {
               <span className="w-2 h-2 bg-accent-cyan rounded-full" />
               iBeacon tokens
             </div>
-            <h2 className="text-chrome font-display text-4xl font-black mb-6">Never lose what matters</h2>
+            <h2 className="font-display text-dark-text text-4xl font-semibold mb-6">Never lose what matters</h2>
             <p className="text-dark-muted text-lg mb-8 leading-relaxed">
               Loxymity iBeacon tokens use a unique UUID so any nearby app user automatically
               crowdsources its location — no GPS in the token required. Attach one to a bag,
@@ -405,7 +400,7 @@ export default function Home() {
               <span className="w-2 h-2 bg-brand-danger rounded-full" />
               Safety & emergency
             </div>
-            <h2 className="font-display text-4xl font-black text-dark-text mb-4">There when it counts most</h2>
+            <h2 className="font-display text-4xl font-semibold text-dark-text mb-4">There when it counts most</h2>
             <p className="text-lg text-dark-muted max-w-xl mx-auto">Loxymity has a full safety layer built in — not bolted on.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
@@ -447,21 +442,18 @@ export default function Home() {
       <section id="how-it-works" className="py-24 px-6 bg-dark-surface">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="font-display text-4xl font-black text-dark-text mb-4">Up and running in minutes</h2>
+            <h2 className="font-display text-4xl font-semibold text-dark-text mb-4">Up and running in minutes</h2>
             <p className="text-lg text-dark-muted">No complicated setup. Just download, invite, and go.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8 relative">
-            <div
-              className="hidden md:block absolute top-7 left-[calc(16.67%+2.5rem)] right-[calc(16.67%+2.5rem)] h-px"
-              style={{ background: 'linear-gradient(90deg, rgba(255,46,154,.3), rgba(0,240,255,.3), rgba(255,194,75,.3))' }}
-            />
+            <div className="hidden md:block absolute top-7 left-[calc(16.67%+2.5rem)] right-[calc(16.67%+2.5rem)] h-px bg-dark-border" />
             {[
               { step: '01', title: 'Create your account', desc: 'Sign up with your email. We send a one-time code — no password to remember.' },
               { step: '02', title: 'Start or join a circle', desc: 'Create a circle and share the invite QR with the people you trust. Owner approval keeps it private.' },
               { step: '03', title: 'See your circle live', desc: 'Everyone appears on the shared map in real time. SOS, check-ins, and alerts are always one tap away.' },
             ].map((s) => (
               <div key={s.step} className="text-center relative">
-                <div className="font-display w-14 h-14 border-2 border-accent-gold/40 bg-accent-gold/10 text-accent-gold font-black text-lg rounded-2xl flex items-center justify-center mx-auto mb-5">
+                <div className="font-display w-14 h-14 border border-accent-gold/40 bg-accent-gold/10 text-accent-gold font-semibold text-lg rounded-2xl flex items-center justify-center mx-auto mb-5">
                   {s.step}
                 </div>
                 <h3 className="text-lg font-bold text-dark-text mb-2">{s.title}</h3>
@@ -476,7 +468,7 @@ export default function Home() {
       <section id="pricing" className="py-24 px-6 bg-dark-bg">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="font-display text-4xl font-black text-dark-text mb-4">Simple, honest pricing</h2>
+            <h2 className="font-display text-4xl font-semibold text-dark-text mb-4">Simple, honest pricing</h2>
             <p className="text-lg text-dark-muted">Start free. Upgrade when you need more.</p>
           </div>
           <div className="grid md:grid-cols-2 gap-8">
@@ -504,28 +496,19 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
-              <a href="#download" className="block text-center bg-dark-border hover:bg-[#55408F] text-dark-text font-semibold px-6 py-3 rounded-xl transition-colors">
+              <a href="#download" className="block text-center bg-dark-border hover:bg-[#333944] text-dark-text font-semibold px-6 py-3 rounded-xl transition-colors">
                 Get started free
               </a>
             </div>
 
             {/* Pro */}
-            <div
-              className="relative rounded-3xl p-8 overflow-hidden shadow-2xl"
-              style={{
-                background: 'linear-gradient(135deg, rgba(11,6,32,0.45), rgba(11,6,32,0.45)), linear-gradient(135deg, #FF2E9A 0%, #FF7A18 55%, #FFC24B 100%)',
-                boxShadow: '0 24px 64px rgba(255,122,24,0.35)',
-              }}
-            >
-              <div className="absolute top-0 left-0 right-0 h-px bg-white/20" />
-              <div className="absolute top-0 right-0 w-52 h-52 rounded-full bg-white/5 -translate-y-1/2 translate-x-1/2" />
-              <div className="absolute bottom-0 left-0 w-36 h-36 rounded-full bg-white/5 translate-y-1/2 -translate-x-1/2" />
-              <div className="chrome-shine absolute top-4 right-4 bg-white/15 border border-white/25 backdrop-blur-sm text-white text-[10px] font-bold px-2.5 py-1 rounded-full">
-                Most Popular
+            <div className="relative rounded-3xl p-8 bg-dark-surface border-2 border-primary/40" style={{ boxShadow: '0 24px 64px rgba(0,0,0,0.4)' }}>
+              <div className="absolute top-4 right-4 bg-primary/10 border border-primary/30 text-primary text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full">
+                Recommended
               </div>
-              <p className="font-hud uppercase tracking-wide text-sm font-semibold text-white/70 mb-2">Pro</p>
-              <p className="font-display text-5xl font-black text-white mb-1">$4.99</p>
-              <p className="text-white/60 text-sm mb-8">per month</p>
+              <p className="font-hud uppercase tracking-wide text-sm font-semibold text-dark-muted mb-2">Pro</p>
+              <p className="font-display text-5xl font-bold text-dark-text mb-1">$4.99</p>
+              <p className="text-dark-muted text-sm mb-8">per month</p>
               <ul className="flex flex-col gap-3 mb-8 relative">
                 {[
                   'Unlimited circles',
@@ -539,13 +522,13 @@ export default function Home() {
                   'Priority support',
                   'Pro badge on your profile',
                 ].map((f) => (
-                  <li key={f} className="flex items-center gap-3 text-sm text-white relative">
-                    <CheckIcon white />
+                  <li key={f} className="flex items-center gap-3 text-sm text-dark-text relative">
+                    <CheckIcon />
                     {f}
                   </li>
                 ))}
               </ul>
-              <a href="#download" className="relative block text-center bg-white hover:bg-white/90 text-primary-dark font-bold px-6 py-3 rounded-xl transition-colors">
+              <a href="#download" className="relative block text-center bg-primary hover:bg-primary-dark text-dark-bg font-bold px-6 py-3 rounded-xl transition-colors">
                 Upgrade to Pro
               </a>
             </div>
@@ -558,7 +541,7 @@ export default function Home() {
       <section id="privacy" className="py-24 px-6 bg-dark-surface">
         <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-12 items-center">
           <div className="flex-1">
-            <h2 className="font-display text-4xl font-black text-dark-text mb-6">Privacy first, always</h2>
+            <h2 className="font-display text-4xl font-semibold text-dark-text mb-6">Privacy first, always</h2>
             <div className="flex flex-col gap-4">
               {[
                 'Your location is never sold or shared with advertisers.',
@@ -596,7 +579,7 @@ export default function Home() {
       <section id="faq" className="py-24 px-6 bg-dark-bg">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="font-display text-4xl font-black text-dark-text mb-4">Frequently asked questions</h2>
+            <h2 className="font-display text-4xl font-semibold text-dark-text mb-4">Frequently asked questions</h2>
             <p className="text-lg text-dark-muted">Everything you need to know before you download.</p>
           </div>
           <div className="flex flex-col divide-y divide-dark-border">
@@ -651,27 +634,26 @@ export default function Home() {
       {/* ── Download CTA ─────────────────────────────────────────────────── */}
       <section
         className="relative py-24 px-6 overflow-hidden text-center"
-        style={{
-          background: 'linear-gradient(135deg, rgba(11,6,32,0.45), rgba(11,6,32,0.45)), linear-gradient(135deg, #4A2E85 0%, #FF2E9A 55%, #FF7A18 100%)',
-        }}
+        style={{ background: 'linear-gradient(180deg, #0A0C10 0%, #14171D 100%)' }}
       >
-        <div className="absolute top-0 left-0 right-0 h-px bg-white/15" />
-        <div className="absolute -top-32 -right-32 w-80 h-80 rounded-full bg-white/5" />
-        <div className="absolute -bottom-20 -left-20 w-60 h-60 rounded-full bg-white/5" />
-        <div className="grid-horizon" />
+        <div
+          className="absolute inset-x-0 top-0 h-72 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse 60% 100% at 50% 0%, rgba(201,162,39,0.12), transparent 70%)' }}
+        />
+        <div className="absolute top-0 left-0 right-0 h-px bg-dark-border" />
         <div className="relative max-w-2xl mx-auto">
-          <div className="relative w-36 h-14 mx-auto mb-8 bg-dark-bg/80 backdrop-blur rounded-2xl p-3 ring-1 ring-white/10">
-            <Image src="/logo-full.png" alt="Loxymity" fill style={{ objectFit: 'contain' }} />
+          <div className="relative w-36 h-14 mx-auto mb-8">
+            <Image src="/logo-full.png" alt="Loxymity" fill style={{ objectFit: 'contain' }} className="mix-blend-screen" />
           </div>
-          <h2 className="font-display text-4xl font-black text-white mb-4">Ready to stay connected?</h2>
-          <p className="text-white/70 text-lg mb-10">Free to download. No subscription required to get started.</p>
+          <h2 className="font-display text-4xl font-semibold text-dark-text mb-4">Ready to stay connected?</h2>
+          <p className="text-dark-muted text-lg mb-10">Free to download. No subscription required to get started.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="#" className="inline-flex items-center justify-center gap-3 bg-white text-gray-900 hover:bg-gray-50 font-semibold px-7 py-4 rounded-2xl transition-colors text-base">
               <AppleIcon dark />
               App Store
             </a>
-            <a href="#" className="inline-flex items-center justify-center gap-3 bg-white/12 hover:bg-white/20 text-white border border-white/25 font-semibold px-7 py-4 rounded-2xl transition-colors text-base">
-              <PlayIcon />
+            <a href="#" className="inline-flex items-center justify-center gap-3 bg-primary hover:bg-primary-dark text-dark-bg font-semibold px-7 py-4 rounded-2xl transition-colors text-base">
+              <PlayIcon dark />
               Google Play
             </a>
           </div>
@@ -691,7 +673,7 @@ export default function Home() {
             <a href="/privacy" className="hover:text-dark-text transition-colors">Privacy Policy</a>
             <a href="/terms"   className="hover:text-dark-text transition-colors">Terms of Service</a>
             <a href="mailto:hello@loxymity.com" className="hover:text-dark-text transition-colors">Contact</a>
-            <a href="/admin"   className="transition-colors" style={{ color: '#1B1042' }}>Admin</a>
+            <a href="/admin"   className="transition-colors" style={{ color: '#14171D' }}>Admin</a>
           </div>
         </div>
       </footer>
@@ -708,18 +690,18 @@ function AppleIcon({ dark }: { dark?: boolean }) {
   );
 }
 
-function PlayIcon() {
+function PlayIcon({ dark }: { dark?: boolean }) {
   return (
-    <svg className="w-5 h-5 text-white flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+    <svg className={`w-5 h-5 flex-shrink-0 ${dark ? 'text-dark-bg' : 'text-white'}`} viewBox="0 0 24 24" fill="currentColor">
       <path d="M3.18 23.82a2 2 0 001.76-.22l12.89-7.44-3.53-3.53-11.12 11.19zM20.83 9.58L17.96 7.9 14.1 11.76l3.87 3.87 2.89-1.67a2 2 0 000-4.38zM.46.4A2 2 0 000 1.74v20.52a2 2 0 00.46 1.34L.54 23.6l11.5-11.5v-.27L.54.4zM14.1 12.24L2.6.74l-.06.06 11.5 11.5.06-.06z" />
     </svg>
   );
 }
 
-function CheckIcon({ white }: { white?: boolean }) {
+function CheckIcon() {
   return (
-    <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 ${white ? 'bg-white/20' : 'bg-accent-cyan/15 border border-accent-cyan/25'}`}>
-      <svg className={`w-3 h-3 ${white ? 'text-white' : 'text-accent-cyan'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+    <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 bg-accent-cyan/15 border border-accent-cyan/25">
+      <svg className="w-3 h-3 text-accent-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
       </svg>
     </div>
