@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -15,15 +15,15 @@ body {
 
 /* ── Scrollbar ──────────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: #0F172A; }
-::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #475569; }
+::-webkit-scrollbar-track { background: #0B0620; }
+::-webkit-scrollbar-thumb { background: #3D2B6F; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #00F0FF; }
 
 /* ── FAQ details/summary ────────────────────────────────────────── */
 details summary { list-style: none; }
 details summary::-webkit-details-marker { display: none; }
-.faq-chevron { transition: transform 0.25s ease; }
-details[open] .faq-chevron { transform: rotate(180deg); }
+.faq-chevron { transition: transform 0.25s ease, color 0.25s ease; }
+details[open] .faq-chevron { transform: rotate(180deg); color: #00F0FF; }
 
 /* ── Keyframes ──────────────────────────────────────────────────── */
 @keyframes float {
@@ -41,9 +41,99 @@ details[open] .faq-chevron { transform: rotate(180deg); }
   50%       { opacity: 0.45; }
 }
 
+@keyframes grid-scroll {
+  from { background-position: 0 0,  0 0; }
+  to   { background-position: 0 48px, 48px 0; }
+}
+
+@keyframes chrome-shine {
+  0%        { left: -150%; }
+  60%, 100% { left: 150%; }
+}
+
 /* ── Utilities ──────────────────────────────────────────────────── */
 @layer utilities {
   .animate-float        { animation: float 6s ease-in-out infinite; }
   .animate-beacon-ring  { animation: beacon-ring 3s ease-out infinite; }
   .animate-glow-breathe { animation: glow-breathe 4s ease-in-out infinite; }
+
+  /* Perspective floor grid — the synthwave horizon. Hero + Download CTA only. */
+  .grid-horizon {
+    position: absolute;
+    left: -25%; right: -25%; bottom: 0; height: 55%;
+    background-image:
+      linear-gradient(rgba(0, 240, 255, 0.35) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 240, 255, 0.35) 1px, transparent 1px);
+    background-size: 48px 48px;
+    transform: perspective(300px) rotateX(65deg);
+    transform-origin: bottom center;
+    -webkit-mask-image: linear-gradient(to top, black 0%, transparent 88%);
+            mask-image: linear-gradient(to top, black 0%, transparent 88%);
+    animation: grid-scroll 6s linear infinite;
+    pointer-events: none;
+  }
+
+  /* Blurred sunset orb — pair with .animate-glow-breathe */
+  .retro-sun {
+    border-radius: 9999px;
+    background: linear-gradient(180deg, #FFC24B 0%, #FF7A18 40%, #FF2E9A 75%, #D6178A 100%);
+    filter: blur(2px);
+  }
+
+  /* CRT scanline texture — confine to the phone-mockup screen only */
+  .scanlines { position: relative; }
+  .scanlines::after {
+    content: '';
+    position: absolute; inset: 0; pointer-events: none;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.18) 0px, rgba(0, 0, 0, 0.18) 1px,
+      transparent 1px, transparent 3px
+    );
+    mix-blend-mode: overlay;
+    opacity: 0.35;
+  }
+
+  /* Metallic gradient text-fill — reserve for 1-2 signature headings */
+  .text-chrome {
+    color: #F4EEFF;
+    background-image: linear-gradient(180deg, #FFFFFF 0%, #D9D2F0 35%, #8C7BB8 55%, #FFFFFF 85%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
+  }
+
+  .text-neon-magenta {
+    color: #FF2E9A;
+    text-shadow: 0 0 4px rgba(255, 46, 154, .85), 0 0 16px rgba(255, 46, 154, .55), 0 0 40px rgba(255, 46, 154, .30);
+  }
+  .text-neon-cyan {
+    color: #00F0FF;
+    text-shadow: 0 0 4px rgba(0, 240, 255, .85), 0 0 16px rgba(0, 240, 255, .5), 0 0 40px rgba(0, 240, 255, .28);
+  }
+
+  /* Gradient-border pill — frames the raster logo files */
+  .chrome-badge {
+    border: 1px solid transparent;
+    border-radius: 9999px;
+    background:
+      linear-gradient(135deg, #1B1042, #0B0620) padding-box,
+      linear-gradient(135deg, #FF2E9A, #00F0FF, #FFC24B) border-box;
+  }
+
+  /* Specular sweep — primary CTAs, Pro badge */
+  .chrome-shine { position: relative; overflow: hidden; }
+  .chrome-shine::before {
+    content: '';
+    position: absolute; top: 0; left: -150%; width: 60%; height: 100%;
+    background: linear-gradient(75deg, transparent 0%, rgba(255, 255, 255, .35) 50%, transparent 100%);
+    animation: chrome-shine 4s ease-in-out infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float, .animate-beacon-ring, .animate-glow-breathe,
+  .grid-horizon, .chrome-shine::before {
+    animation: none !important;
+  }
 }
