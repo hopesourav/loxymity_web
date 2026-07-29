@@ -24,12 +24,20 @@ export default function Home() {
             <a href="#pricing"     className="hover:text-dark-text transition-colors">Pricing</a>
             <a href="#faq"         className="hover:text-dark-text transition-colors">FAQ</a>
           </div>
-          <a
-            href="#download"
-            className="bg-primary hover:bg-primary-dark text-dark-bg text-sm font-semibold px-5 py-2.5 rounded-full transition-colors"
-          >
-            Get the App
-          </a>
+          <div className="flex items-center gap-3">
+            <a
+              href="/dashboard/login/"
+              className="text-sm font-semibold text-dark-muted hover:text-dark-text transition-colors"
+            >
+              Pro Dashboard
+            </a>
+            <a
+              href="#download"
+              className="bg-primary hover:bg-primary-dark text-dark-bg text-sm font-semibold px-5 py-2.5 rounded-full transition-colors"
+            >
+              Get the App
+            </a>
+          </div>
         </div>
       </nav>
 
