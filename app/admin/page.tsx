@@ -1,135 +1,81 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { useAdmin } from './_lib/adminContext';
+import type { OverviewStats, SosAlert, AdminLocation } from './_lib/types';
 
-const SUPABASE_URL = 'https://szsipgfrxvvkgqtpwhso.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN6c2lwZ2ZyeHZ2a2dxdHB3aHNvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzcxNDYsImV4cCI6MjA5MzMxMzE0Nn0.wVB1R1dsx5hbuXvuCYbgKdPDofiQApdVNeRpSIaFQrY';
+const ACTIVE_MS = 15 * 60 * 1000;
+const STALE_MS = 60 * 60 * 1000;
 
-// Simple admin password — gate only, not a security boundary.
-// Real security is enforced by Supabase RLS on the server.
-const ADMIN_PASSWORD = 'loxy-admin-2024';
-
-type BeaconToken = {
-  id: string;
-  name: string;
-  owner_id: string;
-  beacon_uuid: string;
-  major: number;
-  minor: number;
-  lat: number | null;
-  lng: number | null;
-  last_seen_at: string | null;
-  created_at: string;
-  profiles?: { display_name: string | null };
-};
-
-type GeofenceRow = {
-  id: string;
-  name: string;
-  lat: number;
-  lng: number;
-  radius_m: number;
-  active: boolean;
-  owner_id: string;
-};
-
-type Stats = {
-  totalBeacons: number;
-  activeToday: number;
-  totalGeofences: number;
-  activeGeofences: number;
-  totalSightings: number;
-};
-
-export default function AdminPage() {
-  const [authed, setAuthed] = useState(false);
-  const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
-  const [loginPassword, setLoginPassword] = useState('');
-  const [step, setStep] = useState<'gate' | 'login'>('gate');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  const [beacons, setBeacons] = useState<BeaconToken[]>([]);
-  const [geofences, setGeofences] = useState<GeofenceRow[]>([]);
-  const [stats, setStats] = useState<Stats | null>(null);
-  const [activeTab, setActiveTab] = useState<'map' | 'beacons' | 'geofences'>('map');
-
+export default function AdminOverviewPage() {
+  const { supabase } = useAdmin();
+  const [stats, setStats] = useState<OverviewStats | null>(null);
+  const [recentSos, setRecentSos] = useState<SosAlert[]>([]);
+  const [locations, setLocations] = useState<AdminLocation[]>([]);
+  const [loading, setLoading] = useState(true);
   const mapRef = useRef<HTMLDivElement>(null);
   const leafletMapRef = useRef<unknown>(null);
 
-  const supabase = useRef(createClient(SUPABASE_URL, SUPABASE_ANON_KEY)).current;
-
-  function handleGate() {
-    if (password === ADMIN_PASSWORD) {
-      setStep('login');
-      setError('');
-    } else {
-      setError('Incorrect admin password.');
-    }
-  }
-
-  async function handleLogin() {
-    setLoading(true);
-    setError('');
-    const { error: err } = await supabase.auth.signInWithPassword({
-      email,
-      password: loginPassword,
-    });
-    setLoading(false);
-    if (err) {
-      setError(err.message);
-    } else {
-      setAuthed(true);
-      loadData();
-    }
-  }
-
-  async function loadData() {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const [{ data: beaconData }, { data: geoData }, { count: sightCount }] = await Promise.all([
-      supabase
-        .from('beacon_tokens')
-        .select('*, profiles(display_name)')
-        .order('last_seen_at', { ascending: false }),
-      supabase
-        .from('geofences')
-        .select('id, name, lat, lng, radius_m, active, owner_id')
-        .order('created_at', { ascending: false }),
-      supabase
-        .from('beacon_sightings')
-        .select('id', { count: 'exact', head: true })
-        .gte('created_at', today.toISOString()),
-    ]);
-
-    const tokens: BeaconToken[] = (beaconData as BeaconToken[]) ?? [];
-    const fences: GeofenceRow[] = (geoData as GeofenceRow[]) ?? [];
-
-    const activeToday = tokens.filter(
-      (b) => b.last_seen_at && new Date(b.last_seen_at) >= today
-    ).length;
-
-    setBeacons(tokens);
-    setGeofences(fences);
-    setStats({
-      totalBeacons: tokens.length,
-      activeToday,
-      totalGeofences: fences.length,
-      activeGeofences: fences.filter((f) => f.active).length,
-      totalSightings: sightCount ?? 0,
-    });
-  }
-
-  // Build Leaflet map after auth + data loaded
   useEffect(() => {
-    if (!authed || activeTab !== 'map') return;
+    async function load() {
+      const now = Date.now();
+      const activeThreshold = new Date(now - ACTIVE_MS).toISOString();
+      const staleThreshold = new Date(now - STALE_MS).toISOString();
+
+      const [
+        { count: totalUsers },
+        { count: proUsers },
+        { count: activeDevices },
+        { count: staleDevices },
+        { count: offlineDevices },
+        { count: activeSos },
+        { count: retryQueue },
+        { data: sosData },
+        { data: locData },
+      ] = await Promise.all([
+        supabase.from('profiles').select('id', { count: 'exact', head: true }),
+        supabase.from('profiles').select('id', { count: 'exact', head: true })
+          .or('subscription_tier.eq.pro,web_tier.eq.pro'),
+        supabase.from('latest_locations').select('user_id', { count: 'exact', head: true })
+          .gte('reported_at', activeThreshold),
+        supabase.from('latest_locations').select('user_id', { count: 'exact', head: true })
+          .lt('reported_at', activeThreshold)
+          .gte('reported_at', staleThreshold),
+        supabase.from('latest_locations').select('user_id', { count: 'exact', head: true })
+          .lt('reported_at', staleThreshold),
+        supabase.from('sos_alerts').select('id', { count: 'exact', head: true })
+          .eq('resolved', false),
+        supabase.from('location_refresh_attempts').select('id', { count: 'exact', head: true })
+          .not('status', 'in', '(resolved,exhausted)'),
+        supabase.from('sos_alerts')
+          .select('id,sender_id,circle_id,message,resolved,created_at,profiles!sender_id(display_name),circles(name)')
+          .order('created_at', { ascending: false })
+          .limit(6),
+        supabase.from('latest_locations')
+          .select('user_id,lat,lng,reported_at,battery_level,activity_type'),
+      ]);
+
+      setStats({
+        totalUsers: totalUsers ?? 0,
+        proUsers: proUsers ?? 0,
+        activeDevices: activeDevices ?? 0,
+        staleDevices: staleDevices ?? 0,
+        offlineDevices: offlineDevices ?? 0,
+        activeSos: activeSos ?? 0,
+        retryQueue: retryQueue ?? 0,
+      });
+      setRecentSos((sosData ?? []) as unknown as SosAlert[]);
+      setLocations((locData ?? []) as AdminLocation[]);
+      setLoading(false);
+    }
+    load();
+  }, [supabase]);
+
+  useEffect(() => {
+    if (!locations.length || !mapRef.current) return;
     if (typeof window === 'undefined') return;
 
     async function initMap() {
-      // Inject Leaflet CSS once
       if (!document.getElementById('leaflet-css')) {
         const link = document.createElement('link');
         link.id = 'leaflet-css';
@@ -138,297 +84,146 @@ export default function AdminPage() {
         document.head.appendChild(link);
       }
       const L = (await import('leaflet')).default;
-
       if (!mapRef.current) return;
-      if (leafletMapRef.current) {
-        (leafletMapRef.current as { remove: () => void }).remove();
-      }
+      if (leafletMapRef.current) (leafletMapRef.current as { remove: () => void }).remove();
 
-      const map = L.map(mapRef.current).setView([20, 0], 2);
+      const map = L.map(mapRef.current).setView([20, 78], 4);
       leafletMapRef.current = map;
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors',
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '© OSM contributors © CARTO',
       }).addTo(map);
 
-      // Beacon markers
-      const beaconIcon = L.divIcon({
-        html: `<div style="background:#5C6BF8;color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(92,107,248,0.4)">📡</div>`,
-        iconSize: [28, 28],
-        className: '',
-      });
+      const now = Date.now();
+      for (const loc of locations) {
+        const age = now - new Date(loc.reported_at).getTime();
+        const color =
+          age < 5 * 60 * 1000 ? '#5C8F6B'
+          : age < 15 * 60 * 1000 ? '#C9A227'
+          : age < 60 * 60 * 1000 ? '#C08B3E'
+          : '#B5453F';
 
-      const withLocation = beacons.filter((b) => b.lat !== null && b.lng !== null);
-      for (const b of withLocation) {
-        const lastSeen = b.last_seen_at
-          ? new Date(b.last_seen_at).toLocaleString()
-          : 'Never';
-        L.marker([b.lat!, b.lng!], { icon: beaconIcon })
+        const icon = L.divIcon({
+          html: `<div style="background:${color};width:10px;height:10px;border-radius:50%;border:2px solid rgba(255,255,255,0.25)"></div>`,
+          iconSize: [10, 10],
+          className: '',
+        });
+
+        L.marker([loc.lat, loc.lng], { icon })
           .addTo(map)
-          .bindPopup(
-            `<b>${b.name}</b><br/>Minor: ${b.minor}<br/>Last seen: ${lastSeen}`
-          );
-        // Coverage ring (~30 m detection range)
-        L.circle([b.lat!, b.lng!], {
-          radius: 30,
-          color: '#5C6BF8',
-          fillColor: '#5C6BF8',
-          fillOpacity: 0.1,
-          weight: 1,
-        }).addTo(map);
+          .bindPopup(`Last seen: ${new Date(loc.reported_at).toLocaleTimeString()}`);
       }
 
-      // Geofence circles
-      for (const g of geofences) {
-        L.circle([g.lat, g.lng], {
-          radius: g.radius_m,
-          color: g.active ? '#10B981' : '#9CA3AF',
-          fillColor: g.active ? '#10B981' : '#9CA3AF',
-          fillOpacity: 0.08,
-          weight: 1.5,
-        })
-          .addTo(map)
-          .bindPopup(`<b>${g.name}</b><br/>Radius: ${g.radius_m}m<br/>Status: ${g.active ? 'Active' : 'Paused'}`);
-      }
-
-      if (withLocation.length > 0) {
-        const group = L.featureGroup(
-          withLocation.map((b) => L.marker([b.lat!, b.lng!]))
-        );
-        map.fitBounds(group.getBounds().pad(0.3));
+      if (locations.length > 0) {
+        const group = L.featureGroup(locations.map((l) => L.marker([l.lat, l.lng])));
+        try { map.fitBounds(group.getBounds().pad(0.2)); } catch { /* empty bounds */ }
       }
     }
 
     initMap();
-  }, [authed, activeTab, beacons, geofences]);
+  }, [locations]);
 
-  if (!authed) {
+  if (loading) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center px-4">
-        <div className="bg-white rounded-3xl p-8 w-full max-w-sm shadow-2xl">
-          <div className="text-center mb-8">
-            <p className="text-2xl font-black text-gray-900">Loxymity</p>
-            <p className="text-gray-500 text-sm mt-1">Admin Dashboard</p>
-          </div>
-
-          {step === 'gate' ? (
-            <>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Admin password</label>
-              <input
-                type="password"
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="Enter admin password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleGate()}
-              />
-              {error && <p className="text-red-500 text-xs mb-3">{error}</p>}
-              <button
-                onClick={handleGate}
-                className="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 rounded-xl transition-colors"
-              >
-                Continue
-              </button>
-            </>
-          ) : (
-            <>
-              <p className="text-sm text-gray-500 mb-4">Sign in with your Loxymity account to view network data.</p>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-              <input
-                type="email"
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-              <input
-                type="password"
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="••••••••"
-                value={loginPassword}
-                onChange={(e) => setLoginPassword(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
-              />
-              {error && <p className="text-red-500 text-xs mb-3">{error}</p>}
-              <button
-                onClick={handleLogin}
-                disabled={loading}
-                className="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50"
-              >
-                {loading ? 'Signing in…' : 'Sign in'}
-              </button>
-            </>
-          )}
-        </div>
+      <div className="flex items-center justify-center h-64">
+        <div className="w-6 h-6 border-2 border-dark-border border-t-primary rounded-full animate-spin" />
       </div>
     );
   }
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between">
-        <div>
-          <p className="font-black text-gray-900 text-lg">Loxymity Admin</p>
-          <p className="text-gray-400 text-xs">Network device coverage</p>
-        </div>
-        <a href="/" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">← Back to site</a>
-      </header>
+  const statCards = stats
+    ? [
+        { label: 'Total Users', value: stats.totalUsers, color: 'text-dark-text', sub: `${stats.proUsers} Pro` },
+        { label: 'Active Devices', value: stats.activeDevices, color: 'text-brand-success', sub: '< 15 min ago' },
+        { label: 'Stale Devices', value: stats.staleDevices, color: 'text-primary', sub: '15 min – 1 h' },
+        { label: 'Offline', value: stats.offlineDevices, color: 'text-brand-danger', sub: '> 1 hour' },
+        { label: 'SOS Active', value: stats.activeSos, color: stats.activeSos > 0 ? 'text-brand-danger' : 'text-dark-text', sub: 'unresolved' },
+        { label: 'Push Retry', value: stats.retryQueue, color: stats.retryQueue > 0 ? 'text-brand-warning' : 'text-dark-text', sub: 'dormant devices' },
+      ]
+    : [];
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Stats */}
-        {stats && (
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-            {[
-              { label: 'Total beacons', value: stats.totalBeacons, color: 'text-primary' },
-              { label: 'Active today', value: stats.activeToday, color: 'text-emerald-600' },
-              { label: 'Sightings today', value: stats.totalSightings, color: 'text-blue-600' },
-              { label: 'Total geofences', value: stats.totalGeofences, color: 'text-violet-600' },
-              { label: 'Active geofences', value: stats.activeGeofences, color: 'text-amber-600' },
-            ].map((s) => (
-              <div key={s.label} className="bg-white rounded-2xl p-5 border border-gray-100">
-                <p className={`text-3xl font-black ${s.color}`}>{s.value}</p>
-                <p className="text-gray-500 text-xs mt-1">{s.label}</p>
+  return (
+    <div className="p-6 space-y-6">
+      <div>
+        <h1 className="text-xl font-bold text-dark-text">Platform Overview</h1>
+        <p className="text-dark-muted text-sm mt-0.5">{new Date().toLocaleString()}</p>
+      </div>
+
+      {stats && stats.activeSos > 0 && (
+        <div className="bg-brand-danger/10 border border-brand-danger/30 rounded-2xl px-5 py-4 flex items-center gap-3">
+          <span className="w-2.5 h-2.5 rounded-full bg-brand-danger animate-pulse shrink-0" />
+          <p className="text-brand-danger font-semibold text-sm">
+            {stats.activeSos} active SOS alert{stats.activeSos !== 1 ? 's' : ''} —{' '}
+            <a href="/admin/sos" className="underline">view now</a>
+          </p>
+        </div>
+      )}
+
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
+        {statCards.map((s) => (
+          <div key={s.label} className="bg-dark-surface border border-dark-border rounded-2xl p-4">
+            <p className={`text-3xl font-black ${s.color}`}>{s.value}</p>
+            <p className="text-dark-text text-xs font-semibold mt-1">{s.label}</p>
+            <p className="text-dark-muted text-xs">{s.sub}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        {/* Fleet map */}
+        <div className="xl:col-span-2 bg-dark-surface border border-dark-border rounded-2xl overflow-hidden">
+          <div className="px-5 py-4 border-b border-dark-border flex items-center justify-between">
+            <p className="font-semibold text-dark-text">Live Fleet Map</p>
+            <div className="flex items-center gap-4 text-xs text-dark-muted">
+              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-brand-success inline-block" /> Active</span>
+              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-primary inline-block" /> Stale</span>
+              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-brand-danger inline-block" /> Offline</span>
+            </div>
+          </div>
+          <div ref={mapRef} style={{ height: 360 }} />
+        </div>
+
+        {/* Recent SOS */}
+        <div className="bg-dark-surface border border-dark-border rounded-2xl flex flex-col">
+          <div className="px-5 py-4 border-b border-dark-border flex items-center justify-between">
+            <p className="font-semibold text-dark-text">Recent SOS</p>
+            <a href="/admin/sos" className="text-xs text-primary hover:underline">View all</a>
+          </div>
+          <div className="flex-1 divide-y divide-dark-border overflow-auto">
+            {recentSos.length === 0 && (
+              <p className="px-5 py-10 text-center text-dark-muted text-sm">No SOS alerts.</p>
+            )}
+            {recentSos.map((s) => (
+              <div key={s.id} className="px-5 py-3.5">
+                <div className="flex items-center gap-2">
+                  <span
+                    className={`w-2 h-2 rounded-full shrink-0 ${
+                      s.resolved ? 'bg-dark-muted' : 'bg-brand-danger animate-pulse'
+                    }`}
+                  />
+                  <p className="text-sm font-medium text-dark-text truncate">
+                    {(s.profiles as unknown as { display_name: string | null })?.display_name ?? 'Unknown'}
+                  </p>
+                  <span
+                    className={`ml-auto text-xs px-1.5 py-0.5 rounded-full shrink-0 ${
+                      s.resolved
+                        ? 'bg-dark-bg text-dark-muted'
+                        : 'bg-brand-danger/10 text-brand-danger'
+                    }`}
+                  >
+                    {s.resolved ? 'resolved' : 'active'}
+                  </span>
+                </div>
+                {s.message && (
+                  <p className="text-xs text-dark-muted mt-0.5 ml-4 truncate">{s.message}</p>
+                )}
+                <p className="text-xs text-dark-muted mt-0.5 ml-4">
+                  {new Date(s.created_at).toLocaleString()}
+                </p>
               </div>
             ))}
           </div>
-        )}
-
-        {/* Tabs */}
-        <div className="flex gap-2 mb-6">
-          {(['map', 'beacons', 'geofences'] as const).map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-5 py-2 rounded-full text-sm font-semibold transition-colors capitalize ${
-                activeTab === tab
-                  ? 'bg-primary text-white'
-                  : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-100'
-              }`}
-            >
-              {tab === 'map' ? '🗺️ Coverage Map' : tab === 'beacons' ? '📡 Beacons' : '📐 Geofences'}
-            </button>
-          ))}
         </div>
-
-        {/* Map tab */}
-        {activeTab === 'map' && (
-          <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-4">
-              <p className="font-semibold text-gray-900">Network Coverage Map</p>
-              <div className="flex items-center gap-4 text-xs text-gray-500">
-                <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-primary inline-block" /> Beacon token</span>
-                <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-emerald-500 inline-block" /> Active geofence</span>
-                <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-gray-400 inline-block" /> Paused geofence</span>
-              </div>
-            </div>
-            <div ref={mapRef} style={{ height: '560px' }} />
-            {beacons.filter((b) => b.lat).length === 0 && (
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <p className="text-gray-400 text-sm">No beacon locations reported yet.</p>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Beacons tab */}
-        {activeTab === 'beacons' && (
-          <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-100">
-              <p className="font-semibold text-gray-900">Registered Beacon Tokens ({beacons.length})</p>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="bg-gray-50 text-gray-500 text-left">
-                    <th className="px-6 py-3 font-medium">Name</th>
-                    <th className="px-6 py-3 font-medium">Minor</th>
-                    <th className="px-6 py-3 font-medium">Last location</th>
-                    <th className="px-6 py-3 font-medium">Last seen</th>
-                    <th className="px-6 py-3 font-medium">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-50">
-                  {beacons.map((b) => {
-                    const lastSeen = b.last_seen_at ? new Date(b.last_seen_at) : null;
-                    const isActive = lastSeen && Date.now() - lastSeen.getTime() < 24 * 60 * 60 * 1000;
-                    return (
-                      <tr key={b.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-3 font-medium text-gray-900">{b.name}</td>
-                        <td className="px-6 py-3 text-gray-500">{b.minor}</td>
-                        <td className="px-6 py-3 text-gray-500 font-mono text-xs">
-                          {b.lat !== null ? `${b.lat.toFixed(5)}, ${b.lng!.toFixed(5)}` : '—'}
-                        </td>
-                        <td className="px-6 py-3 text-gray-500">
-                          {lastSeen ? lastSeen.toLocaleString() : 'Never'}
-                        </td>
-                        <td className="px-6 py-3">
-                          <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full ${
-                            isActive ? 'bg-emerald-100 text-emerald-700' : b.last_seen_at ? 'bg-gray-100 text-gray-600' : 'bg-amber-100 text-amber-700'
-                          }`}>
-                            <span className={`w-1.5 h-1.5 rounded-full ${isActive ? 'bg-emerald-500' : b.last_seen_at ? 'bg-gray-400' : 'bg-amber-400'}`} />
-                            {isActive ? 'Active' : b.last_seen_at ? 'Inactive' : 'Never seen'}
-                          </span>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                  {beacons.length === 0 && (
-                    <tr>
-                      <td colSpan={5} className="px-6 py-12 text-center text-gray-400">No beacon tokens registered yet.</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-
-        {/* Geofences tab */}
-        {activeTab === 'geofences' && (
-          <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-100">
-              <p className="font-semibold text-gray-900">Geofences ({geofences.length})</p>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="bg-gray-50 text-gray-500 text-left">
-                    <th className="px-6 py-3 font-medium">Name</th>
-                    <th className="px-6 py-3 font-medium">Center</th>
-                    <th className="px-6 py-3 font-medium">Radius</th>
-                    <th className="px-6 py-3 font-medium">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-50">
-                  {geofences.map((g) => (
-                    <tr key={g.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-3 font-medium text-gray-900">{g.name}</td>
-                      <td className="px-6 py-3 text-gray-500 font-mono text-xs">
-                        {g.lat.toFixed(5)}, {g.lng.toFixed(5)}
-                      </td>
-                      <td className="px-6 py-3 text-gray-500">{g.radius_m} m</td>
-                      <td className="px-6 py-3">
-                        <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full ${
-                          g.active ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-600'
-                        }`}>
-                          <span className={`w-1.5 h-1.5 rounded-full ${g.active ? 'bg-emerald-500' : 'bg-gray-400'}`} />
-                          {g.active ? 'Active' : 'Paused'}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                  {geofences.length === 0 && (
-                    <tr>
-                      <td colSpan={4} className="px-6 py-12 text-center text-gray-400">No geofences created yet.</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
