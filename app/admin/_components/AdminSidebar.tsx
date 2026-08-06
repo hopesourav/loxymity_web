@@ -68,7 +68,9 @@ export default function AdminSidebar({ open, onClose }: Props) {
   const { signOut } = useAdmin();
 
   const isActive = (href: string) =>
-    href === '/admin' ? pathname === '/admin' : pathname.startsWith(href);
+    href === '/admin'
+      ? pathname === '/admin' || pathname === '/admin/'
+      : pathname.startsWith(href);
 
   return (
     <aside
