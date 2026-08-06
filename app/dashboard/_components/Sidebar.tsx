@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { LogoMark } from '../../_components/Logo';
 import { useDashboard } from '../_lib/context';
 import {
   IconMap, IconActivity, IconHistory, IconFence,
@@ -40,7 +40,7 @@ export default function Sidebar({ open, onClose }: Props) {
     `}>
       {/* Logo */}
       <div className="px-4 py-4 border-b border-dark-border flex items-center gap-3">
-        <Image src="/logo-short.png" alt="Loxymity" width={44} height={44} className="rounded-xl shrink-0" />
+        <LogoMark />
         <div className="flex-1 min-w-0">
           <span className="font-display text-2xl font-bold text-dark-text tracking-tight block leading-tight">
             Loxymity

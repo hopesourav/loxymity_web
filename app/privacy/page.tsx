@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
+import { LogoFull } from '../_components/Logo';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy — Loxymity',
@@ -16,8 +16,8 @@ export default function PrivacyPolicy() {
       {/* Nav */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-dark-bg/90 backdrop-blur-lg border-b border-dark-border">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="relative w-36 h-9 flex-shrink-0">
-            <Image src="/logo-full.png" alt="Loxymity" fill style={{ objectFit: 'contain', objectPosition: 'left center' }} className="mix-blend-screen" priority />
+          <Link href="/">
+            <LogoFull className="text-2xl font-bold" />
           </Link>
           <Link href="/" className="text-sm text-dark-muted hover:text-dark-text transition-colors">← Back to Home</Link>
         </div>
@@ -219,8 +219,8 @@ export default function PrivacyPolicy() {
       <footer className="py-10 px-6 bg-dark-bg border-t border-dark-border">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div>
-            <div className="relative w-36 h-9 mb-2">
-              <Image src="/logo-full.png" alt="Loxymity" fill style={{ objectFit: 'contain', objectPosition: 'left center' }} className="mix-blend-screen opacity-80" />
+            <div className="mb-2">
+              <LogoFull className="text-xl font-bold opacity-80" />
             </div>
             <p className="text-dark-muted text-sm">© {new Date().getFullYear()} Sawsib Infotech. All rights reserved.</p>
           </div>
