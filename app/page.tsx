@@ -26,10 +26,10 @@ export default function Home() {
           </div>
           <div className="flex items-center gap-3">
             <a
-              href="/dashboard/login/"
+              href="/admin/"
               className="text-sm font-semibold text-dark-muted hover:text-dark-text transition-colors"
             >
-              Pro Dashboard
+              Admin
             </a>
             <a
               href="#download"
