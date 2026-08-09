@@ -1,6 +1,8 @@
 'use client';
 
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
+const AUTOPLAY_MS = 5000;
 
 type Slide = {
   title: string;
@@ -87,6 +89,7 @@ const SLIDES: Slide[] = [
 
 export function DifferentiatorCarousel() {
   const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
   const touchStartX = useRef<number | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -98,12 +101,23 @@ export function DifferentiatorCarousel() {
   const prev = useCallback(() => go(index - 1), [go, index]);
   const next = useCallback(() => go(index + 1), [go, index]);
 
+  // Gentle autoplay — paused on hover/focus/touch, and disabled entirely for
+  // users who prefer reduced motion. Manual controls always work.
+  useEffect(() => {
+    if (paused) return;
+    if (typeof window !== 'undefined'
+        && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+    const id = window.setInterval(() => setIndex((i) => (i + 1) % count), AUTOPLAY_MS);
+    return () => window.clearInterval(id);
+  }, [paused, count]);
+
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
     else if (e.key === 'ArrowRight') { e.preventDefault(); next(); }
   };
 
   const onTouchStart = (e: React.TouchEvent) => {
+    setPaused(true); // stop autoplay from fighting a swipe
     touchStartX.current = e.touches[0].clientX;
   };
   const onTouchEnd = (e: React.TouchEvent) => {
@@ -123,10 +137,14 @@ export function DifferentiatorCarousel() {
       aria-label="What sets Loxymity apart"
       tabIndex={0}
       onKeyDown={onKeyDown}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={() => setPaused(false)}
     >
       {/* Viewport */}
       <div
-        className="overflow-hidden rounded-3xl border border-dark-border bg-dark-surface"
+        className="overflow-hidden rounded-3xl card-premium gradient-border"
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >

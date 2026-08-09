@@ -35,6 +35,10 @@ export default function Home() {
 
       {/* ── Hero ────────────────────────────────────────────────────────── */}
       <section className="relative pt-32 pb-0 px-6 text-center bg-dark-bg overflow-hidden">
+        {/* Ambient aurora */}
+        <div className="aurora" aria-hidden="true">
+          <span className="a1" /><span className="a2" /><span className="a3" />
+        </div>
         {/* Radial glow */}
         <div
           className="absolute inset-x-0 top-0 h-[560px] pointer-events-none animate-glow-breathe"
@@ -50,20 +54,21 @@ export default function Home() {
         />
 
         <div className="relative max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 bg-dark-surface border border-dark-border text-dark-muted font-hud uppercase tracking-wide text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
-            <span className="w-1.5 h-1.5 bg-primary rounded-full" />
-            Private location sharing
+          <div className="inline-flex items-center gap-2 gradient-border card-premium text-dark-muted font-hud uppercase tracking-wide text-sm font-semibold px-4 py-1.5 rounded-full mb-6 animate-fade-up">
+            <span className="w-1.5 h-1.5 bg-primary rounded-full animate-halo" />
+            The family locator that never sells your data
           </div>
-          <h1 className="font-display text-dark-text text-5xl md:text-[4.25rem] font-semibold tracking-tight leading-[1.08] mb-6">
-            See where your<br />
-            <span className="italic text-primary">circle is</span>, right now.
+          <h1 className="font-display text-dark-text text-5xl md:text-[4.25rem] font-semibold tracking-tight leading-[1.08] mb-6 animate-fade-up" style={{ animationDelay: '0.08s' }}>
+            Never wonder<br />
+            <span className="italic text-gradient text-gradient-anim">where they are</span> again.
           </h1>
-          <p className="text-xl text-dark-muted max-w-xl mx-auto mb-10 leading-relaxed">
-            Loxymity keeps families and close friends connected through private,
-            real-time location sharing — with safety check-ins, emergency SOS,
-            iBeacon tracking, and geo-fencing for complete peace of mind.
+          <p className="text-xl text-dark-muted max-w-xl mx-auto mb-6 leading-relaxed animate-fade-up" style={{ animationDelay: '0.16s' }}>
+            A private, real-time map of everyone you love — with SOS, safety check-ins,
+            and instant answers from WhatsApp &amp; Alexa. All the safety of the big
+            trackers, none of the data-selling. <span className="text-dark-text font-medium">Your location is never sold. Ever.</span>
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center" id="download">
+          <p className="text-sm text-dark-muted mb-10 animate-fade-up" style={{ animationDelay: '0.24s' }}>Free to start · Peace of mind from less than 50¢ a day.</p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-up" style={{ animationDelay: '0.32s' }} id="download">
             <a
               href="#"
               className="inline-flex items-center justify-center gap-3 bg-dark-surface hover:bg-dark-border border border-dark-border text-dark-text font-semibold px-7 py-4 rounded-2xl transition-colors text-base"
@@ -240,11 +245,63 @@ export default function Home() {
         </div>
       </div>
 
+      {/* ── Problem → Gap (PAS) ────────────────────────────────────────────── */}
+      <section className="py-24 px-6 bg-dark-surface">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 bg-brand-danger/10 border border-brand-danger/20 text-brand-danger font-hud uppercase tracking-wide text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
+              <span className="w-2 h-2 bg-brand-danger rounded-full" />
+              The problem
+            </div>
+            <h2 className="font-display text-4xl md:text-5xl font-semibold text-dark-text mb-4 tracking-tight">Most family locators make you choose:<br className="hidden md:block" /> safety <span className="text-dark-muted">or</span> <span className="text-gradient">privacy</span></h2>
+            <p className="text-lg text-dark-muted max-w-2xl mx-auto">The popular apps got you tracking your family — then quietly turned that trust into a product. Here&apos;s the gap Loxymity was built to close.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-5 mb-14">
+            {[
+              {
+                iconPath: 'M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z',
+                title: 'They sell where you go',
+                desc: 'A leading tracker was caught selling precise location data. When the app is “free,” your family’s movements are the product.',
+              },
+              {
+                iconPath: 'M21 10.5h.375c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125H21M4.5 10.5H18V15H4.5A2.25 2.25 0 012.25 12.75v0A2.25 2.25 0 014.5 10.5z',
+                title: 'They kill your battery',
+                desc: 'Constant fixed-interval polling drains phones by lunchtime — so people switch tracking off, exactly when it matters most.',
+              },
+              {
+                iconPath: 'M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm4.5 0c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z',
+                title: 'They’re just a dot',
+                desc: 'A pin on a map, no context, no answers. You still end up calling to ask “where are you?” — the one thing you wanted to avoid.',
+              },
+            ].map((p) => (
+              <div key={p.title} className="bg-dark-bg gradient-border lift rounded-2xl p-7">
+                <div className="w-10 h-10 rounded-xl bg-brand-danger/10 flex items-center justify-center mb-4">
+                  <svg className="w-5 h-5 text-brand-danger" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                    <path d={p.iconPath} />
+                  </svg>
+                </div>
+                <h3 className="text-base font-bold text-dark-text mb-2">{p.title}</h3>
+                <p className="text-dark-muted text-sm leading-relaxed">{p.desc}</p>
+              </div>
+            ))}
+          </div>
+          <div className="max-w-2xl mx-auto text-center">
+            <p className="font-display text-2xl md:text-3xl font-semibold text-dark-text mb-3">
+              Loxymity closes all three — <span className="text-gradient">and never sells your data.</span>
+            </p>
+            <p className="text-dark-muted text-base leading-relaxed">
+              Adaptive tracking that sips battery, AI answers you can ask from WhatsApp or Alexa,
+              hardware iBeacon tokens, Street View, in-app calls — the full toolkit, with privacy as the whole point.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* ── Features ─────────────────────────────────────────────────────── */}
       <section id="features" className="py-24 px-6 bg-dark-bg">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="font-display text-4xl font-semibold text-dark-text mb-4">Everything your circle needs</h2>
+            <h2 className="font-display text-4xl md:text-5xl font-semibold text-dark-text mb-4 tracking-tight">Everything <span className="text-gradient">your circle</span> needs</h2>
             <p className="text-lg text-dark-muted max-w-xl mx-auto">Built for real families and close friends — not strangers.</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -353,7 +410,7 @@ export default function Home() {
                 desc: "Smart adaptive tracking slows down when you're still and speeds up when you're moving — minimum drain.",
               },
             ].map((f) => (
-              <div key={f.title} className="bg-dark-surface border border-dark-border rounded-2xl p-7 hover:border-accent-cyan/40 hover:shadow-[0_8px_32px_rgba(0,240,255,0.08)] transition-all duration-200 group relative">
+              <div key={f.title} className="card-premium gradient-border lift rounded-2xl p-7 group relative">
                 {f.badge && (
                   <span className="absolute top-4 right-4 bg-accent-gold/12 text-accent-gold border border-accent-gold/30 font-hud uppercase text-[10px] font-bold px-2 py-0.5 rounded-full">
                     {f.badge}
@@ -380,7 +437,7 @@ export default function Home() {
               <span className="w-2 h-2 bg-primary rounded-full" />
               What sets us apart
             </div>
-            <h2 className="font-display text-4xl font-semibold text-dark-text mb-4">More than a dot on a map</h2>
+            <h2 className="font-display text-4xl md:text-5xl font-semibold text-dark-text mb-4 tracking-tight">More than a <span className="text-gradient">dot on a map</span></h2>
             <p className="text-lg text-dark-muted max-w-xl mx-auto">The things other trackers don&apos;t do — and a privacy promise they can&apos;t make.</p>
           </div>
           <DifferentiatorCarousel />
@@ -395,7 +452,7 @@ export default function Home() {
               <span className="w-2 h-2 bg-accent-cyan rounded-full" />
               iBeacon tokens
             </div>
-            <h2 className="font-display text-dark-text text-4xl font-semibold mb-6">Never lose what matters</h2>
+            <h2 className="font-display text-dark-text text-4xl md:text-5xl font-semibold mb-6 tracking-tight">Never lose <span className="text-gradient">what matters</span></h2>
             <p className="text-dark-muted text-lg mb-8 leading-relaxed">
               Loxymity iBeacon tokens use a unique UUID so any nearby app user automatically
               crowdsources its location — no GPS in the token required. Attach one to a bag,
@@ -442,7 +499,7 @@ export default function Home() {
               <span className="w-2 h-2 bg-brand-danger rounded-full" />
               Safety & emergency
             </div>
-            <h2 className="font-display text-4xl font-semibold text-dark-text mb-4">There when it counts most</h2>
+            <h2 className="font-display text-4xl md:text-5xl font-semibold text-dark-text mb-4 tracking-tight">There when it <span className="text-gradient">counts most</span></h2>
             <p className="text-lg text-dark-muted max-w-xl mx-auto">Loxymity has a full safety layer built in — not bolted on.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
@@ -466,7 +523,7 @@ export default function Home() {
                 desc: 'A chronological log of every geofence crossing, safety check-in, motion event, and SOS alert in your circle. Catch up on anything you missed.',
               },
             ].map((item) => (
-              <div key={item.title} className={`${item.bg} rounded-2xl p-8`}>
+              <div key={item.title} className={`${item.bg} lift rounded-2xl p-8`}>
                 <div className={`w-11 h-11 ${item.iconBg} rounded-xl flex items-center justify-center mb-5`}>
                   <svg className={`w-5 h-5 ${item.iconColor}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
                     <path d={item.iconPath} />
@@ -484,7 +541,7 @@ export default function Home() {
       <section id="how-it-works" className="py-24 px-6 bg-dark-surface">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="font-display text-4xl font-semibold text-dark-text mb-4">Up and running in minutes</h2>
+            <h2 className="font-display text-4xl md:text-5xl font-semibold text-dark-text mb-4 tracking-tight">Up and running in <span className="text-gradient">minutes</span></h2>
             <p className="text-lg text-dark-muted">No complicated setup. Just download, invite, and go.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8 relative">
@@ -507,19 +564,27 @@ export default function Home() {
       </section>
 
       {/* ── Pricing ──────────────────────────────────────────────────────── */}
-      <section id="pricing" className="py-24 px-6 bg-dark-bg">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-4xl font-semibold text-dark-text mb-4">Premium family safety — priced honestly</h2>
-            <p className="text-lg text-dark-muted max-w-xl mx-auto">Pick the features you need, not the number of people. Every plan — even Free — comes with our promise: your location is never sold.</p>
+      <section id="pricing" className="relative overflow-hidden py-24 px-6 bg-dark-bg">
+        <div className="aurora" aria-hidden="true"><span className="a1" /><span className="a2" /></div>
+        <div className="relative z-10 max-w-6xl mx-auto">
+          <div className="text-center mb-6">
+            <div className="inline-flex items-center gap-2 gradient-border card-premium text-primary font-hud uppercase tracking-wide text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
+              <span className="w-2 h-2 bg-primary rounded-full" />
+              Pricing
+            </div>
+            <h2 className="font-display text-4xl md:text-5xl font-semibold text-dark-text mb-4 tracking-tight">What is <span className="text-gradient">knowing they&apos;re safe</span> worth?</h2>
+            <p className="text-lg text-dark-muted max-w-xl mx-auto">Probably a lot. Loxymity is a few cents a day. Pick the features you need — never a per-person bill — and every plan keeps the promise: <span className="text-dark-text font-medium">your location is never sold.</span></p>
           </div>
+          <p className="text-center text-dark-muted text-sm mb-12">Prices in USD, billed monthly. <span className="text-brand-success font-medium">Switch to annual and save up to 29%.</span></p>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
             {[
               {
                 name: 'Free',
                 price: '$0',
-                cadence: 'Forever free',
-                cta: 'Get started free',
+                cadence: 'Forever free — no card required',
+                daily: null,
+                annual: null,
+                cta: 'Start free',
                 features: [
                   'Up to 5 members',
                   '2 days location history',
@@ -533,78 +598,90 @@ export default function Home() {
               {
                 name: 'Gold',
                 price: '$7.99',
-                cadence: 'per month · $69.99/yr',
-                cta: 'Choose Gold',
+                cadence: 'per month',
+                daily: 'about 26¢ a day',
+                annual: 'or $69.99/yr — save $26',
+                cta: 'Get Gold',
                 features: [
+                  'Everything in Free, plus:',
                   'Up to 10 members',
                   '30 days location history',
-                  '10 geofences',
-                  '1 iBeacon token',
                   'In-app voice & video calls',
                   'Arrival & departure alerts',
                   'Member battery status',
-                  'Browser share links',
+                  'Browser share links · 1 iBeacon token',
                 ],
               },
               {
                 name: 'Platinum',
                 price: '$14.99',
-                cadence: 'per month · $129.99/yr',
-                cta: 'Choose Platinum',
+                cadence: 'per month',
+                daily: 'about 49¢ a day',
+                annual: 'or $129.99/yr — save $50',
+                cta: 'Start 7-day free trial',
                 highlight: true,
-                badge: 'Best value',
+                badge: 'Most popular',
                 features: [
+                  'Everything in Gold, plus:',
                   'Up to 15 members',
                   '90 days location history',
-                  '50 geofences',
-                  '20 iBeacon tokens',
-                  'Unlimited voice & video',
+                  'Unlimited voice & video calls',
                   'Street View on any pin',
                   'Driving reports & auto check-ins',
-                  'WhatsApp & Alexa queries (30/day)',
+                  'WhatsApp & Alexa queries (30/day) · 20 beacons',
                 ],
               },
               {
                 name: 'Infinite',
                 price: '$19.99',
-                cadence: 'per month · $169.99/yr',
-                cta: 'Choose Infinite',
+                cadence: 'per month',
+                daily: 'about 66¢ a day',
+                annual: 'or $169.99/yr — save $70',
+                cta: 'Go Infinite',
                 features: [
+                  'Everything in Platinum, plus:',
                   'Unlimited members',
                   '180 days location history',
                   'Privacy Shield — see who viewed you',
                   'Location blur & ghost mode',
                   'Retention control & data export',
-                  'Everything in Platinum',
                   'Priority support',
                 ],
               },
             ].map((plan) => (
               <div
                 key={plan.name}
-                className={`relative flex flex-col rounded-3xl p-7 ${
+                className={`relative flex flex-col rounded-3xl p-7 lift ${
                   plan.highlight
-                    ? 'bg-dark-surface border-2 border-primary/40'
-                    : 'bg-dark-surface border border-dark-border'
+                    ? 'card-premium border-2 border-primary/50 lg:scale-[1.04] z-10 isolate'
+                    : 'card-premium gradient-border'
                 }`}
-                style={plan.highlight ? { boxShadow: '0 24px 64px rgba(0,0,0,0.4)' } : undefined}
+                style={plan.highlight ? { boxShadow: '0 30px 80px -20px rgba(201,162,39,0.38), 0 0 0 1px rgba(201,162,39,0.28)' } : undefined}
               >
+                {plan.highlight && (
+                  <div className="absolute -inset-px rounded-3xl pointer-events-none animate-halo -z-10" aria-hidden="true" style={{ background: 'radial-gradient(120% 60% at 50% 0%, rgba(201,162,39,0.14), transparent 60%)' }} />
+                )}
                 {plan.badge && (
-                  <div className="absolute top-4 right-4 bg-primary/10 border border-primary/30 text-primary text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full">
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-dark-bg text-[10px] font-bold uppercase tracking-wide px-3 py-1 rounded-full shadow-lg">
                     {plan.badge}
                   </div>
                 )}
                 <p className="font-hud uppercase tracking-wide text-sm font-semibold text-dark-muted mb-2">{plan.name}</p>
-                <p className={`font-display text-4xl font-bold text-dark-text mb-1 ${plan.name === 'Free' ? 'text-5xl font-black' : ''}`}>{plan.price}</p>
-                <p className="text-dark-muted text-xs mb-4">{plan.cadence}</p>
+                <p className="flex items-baseline gap-1 mb-1">
+                  <span className={`font-display font-bold text-dark-text ${plan.name === 'Free' ? 'text-5xl font-black' : 'text-4xl'}`}>{plan.price}</span>
+                  {plan.name !== 'Free' && <span className="text-dark-muted text-sm">/mo</span>}
+                </p>
+                <p className="text-dark-muted text-xs mb-1">{plan.cadence}</p>
+                {plan.daily && <p className="text-primary text-xs font-medium mb-1">{plan.daily}</p>}
+                <p className="text-brand-success text-xs font-medium mb-4 min-h-[1rem]">{plan.annual || ' '}</p>
                 <div className="inline-flex items-center gap-1.5 self-start bg-brand-success/10 border border-brand-success/25 text-brand-success text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full mb-6">
                   <span className="w-1.5 h-1.5 bg-brand-success rounded-full" />
                   Never sold
                 </div>
                 <ul className="flex flex-col gap-2.5 mb-8 flex-1">
-                  {plan.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2.5 text-sm text-dark-muted">
-                      <span className="mt-0.5"><CheckIcon /></span>
+                  {plan.features.map((f, i) => (
+                    <li key={f} className={`flex items-start gap-2.5 text-sm ${i === 0 && plan.name !== 'Free' ? 'text-dark-text font-semibold' : 'text-dark-muted'}`}>
+                      {!(i === 0 && plan.name !== 'Free') && <span className="mt-0.5"><CheckIcon /></span>}
                       {f}
                     </li>
                   ))}
@@ -622,7 +699,18 @@ export default function Home() {
               </div>
             ))}
           </div>
-          <p className="text-center text-dark-muted text-sm mt-8">Prices in USD; localized pricing shown in your region&apos;s store. Member counts are generous household caps — never per-seat billing.</p>
+          {/* Risk reversal */}
+          <div className="mt-10 flex flex-wrap justify-center gap-x-8 gap-y-3">
+            {['7-day free Platinum trial', 'Cancel anytime', 'No ads, ever', 'Your data is never sold'].map((r) => (
+              <div key={r} className="flex items-center gap-2 text-dark-muted text-sm font-medium">
+                <svg className="w-4 h-4 text-brand-success flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 13l4 4L19 7" />
+                </svg>
+                {r}
+              </div>
+            ))}
+          </div>
+          <p className="text-center text-dark-muted text-xs mt-6">Localized pricing shown in your region&apos;s store. Member counts are generous household caps — never per-seat billing.</p>
         </div>
       </section>
 
@@ -630,7 +718,7 @@ export default function Home() {
       <section id="privacy" className="py-24 px-6 bg-dark-surface">
         <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-12 items-center">
           <div className="flex-1">
-            <h2 className="font-display text-4xl font-semibold text-dark-text mb-6">Privacy first, always</h2>
+            <h2 className="font-display text-4xl md:text-5xl font-semibold text-dark-text mb-6 tracking-tight">Privacy first, <span className="text-gradient">always</span></h2>
             <div className="flex flex-col gap-4">
               {[
                 'Your location is processed on-device where possible and never sold or shared with advertisers.',
@@ -669,7 +757,7 @@ export default function Home() {
       <section id="faq" className="py-24 px-6 bg-dark-bg">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="font-display text-4xl font-semibold text-dark-text mb-4">Frequently asked questions</h2>
+            <h2 className="font-display text-4xl md:text-5xl font-semibold text-dark-text mb-4 tracking-tight">Frequently asked <span className="text-gradient">questions</span></h2>
             <p className="text-lg text-dark-muted">Everything you need to know before you download.</p>
           </div>
           <div className="flex flex-col divide-y divide-dark-border">
@@ -734,12 +822,13 @@ export default function Home() {
           className="absolute inset-x-0 top-0 h-72 pointer-events-none"
           style={{ background: 'radial-gradient(ellipse 60% 100% at 50% 0%, rgba(201,162,39,0.12), transparent 70%)' }}
         />
-        <div className="absolute top-0 left-0 right-0 h-px bg-dark-border" />
-        <div className="relative max-w-2xl mx-auto">
+        <div className="absolute top-0 left-0 right-0 hairline" />
+        <div className="aurora" aria-hidden="true"><span className="a1" /><span className="a3" /></div>
+        <div className="relative z-10 max-w-2xl mx-auto">
           <div className="flex justify-center mb-8">
             <LogoFull className="text-4xl font-bold" />
           </div>
-          <h2 className="font-display text-4xl font-semibold text-dark-text mb-4">Ready to stay connected?</h2>
+          <h2 className="font-display text-4xl md:text-5xl font-semibold text-dark-text mb-4 tracking-tight">Ready to <span className="text-gradient">stay connected</span>?</h2>
           <p className="text-dark-muted text-lg mb-10">Free to download. No subscription required to get started.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="#" className="inline-flex items-center justify-center gap-3 bg-white text-gray-900 hover:bg-gray-50 font-semibold px-7 py-4 rounded-2xl transition-colors text-base">
