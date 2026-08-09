@@ -1,4 +1,5 @@
 import { LogoFull } from './_components/Logo';
+import { DifferentiatorCarousel } from './_components/DifferentiatorCarousel';
 
 export default function Home() {
   return (
@@ -220,7 +221,8 @@ export default function Home() {
       <div className="border-b border-dark-border bg-dark-bg">
         <div className="max-w-5xl mx-auto px-6 py-7 flex flex-wrap justify-center gap-x-10 gap-y-3">
           {[
-            { label: 'End-to-end encrypted',   path: 'M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z' },
+            { label: 'Never sold. Ever.',        path: 'M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z' },
+            { label: 'End-to-end encrypted',    path: 'M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z' },
             { label: 'iOS & Android',           path: 'M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 8.25h3v.75h-3v-.75z' },
             { label: 'Adaptive battery tracking', path: 'M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z' },
             { label: 'No ads. Ever.',            path: 'M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636' },
@@ -288,35 +290,61 @@ export default function Home() {
                 iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
                 title: 'iBeacon tokens',
                 desc: 'Attach a Loxymity beacon to anything valuable. Nearby app users automatically report its location back to you.',
-                badge: 'Pro',
+                badge: 'Premium',
               },
               {
                 iconPath: 'M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z',
                 iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
                 title: 'Geo-fencing',
                 desc: 'Draw virtual boundaries on the map with a custom dwell time — alerts fire only when someone actually stays inside.',
-                badge: 'Pro',
+                badge: 'Premium',
               },
               {
                 iconPath: 'M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0',
                 iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
                 title: 'Arrival & departure alerts',
                 desc: 'Get notified the moment someone arrives at or leaves school, home, work, or any zone you define.',
-                badge: 'Pro',
+                badge: 'Premium',
               },
               {
                 iconPath: 'M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z',
                 iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
                 title: 'In-app voice & video',
                 desc: 'Call any circle member directly inside the app. No phone number needed — tap their name and connect.',
-                badge: 'Pro',
+                badge: 'Premium',
               },
               {
                 iconPath: 'M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 8.25h3v.75h-3v-.75z',
                 iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
                 title: 'Member battery status',
                 desc: "See each member's battery level on the map — know when someone's phone is about to die before they go dark.",
-                badge: 'Pro',
+                badge: 'Premium',
+              },
+              {
+                iconPath: 'M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z',
+                iconColor: 'text-brand-success', iconBg: 'bg-brand-success/10',
+                title: 'WhatsApp & Alexa queries',
+                desc: 'Ask “where’s mum?” in WhatsApp or out loud to Alexa — AI-powered, privacy-first location answers. No map to open.',
+              },
+              {
+                iconPath: 'M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm4.5 0c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z',
+                iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
+                title: 'Street View on any pin',
+                desc: 'Drop into ground-level Street View for any member or place — recognise the actual doorway or corner at a glance.',
+                badge: 'Premium',
+              },
+              {
+                iconPath: 'M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5',
+                iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
+                title: 'Event circles',
+                desc: 'Spin up a time-limited circle for a trip or night out — it auto-dissolves when the event ends. Share for the moment, not forever.',
+              },
+              {
+                iconPath: 'M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244',
+                iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
+                title: 'Browser share links',
+                desc: 'Send a time-limited link to anyone — a grandparent or driver without the app. They open it in any browser and see live location.',
+                badge: 'Premium',
               },
               {
                 iconPath: 'M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z',
@@ -341,6 +369,21 @@ export default function Home() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── Differentiators carousel ───────────────────────────────────────── */}
+      <section className="py-24 px-6 bg-dark-bg">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-14">
+            <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/25 text-primary font-hud uppercase tracking-wide text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
+              <span className="w-2 h-2 bg-primary rounded-full" />
+              What sets us apart
+            </div>
+            <h2 className="font-display text-4xl font-semibold text-dark-text mb-4">More than a dot on a map</h2>
+            <p className="text-lg text-dark-muted max-w-xl mx-auto">The things other trackers don&apos;t do — and a privacy promise they can&apos;t make.</p>
+          </div>
+          <DifferentiatorCarousel />
         </div>
       </section>
 
@@ -465,74 +508,121 @@ export default function Home() {
 
       {/* ── Pricing ──────────────────────────────────────────────────────── */}
       <section id="pricing" className="py-24 px-6 bg-dark-bg">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="font-display text-4xl font-semibold text-dark-text mb-4">Simple, honest pricing</h2>
-            <p className="text-lg text-dark-muted">Start free. Upgrade when you need more.</p>
+            <h2 className="font-display text-4xl font-semibold text-dark-text mb-4">Premium family safety — priced honestly</h2>
+            <p className="text-lg text-dark-muted max-w-xl mx-auto">Pick the features you need, not the number of people. Every plan — even Free — comes with our promise: your location is never sold.</p>
           </div>
-          <div className="grid md:grid-cols-2 gap-8">
-
-            {/* Free */}
-            <div className="bg-dark-surface rounded-3xl p-8 border border-dark-border">
-              <p className="text-sm font-semibold text-dark-muted mb-2">Free</p>
-              <p className="text-5xl font-black text-dark-text mb-1">$0</p>
-              <p className="text-dark-border text-sm mb-8">Forever free</p>
-              <ul className="flex flex-col gap-3 mb-8">
-                {[
-                  '1 circle (up to 5 members)',
-                  '24-hour location history',
-                  '1 iBeacon token',
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+            {[
+              {
+                name: 'Free',
+                price: '$0',
+                cadence: 'Forever free',
+                cta: 'Get started free',
+                features: [
+                  'Up to 5 members',
+                  '2 days location history',
                   '2 geofences',
                   'Real-time shared map',
                   'SOS emergency alerts',
-                  'Safety check-in',
-                  'Activity feed',
-                  'QR invite codes',
-                ].map((f) => (
-                  <li key={f} className="flex items-center gap-3 text-sm text-dark-muted">
-                    <CheckIcon />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <a href="#download" className="block text-center bg-dark-border hover:bg-[#333944] text-dark-text font-semibold px-6 py-3 rounded-xl transition-colors">
-                Get started free
-              </a>
-            </div>
-
-            {/* Pro */}
-            <div className="relative rounded-3xl p-8 bg-dark-surface border-2 border-primary/40" style={{ boxShadow: '0 24px 64px rgba(0,0,0,0.4)' }}>
-              <div className="absolute top-4 right-4 bg-primary/10 border border-primary/30 text-primary text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full">
-                Recommended
-              </div>
-              <p className="font-hud uppercase tracking-wide text-sm font-semibold text-dark-muted mb-2">Pro</p>
-              <p className="font-display text-5xl font-bold text-dark-text mb-1">$4.99</p>
-              <p className="text-dark-muted text-sm mb-8">per month</p>
-              <ul className="flex flex-col gap-3 mb-8 relative">
-                {[
-                  'Unlimited circles',
-                  'Up to 20 members per circle',
-                  '30-day location history',
-                  '20 iBeacon tokens',
-                  '50 geofences',
+                  'Safety check-in & activity feed',
+                  'WhatsApp & Alexa queries (10/mo)',
+                ],
+              },
+              {
+                name: 'Gold',
+                price: '$7.99',
+                cadence: 'per month · $69.99/yr',
+                cta: 'Choose Gold',
+                features: [
+                  'Up to 10 members',
+                  '30 days location history',
+                  '10 geofences',
+                  '1 iBeacon token',
+                  'In-app voice & video calls',
                   'Arrival & departure alerts',
                   'Member battery status',
-                  'In-app voice & video calls',
+                  'Browser share links',
+                ],
+              },
+              {
+                name: 'Platinum',
+                price: '$14.99',
+                cadence: 'per month · $129.99/yr',
+                cta: 'Choose Platinum',
+                highlight: true,
+                badge: 'Best value',
+                features: [
+                  'Up to 15 members',
+                  '90 days location history',
+                  '50 geofences',
+                  '20 iBeacon tokens',
+                  'Unlimited voice & video',
+                  'Street View on any pin',
+                  'Driving reports & auto check-ins',
+                  'WhatsApp & Alexa queries (30/day)',
+                ],
+              },
+              {
+                name: 'Infinite',
+                price: '$19.99',
+                cadence: 'per month · $169.99/yr',
+                cta: 'Choose Infinite',
+                features: [
+                  'Unlimited members',
+                  '180 days location history',
+                  'Privacy Shield — see who viewed you',
+                  'Location blur & ghost mode',
+                  'Retention control & data export',
+                  'Everything in Platinum',
                   'Priority support',
-                  'Pro badge on your profile',
-                ].map((f) => (
-                  <li key={f} className="flex items-center gap-3 text-sm text-dark-text relative">
-                    <CheckIcon />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <a href="#download" className="relative block text-center bg-primary hover:bg-primary-dark text-dark-bg font-bold px-6 py-3 rounded-xl transition-colors">
-                Upgrade to Pro
-              </a>
-            </div>
-
+                ],
+              },
+            ].map((plan) => (
+              <div
+                key={plan.name}
+                className={`relative flex flex-col rounded-3xl p-7 ${
+                  plan.highlight
+                    ? 'bg-dark-surface border-2 border-primary/40'
+                    : 'bg-dark-surface border border-dark-border'
+                }`}
+                style={plan.highlight ? { boxShadow: '0 24px 64px rgba(0,0,0,0.4)' } : undefined}
+              >
+                {plan.badge && (
+                  <div className="absolute top-4 right-4 bg-primary/10 border border-primary/30 text-primary text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full">
+                    {plan.badge}
+                  </div>
+                )}
+                <p className="font-hud uppercase tracking-wide text-sm font-semibold text-dark-muted mb-2">{plan.name}</p>
+                <p className={`font-display text-4xl font-bold text-dark-text mb-1 ${plan.name === 'Free' ? 'text-5xl font-black' : ''}`}>{plan.price}</p>
+                <p className="text-dark-muted text-xs mb-4">{plan.cadence}</p>
+                <div className="inline-flex items-center gap-1.5 self-start bg-brand-success/10 border border-brand-success/25 text-brand-success text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full mb-6">
+                  <span className="w-1.5 h-1.5 bg-brand-success rounded-full" />
+                  Never sold
+                </div>
+                <ul className="flex flex-col gap-2.5 mb-8 flex-1">
+                  {plan.features.map((f) => (
+                    <li key={f} className="flex items-start gap-2.5 text-sm text-dark-muted">
+                      <span className="mt-0.5"><CheckIcon /></span>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  href="#download"
+                  className={`block text-center font-semibold px-6 py-3 rounded-xl transition-colors ${
+                    plan.highlight
+                      ? 'bg-primary hover:bg-primary-dark text-dark-bg font-bold'
+                      : 'bg-dark-border hover:bg-[#333944] text-dark-text'
+                  }`}
+                >
+                  {plan.cta}
+                </a>
+              </div>
+            ))}
           </div>
+          <p className="text-center text-dark-muted text-sm mt-8">Prices in USD; localized pricing shown in your region&apos;s store. Member counts are generous household caps — never per-seat billing.</p>
         </div>
       </section>
 
@@ -543,10 +633,11 @@ export default function Home() {
             <h2 className="font-display text-4xl font-semibold text-dark-text mb-6">Privacy first, always</h2>
             <div className="flex flex-col gap-4">
               {[
-                'Your location is never sold or shared with advertisers.',
+                'Your location is processed on-device where possible and never sold or shared with advertisers.',
                 'You can pause or stop sharing at any time — instantly.',
                 'Only circle members you approve can see your location.',
                 'All data is encrypted in transit and at rest.',
+                'Privacy Shield (Infinite): see who viewed you, blur your location, or go into ghost mode.',
                 'Location history is automatically deleted after 30 days.',
               ].map((point) => (
                 <div key={point} className="flex items-start gap-3">
@@ -605,11 +696,15 @@ export default function Home() {
               },
               {
                 q: 'How is this different from sharing location on WhatsApp or Google Maps?',
-                a: "Those tools offer basic, temporary location sharing as a side feature. Loxymity is purpose-built for continuous family and friend tracking, with a dedicated shared map, geofencing with custom dwell times, arrival/departure alerts, iBeacon support, battery status, SOS alerts, in-app voice and video calls, and a full activity feed — all in one app.",
+                a: "Those tools offer basic, temporary location sharing as a side feature. Loxymity is purpose-built for continuous family and friend tracking: a dedicated shared map, geofencing with custom dwell times, arrival/departure alerts, iBeacon support, battery status, SOS alerts, in-app voice and video calls, Street View on any pin, WhatsApp and Alexa location queries, and a full activity feed — all in one app, and your location is never sold.",
+              },
+              {
+                q: 'Can I ask where someone is from WhatsApp or Alexa?',
+                a: "Yes — this is one of the things that sets Loxymity apart. Link your account and simply ask “where’s mum?” in WhatsApp, or ask Alexa out loud, and get an instant, AI-powered answer from your live circle. It’s privacy-first: your location powers the answer and is never sold.",
               },
               {
                 q: 'Can I see where someone was earlier today?',
-                a: "Yes. All plans include location history — 24 hours on Free and 30 days on Pro. Tap any circle member on the map to replay their location trail and see exactly where they were and when.",
+                a: "Yes. Every plan includes location history — 2 days on Free, scaling up to 30, 90, and 180 days on Gold, Platinum, and Infinite. Tap any circle member on the map to replay their location trail and see exactly where they were and when.",
               },
               {
                 q: 'Is my data ever sold or shared with third parties?',
