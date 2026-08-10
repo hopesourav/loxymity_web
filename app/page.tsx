@@ -1,5 +1,6 @@
 import { LogoFull } from './_components/Logo';
 import { DifferentiatorCarousel } from './_components/DifferentiatorCarousel';
+import { HeroPhoneCarousel } from './_components/HeroPhoneCarousel';
 
 export default function Home() {
   return (
@@ -86,140 +87,8 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Phone mockup */}
-        <div className="relative mt-16 max-w-[285px] mx-auto animate-float" style={{ willChange: 'transform' }}>
-          <div className="absolute -inset-8 bg-primary/8 blur-3xl rounded-full" />
-          <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-dark-bg to-transparent pointer-events-none z-10" />
-          {/* Chassis */}
-          <div className="relative bg-dark-surface rounded-[3rem] p-[3px] ring-1 ring-dark-border shadow-2xl" style={{ boxShadow: '0 32px 80px rgba(0,0,0,0.45)' }}>
-            <div className="bg-[#070d19] rounded-[2.8rem] overflow-hidden">
-
-              {/* Status bar */}
-              <div className="h-9 flex items-center justify-between px-5 pt-2">
-                <span className="text-dark-text text-[10px] font-semibold">9:41</span>
-                <div className="w-14 h-[18px] bg-black rounded-full" />
-                <div className="flex items-center gap-1.5 opacity-70">
-                  <svg className="w-3 h-3 text-dark-text" fill="currentColor" viewBox="0 0 10 12">
-                    <rect x="0" y="6.5" width="1.8" height="5.5" rx="0.4" />
-                    <rect x="2.7" y="4.5" width="1.8" height="7.5" rx="0.4" />
-                    <rect x="5.4" y="2.5" width="1.8" height="9.5" rx="0.4" />
-                    <rect x="8.1" y="0.5" width="1.8" height="11.5" rx="0.4" />
-                  </svg>
-                  <svg className="w-[18px] h-3 text-dark-text" fill="none" viewBox="0 0 20 12">
-                    <rect x="0.5" y="0.5" width="16.5" height="11" rx="2.5" stroke="currentColor" strokeOpacity="0.45" />
-                    <rect x="2" y="2" width="11.5" height="8" rx="1.5" fill="currentColor" fillOpacity="0.75" />
-                    <path d="M18 4v4a2 2 0 000-4z" fill="currentColor" fillOpacity="0.35" />
-                  </svg>
-                </div>
-              </div>
-
-              {/* Circle header */}
-              <div className="px-4 pb-2 flex items-center justify-between">
-                <div>
-                  <p className="text-dark-text font-bold text-[11px] leading-tight">Family Circle</p>
-                  <p className="text-dark-muted text-[10px] leading-tight">4 members · all active</p>
-                </div>
-                <div className="flex -space-x-2">
-                  {[['S','#C9A227'],['A','#5C8F6B'],['R','#C08B3E'],['M','#B5453F']].map(([init, col]) => (
-                    <div
-                      key={init}
-                      className="w-6 h-6 rounded-full border border-[#070d19] flex items-center justify-center text-white text-[9px] font-bold flex-shrink-0"
-                      style={{ backgroundColor: col }}
-                    >{init}</div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Map area */}
-              <div className="h-[168px] relative overflow-hidden" style={{ backgroundColor: '#0d0f13' }}>
-                <div className="absolute inset-0" style={{
-                  backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px)',
-                  backgroundSize: '22px 22px',
-                }} />
-                <div className="absolute top-[41%] left-0 right-0 h-[2px]" style={{ backgroundColor: '#1a1d24' }} />
-                <div className="absolute top-[68%] left-0 right-0 h-[2px]" style={{ backgroundColor: '#1a1d24' }} />
-                <div className="absolute left-[27%] top-0 bottom-0 w-[2px]" style={{ backgroundColor: '#1a1d24' }} />
-                <div className="absolute left-[63%] top-0 bottom-0 w-[2px]" style={{ backgroundColor: '#1a1d24' }} />
-
-                {/* Sourav — active */}
-                <div className="absolute" style={{ top: '28%', left: '34%' }}>
-                  <div
-                    className="absolute rounded-full"
-                    style={{ width: 28, height: 28, top: -11, left: -11, backgroundColor: 'rgba(201,162,39,0.18)', animation: 'beacon-ring 2.4s ease-out infinite' }}
-                  />
-                  <div className="w-3.5 h-3.5 rounded-full border-2 border-white/25" style={{ backgroundColor: '#C9A227' }} />
-                </div>
-                {/* Ananya */}
-                <div className="absolute w-3 h-3 rounded-full" style={{ top: '56%', left: '61%', backgroundColor: '#5C8F6B' }} />
-                {/* Rohan */}
-                <div className="absolute w-3 h-3 rounded-full" style={{ top: '37%', left: '15%', backgroundColor: '#C08B3E' }} />
-
-                {/* Place label */}
-                <div
-                  className="absolute text-[8px] text-dark-muted rounded-md px-1.5 py-0.5"
-                  style={{ top: '17%', left: '37%', backgroundColor: 'rgba(20,23,29,0.88)', border: '1px solid rgba(38,43,51,0.6)' }}
-                >
-                  Home
-                </div>
-              </div>
-
-              {/* Member cards */}
-              <div className="flex flex-col gap-1.5 px-3 py-3">
-                {[
-                  { name: 'Sourav', place: 'Home',   time: 'Just now',  color: '#C9A227', bat: 82 },
-                  { name: 'Ananya', place: 'Office', time: '3 min ago', color: '#5C8F6B', bat: 61 },
-                  { name: 'Rohan',  place: 'School', time: '7 min ago', color: '#C08B3E', bat: 34 },
-                ].map((m) => {
-                  const bc = m.bat > 50 ? '#5C8F6B' : m.bat > 20 ? '#C08B3E' : '#B5453F';
-                  const bb = m.bat > 50 ? 'rgba(92,143,107,0.12)' : m.bat > 20 ? 'rgba(192,139,62,0.12)' : 'rgba(181,69,63,0.12)';
-                  return (
-                    <div key={m.name} className="bg-dark-surface rounded-xl px-3 py-2 flex items-center gap-2.5">
-                      <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0" style={{ backgroundColor: m.color }}>
-                        {m.name[0]}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-dark-text text-[11px] font-semibold leading-tight">{m.name}</p>
-                        <p className="text-dark-muted text-[10px] leading-tight">{m.place}</p>
-                      </div>
-                      <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full flex-shrink-0" style={{ color: bc, backgroundColor: bb }}>{m.bat}%</span>
-                      <p className="text-[9px] flex-shrink-0" style={{ color: '#5A5F68' }}>{m.time}</p>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Bottom tab bar */}
-              <div className="h-12 border-t border-dark-border flex items-center justify-around px-3 pb-1">
-                {/* Map (active) */}
-                <div className="flex flex-col items-center gap-0.5">
-                  <svg className="w-[17px] h-[17px] text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 6.75V15m6-6v8.25M3 17.25V6.75a1.125 1.125 0 01.622-1.06l4.125-2.063a1.125 1.125 0 011.006 0l4.5 2.25a1.125 1.125 0 001.006 0l4.125-2.063A1.125 1.125 0 0121 4.813V15.5a1.125 1.125 0 01-.622 1.06l-4.125 2.063a1.125 1.125 0 01-1.006 0l-4.5-2.25a1.125 1.125 0 00-1.006 0L3.622 18.44" />
-                  </svg>
-                  <div className="w-1 h-1 bg-primary rounded-full" />
-                </div>
-                {/* Activity */}
-                <svg className="w-[17px] h-[17px] text-dark-border" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-                </svg>
-                {/* SOS */}
-                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(181,69,63,0.12)', border: '1px solid rgba(181,69,63,0.22)' }}>
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="#B5453F" strokeWidth="2.5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-                  </svg>
-                </div>
-                {/* Circles */}
-                <svg className="w-[17px] h-[17px] text-dark-border" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
-                </svg>
-                {/* Profile */}
-                <svg className="w-[17px] h-[17px] text-dark-border" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                </svg>
-              </div>
-
-            </div>
-          </div>
-        </div>
+        {/* Phone mockup — auto-rotating app scenes */}
+        <HeroPhoneCarousel />
       </section>
 
       {/* ── Trust strip ──────────────────────────────────────────────────── */}
@@ -245,18 +114,140 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ── Problem → Gap (PAS) ────────────────────────────────────────────── */}
-      <section className="py-24 px-6 bg-dark-surface">
-        <div className="max-w-5xl mx-auto">
+      {/* ── Features (Area 2 — Everything you get) ───────────────────────── */}
+      <section id="features" className="py-24 px-6 bg-dark-bg">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 bg-brand-danger/10 border border-brand-danger/20 text-brand-danger font-hud uppercase tracking-wide text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
-              <span className="w-2 h-2 bg-brand-danger rounded-full" />
-              The problem
+            <div className="inline-flex items-center gap-2 gradient-border card-premium text-accent-cyan font-hud uppercase tracking-wide text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
+              <span className="w-2 h-2 bg-accent-cyan rounded-full" />
+              Everything you get
             </div>
-            <h2 className="font-display text-4xl md:text-5xl font-semibold text-dark-text mb-4 tracking-tight">Most family locators make you choose:<br className="hidden md:block" /> safety <span className="text-dark-muted">or</span> <span className="text-gradient">privacy</span></h2>
-            <p className="text-lg text-dark-muted max-w-2xl mx-auto">The popular apps got you tracking your family — then quietly turned that trust into a product. Here&apos;s the gap Loxymity was built to close.</p>
+            <h2 className="font-display text-4xl md:text-5xl font-semibold text-dark-text mb-4 tracking-tight">Everything <span className="text-gradient">your circle</span> needs</h2>
+            <p className="text-lg text-dark-muted max-w-xl mx-auto">One app for the whole family — real-time safety, smart alerts, and answers you can just ask for.</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-5 mb-14">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {[
+              {
+                iconPath: 'M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm4.5 0c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z',
+                iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
+                title: 'Real-time location',
+                desc: 'See exactly where everyone is on a live shared map, updated continuously. No refresh, no guessing.',
+              },
+              {
+                iconPath: 'M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z',
+                iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
+                title: 'Geofences & place alerts',
+                desc: 'Draw zones around home, school, or work — get an alert the moment someone arrives or leaves.',
+                badge: 'Premium',
+              },
+              {
+                iconPath: 'M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z',
+                iconColor: 'text-brand-danger', iconBg: 'bg-brand-danger/10',
+                title: 'SOS emergency',
+                desc: 'One tap sends an alert with exact GPS to every circle member — even if their app is closed.',
+              },
+              {
+                iconPath: 'M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z',
+                iconColor: 'text-brand-success', iconBg: 'bg-brand-success/10',
+                title: 'WhatsApp & Alexa answers',
+                desc: 'Ask “where’s mum?” in WhatsApp or out loud to Alexa — AI-powered, privacy-first answers. Nothing to open.',
+              },
+              {
+                iconPath: 'M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z',
+                iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
+                title: 'In-app voice & video',
+                desc: 'Call any member by name, right from the map — no phone number needed.',
+                badge: 'Premium',
+              },
+              {
+                iconPath: 'M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z',
+                iconColor: 'text-primary', iconBg: 'bg-primary/10',
+                title: 'Battery-friendly by design',
+                desc: 'Adaptive tracking speeds up when moving and eases off when still — real-time when it counts, gentle on battery.',
+              },
+            ].map((f) => (
+              <div key={f.title} className="card-premium gradient-border lift rounded-2xl p-7 group relative">
+                {f.badge && (
+                  <span className="absolute top-4 right-4 bg-accent-gold/12 text-accent-gold border border-accent-gold/30 font-hud uppercase text-[10px] font-bold px-2 py-0.5 rounded-full">
+                    {f.badge}
+                  </span>
+                )}
+                <div className={`w-10 h-10 rounded-xl ${f.iconBg} flex items-center justify-center mb-4`}>
+                  <svg className={`w-5 h-5 ${f.iconColor}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                    <path d={f.iconPath} />
+                  </svg>
+                </div>
+                <h3 className="text-base font-bold text-dark-text mb-2 group-hover:text-accent-cyan transition-colors">{f.title}</h3>
+                <p className="text-dark-muted text-sm leading-relaxed">{f.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Detailed "everything else" box */}
+          <div className="mt-6 card-premium gradient-border rounded-2xl p-8">
+            <div className="flex items-center gap-2.5 mb-6">
+              <svg className="w-5 h-5 text-primary flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <h3 className="font-display text-xl font-semibold text-dark-text">…and everything else, included</h3>
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-3">
+              {[
+                { t: 'Private circles with owner approval' },
+                { t: 'Full activity feed & history' },
+                { t: 'Safety check-in' },
+                { t: 'Member battery status', p: true },
+                { t: 'Motion & stillness alerts' },
+                { t: 'iBeacon / BLE tokens', p: true },
+                { t: 'Street View on any pin', p: true },
+                { t: 'Event circles (auto-dissolving)' },
+                { t: 'Browser share links', p: true },
+                { t: 'QR & link invites' },
+                { t: 'Arrival & departure alerts', p: true },
+                { t: 'On-device processing, never sold' },
+              ].map((item) => (
+                <div key={item.t} className="flex items-start gap-2.5 text-sm text-dark-muted">
+                  <span className="mt-0.5"><CheckIcon /></span>
+                  <span>
+                    {item.t}
+                    {item.p && <span className="ml-1.5 text-accent-gold/80 text-[10px] font-hud uppercase font-bold">Premium</span>}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Differentiators carousel ───────────────────────────────────────── */}
+      <section className="py-24 px-6 bg-dark-bg">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-14">
+            <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/25 text-primary font-hud uppercase tracking-wide text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
+              <span className="w-2 h-2 bg-primary rounded-full" />
+              What sets us apart
+            </div>
+            <h2 className="font-display text-4xl md:text-5xl font-semibold text-dark-text mb-4 tracking-tight">More than a <span className="text-gradient">dot on a map</span></h2>
+            <p className="text-lg text-dark-muted max-w-xl mx-auto">The things other trackers don&apos;t do — and a privacy promise they can&apos;t make.</p>
+          </div>
+          <DifferentiatorCarousel />
+        </div>
+      </section>
+
+      {/* ── Safety & trust (Area 3 — problem + safety + how-it-works merged) ─ */}
+      <section id="safety" className="py-24 px-6 bg-dark-surface">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-14">
+            <div className="inline-flex items-center gap-2 gradient-border card-premium text-brand-danger font-hud uppercase tracking-wide text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
+              <span className="w-2 h-2 bg-brand-danger rounded-full" />
+              Safety &amp; trust
+            </div>
+            <h2 className="font-display text-4xl md:text-5xl font-semibold text-dark-text mb-4 tracking-tight">Trusted with <span className="text-gradient">the people you love</span></h2>
+            <p className="text-lg text-dark-muted max-w-2xl mx-auto">Most family locators make you choose between safety and privacy. Here&apos;s the gap Loxymity closes — and how you start in minutes.</p>
+          </div>
+
+          {/* The problem / gap */}
+          <div className="grid md:grid-cols-3 gap-5 mb-8">
             {[
               {
                 iconPath: 'M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z',
@@ -285,280 +276,47 @@ export default function Home() {
               </div>
             ))}
           </div>
-          <div className="max-w-2xl mx-auto text-center">
-            <p className="font-display text-2xl md:text-3xl font-semibold text-dark-text mb-3">
-              Loxymity closes all three — <span className="text-gradient">and never sells your data.</span>
-            </p>
-            <p className="text-dark-muted text-base leading-relaxed">
-              Adaptive tracking that sips battery, AI answers you can ask from WhatsApp or Alexa,
-              hardware iBeacon tokens, Street View, in-app calls — the full toolkit, with privacy as the whole point.
-            </p>
-          </div>
-        </div>
-      </section>
+          <p className="text-center font-display text-2xl md:text-3xl font-semibold text-dark-text max-w-2xl mx-auto mb-6">
+            Loxymity closes all three — <span className="text-gradient">and never sells your data.</span>
+          </p>
 
-      {/* ── Features ─────────────────────────────────────────────────────── */}
-      <section id="features" className="py-24 px-6 bg-dark-bg">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-4xl md:text-5xl font-semibold text-dark-text mb-4 tracking-tight">Everything <span className="text-gradient">your circle</span> needs</h2>
-            <p className="text-lg text-dark-muted max-w-xl mx-auto">Built for real families and close friends — not strangers.</p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {/* Safety layer chips */}
+          <div className="flex flex-wrap justify-center gap-3 mb-20">
             {[
-              {
-                iconPath: 'M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm4.5 0c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z',
-                iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
-                title: 'Real-time location',
-                desc: 'See exactly where everyone is on a live shared map, updated continuously. No refresh, no guessing.',
-              },
-              {
-                iconPath: 'M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z',
-                iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
-                title: 'Private circles',
-                desc: 'Create groups for family, friends, or trips. Invite with a QR code or link — you control every member.',
-              },
-              {
-                iconPath: 'M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z',
-                iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
-                title: 'Owner approval',
-                desc: 'Circle owners review and approve every join request. No one enters without your explicit permission.',
-              },
-              {
-                iconPath: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01',
-                iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
-                title: 'Activity feed',
-                desc: 'A chronological log of every geofence crossing, safety check-in, motion alert, and SOS in your circle.',
-              },
-              {
-                iconPath: 'M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z',
-                iconColor: 'text-brand-danger', iconBg: 'bg-brand-danger/10',
-                title: 'SOS emergency',
-                desc: 'One tap sends an emergency alert with your exact GPS location to every circle member, instantly.',
-              },
-              {
-                iconPath: 'M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z',
-                iconColor: 'text-brand-success', iconBg: 'bg-brand-success/10',
-                title: 'Safety check-in',
-                desc: "Mark yourself safe with a single tap. Your circle sees your status instantly — no anxious group texts needed.",
-              },
-              {
-                iconPath: 'M9.348 14.651a3.75 3.75 0 010-5.303m5.304 0a3.75 3.75 0 010 5.303m-7.425 2.122a6.75 6.75 0 010-9.546m9.546 0a6.75 6.75 0 010 9.546M5.106 18.894c-3.808-3.808-3.808-9.98 0-13.789m13.788 0c3.808 3.808 3.808 9.981 0 13.79M12 12h.008v.007H12V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z',
-                iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
-                title: 'iBeacon tokens',
-                desc: 'Attach a Loxymity beacon to anything valuable. Nearby app users automatically report its location back to you.',
-                badge: 'Premium',
-              },
-              {
-                iconPath: 'M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z',
-                iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
-                title: 'Geo-fencing',
-                desc: 'Draw virtual boundaries on the map with a custom dwell time — alerts fire only when someone actually stays inside.',
-                badge: 'Premium',
-              },
-              {
-                iconPath: 'M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0',
-                iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
-                title: 'Arrival & departure alerts',
-                desc: 'Get notified the moment someone arrives at or leaves school, home, work, or any zone you define.',
-                badge: 'Premium',
-              },
-              {
-                iconPath: 'M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z',
-                iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
-                title: 'In-app voice & video',
-                desc: 'Call any circle member directly inside the app. No phone number needed — tap their name and connect.',
-                badge: 'Premium',
-              },
-              {
-                iconPath: 'M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 8.25h3v.75h-3v-.75z',
-                iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
-                title: 'Member battery status',
-                desc: "See each member's battery level on the map — know when someone's phone is about to die before they go dark.",
-                badge: 'Premium',
-              },
-              {
-                iconPath: 'M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z',
-                iconColor: 'text-brand-success', iconBg: 'bg-brand-success/10',
-                title: 'WhatsApp & Alexa queries',
-                desc: 'Ask “where’s mum?” in WhatsApp or out loud to Alexa — AI-powered, privacy-first location answers. No map to open.',
-              },
-              {
-                iconPath: 'M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm4.5 0c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z',
-                iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
-                title: 'Street View on any pin',
-                desc: 'Drop into ground-level Street View for any member or place — recognise the actual doorway or corner at a glance.',
-                badge: 'Premium',
-              },
-              {
-                iconPath: 'M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5',
-                iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
-                title: 'Event circles',
-                desc: 'Spin up a time-limited circle for a trip or night out — it auto-dissolves when the event ends. Share for the moment, not forever.',
-              },
-              {
-                iconPath: 'M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244',
-                iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
-                title: 'Browser share links',
-                desc: 'Send a time-limited link to anyone — a grandparent or driver without the app. They open it in any browser and see live location.',
-                badge: 'Premium',
-              },
-              {
-                iconPath: 'M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z',
-                iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
-                title: 'Battery friendly',
-                desc: "Smart adaptive tracking slows down when you're still and speeds up when you're moving — minimum drain.",
-              },
-            ].map((f) => (
-              <div key={f.title} className="card-premium gradient-border lift rounded-2xl p-7 group relative">
-                {f.badge && (
-                  <span className="absolute top-4 right-4 bg-accent-gold/12 text-accent-gold border border-accent-gold/30 font-hud uppercase text-[10px] font-bold px-2 py-0.5 rounded-full">
-                    {f.badge}
-                  </span>
-                )}
-                <div className={`w-10 h-10 rounded-xl ${f.iconBg} flex items-center justify-center mb-4`}>
-                  <svg className={`w-5 h-5 ${f.iconColor}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                    <path d={f.iconPath} />
-                  </svg>
-                </div>
-                <h3 className="text-base font-bold text-dark-text mb-2 group-hover:text-accent-cyan transition-colors">{f.title}</h3>
-                <p className="text-dark-muted text-sm leading-relaxed">{f.desc}</p>
-              </div>
+              { t: 'One-tap SOS', c: '#B5453F' },
+              { t: 'Safety check-in', c: '#5C8F6B' },
+              { t: 'Live activity feed', c: '#5F82A5' },
+              { t: 'Motion & stillness alerts', c: '#C9A227' },
+            ].map((chip) => (
+              <span key={chip.t} className="inline-flex items-center gap-2 bg-dark-bg border border-dark-border rounded-full px-4 py-2 text-sm text-dark-text font-medium">
+                <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: chip.c }} />
+                {chip.t}
+              </span>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* ── Differentiators carousel ───────────────────────────────────────── */}
-      <section className="py-24 px-6 bg-dark-bg">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-14">
-            <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/25 text-primary font-hud uppercase tracking-wide text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
-              <span className="w-2 h-2 bg-primary rounded-full" />
-              What sets us apart
+          {/* How it works */}
+          <div id="how-it-works" className="scroll-mt-24">
+            <div className="text-center mb-12">
+              <h3 className="font-display text-3xl md:text-4xl font-semibold text-dark-text tracking-tight">Up and running in <span className="text-gradient">minutes</span></h3>
+              <p className="text-dark-muted mt-2">No complicated setup. Download, invite, and go.</p>
             </div>
-            <h2 className="font-display text-4xl md:text-5xl font-semibold text-dark-text mb-4 tracking-tight">More than a <span className="text-gradient">dot on a map</span></h2>
-            <p className="text-lg text-dark-muted max-w-xl mx-auto">The things other trackers don&apos;t do — and a privacy promise they can&apos;t make.</p>
-          </div>
-          <DifferentiatorCarousel />
-        </div>
-      </section>
-
-      {/* ── iBeacon highlight ──────────────────────────────────────────────── */}
-      <section className="py-24 px-6 bg-dark-surface">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-16 items-center">
-          <div className="flex-1">
-            <div className="inline-flex items-center gap-2 bg-accent-cyan/10 border border-accent-cyan/25 text-accent-cyan font-hud uppercase tracking-wide text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
-              <span className="w-2 h-2 bg-accent-cyan rounded-full" />
-              iBeacon tokens
-            </div>
-            <h2 className="font-display text-dark-text text-4xl md:text-5xl font-semibold mb-6 tracking-tight">Never lose <span className="text-gradient">what matters</span></h2>
-            <p className="text-dark-muted text-lg mb-8 leading-relaxed">
-              Loxymity iBeacon tokens use a unique UUID so any nearby app user automatically
-              crowdsources its location — no GPS in the token required. Attach one to a bag,
-              bike, or car and see it move on your map in real time.
-            </p>
-            <div className="flex flex-col gap-4">
+            <div className="grid md:grid-cols-3 gap-8 relative">
+              <div className="hidden md:block absolute top-7 left-[calc(16.67%+2.5rem)] right-[calc(16.67%+2.5rem)] h-px bg-dark-border" />
               {[
-                { p: 'M9.348 14.651a3.75 3.75 0 010-5.303m5.304 0a3.75 3.75 0 010 5.303m-7.425 2.122a6.75 6.75 0 010-9.546m9.546 0a6.75 6.75 0 010 9.546M5.106 18.894c-3.808-3.808-3.808-9.98 0-13.789m13.788 0c3.808 3.808 3.808 9.981 0 13.79M12 12h.008v.007H12V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z', text: 'Unique UUID — registered exclusively to the Loxymity network' },
-                { p: 'M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z', text: 'Crowd-sourced — every nearby Loxymity user reports it silently' },
-                { p: 'M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z', text: 'Last-seen location and time visible on your map instantly' },
-                { p: 'M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0', text: 'Set a geofence around a token to get alerted if it moves' },
-              ].map((item) => (
-                <div key={item.text} className="flex items-start gap-3">
-                  <div className="w-7 h-7 rounded-lg bg-accent-cyan/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <svg className="w-3.5 h-3.5 text-accent-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                      <path d={item.p} />
-                    </svg>
+                { step: '01', title: 'Create your account', desc: 'Sign up with your email. We send a one-time code — no password to remember.' },
+                { step: '02', title: 'Start or join a circle', desc: 'Create a circle and share the invite QR with the people you trust. Owner approval keeps it private.' },
+                { step: '03', title: 'See your circle live', desc: 'Everyone appears on the shared map in real time. SOS, check-ins, and alerts are always one tap away.' },
+              ].map((s) => (
+                <div key={s.step} className="text-center relative">
+                  <div className="font-display w-14 h-14 border border-accent-gold/40 bg-accent-gold/10 text-accent-gold font-semibold text-lg rounded-2xl flex items-center justify-center mx-auto mb-5">
+                    {s.step}
                   </div>
-                  <p className="text-dark-muted text-sm leading-relaxed">{item.text}</p>
+                  <h3 className="text-lg font-bold text-dark-text mb-2">{s.title}</h3>
+                  <p className="text-dark-muted text-sm leading-relaxed">{s.desc}</p>
                 </div>
               ))}
             </div>
-          </div>
-          <div className="flex-1 flex justify-center">
-            <div className="relative w-64 h-64 flex items-center justify-center">
-              <div className="absolute inset-0 rounded-full border border-accent-cyan/10 animate-beacon-ring" />
-              <div className="absolute inset-8 rounded-full border border-accent-cyan/15 animate-beacon-ring" style={{ animationDelay: '1s' }} />
-              <div className="absolute inset-16 rounded-full border border-accent-cyan/25 animate-beacon-ring" style={{ animationDelay: '2s' }} />
-              <div className="absolute inset-20 bg-dark-bg border border-accent-cyan/30 rounded-3xl flex items-center justify-center shadow-xl" style={{ boxShadow: '0 0 40px rgba(0,240,255,0.25)' }}>
-                <svg className="w-9 h-9 text-accent-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M9.348 14.651a3.75 3.75 0 010-5.303m5.304 0a3.75 3.75 0 010 5.303m-7.425 2.122a6.75 6.75 0 010-9.546m9.546 0a6.75 6.75 0 010 9.546M5.106 18.894c-3.808-3.808-3.808-9.98 0-13.789m13.788 0c3.808 3.808 3.808 9.981 0 13.79M12 12h.008v.007H12V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Safety & Emergency ───────────────────────────────────────────── */}
-      <section id="safety" className="py-24 px-6 bg-dark-bg">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 bg-brand-danger/10 border border-brand-danger/20 text-brand-danger text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
-              <span className="w-2 h-2 bg-brand-danger rounded-full" />
-              Safety & emergency
-            </div>
-            <h2 className="font-display text-4xl md:text-5xl font-semibold text-dark-text mb-4 tracking-tight">There when it <span className="text-gradient">counts most</span></h2>
-            <p className="text-lg text-dark-muted max-w-xl mx-auto">Loxymity has a full safety layer built in — not bolted on.</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                iconPath: 'M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z',
-                bg: 'bg-brand-danger/6 border border-brand-danger/18', iconBg: 'bg-brand-danger/10', iconColor: 'text-brand-danger', titleColor: 'text-brand-danger',
-                title: 'One-tap SOS',
-                desc: 'Press SOS in an emergency. Every circle member receives an immediate push notification with your exact GPS coordinates — no typing, no calling.',
-              },
-              {
-                iconPath: 'M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z',
-                bg: 'bg-brand-success/6 border border-brand-success/18', iconBg: 'bg-brand-success/10', iconColor: 'text-brand-success', titleColor: 'text-brand-success',
-                title: 'Safety check-in',
-                desc: "Arrived safely? Tap once to mark yourself safe. Your circle sees the update instantly with a timestamp — no anxious follow-up calls needed.",
-              },
-              {
-                iconPath: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01',
-                bg: 'bg-accent-cyan/6 border border-accent-cyan/18', iconBg: 'bg-accent-cyan/10', iconColor: 'text-accent-cyan', titleColor: 'text-accent-cyan',
-                title: 'Activity feed',
-                desc: 'A chronological log of every geofence crossing, safety check-in, motion event, and SOS alert in your circle. Catch up on anything you missed.',
-              },
-            ].map((item) => (
-              <div key={item.title} className={`${item.bg} lift rounded-2xl p-8`}>
-                <div className={`w-11 h-11 ${item.iconBg} rounded-xl flex items-center justify-center mb-5`}>
-                  <svg className={`w-5 h-5 ${item.iconColor}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                    <path d={item.iconPath} />
-                  </svg>
-                </div>
-                <h3 className={`text-xl font-bold mb-3 ${item.titleColor}`}>{item.title}</h3>
-                <p className="text-dark-muted text-sm leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── How it works ─────────────────────────────────────────────────── */}
-      <section id="how-it-works" className="py-24 px-6 bg-dark-surface">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-4xl md:text-5xl font-semibold text-dark-text mb-4 tracking-tight">Up and running in <span className="text-gradient">minutes</span></h2>
-            <p className="text-lg text-dark-muted">No complicated setup. Just download, invite, and go.</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8 relative">
-            <div className="hidden md:block absolute top-7 left-[calc(16.67%+2.5rem)] right-[calc(16.67%+2.5rem)] h-px bg-dark-border" />
-            {[
-              { step: '01', title: 'Create your account', desc: 'Sign up with your email. We send a one-time code — no password to remember.' },
-              { step: '02', title: 'Start or join a circle', desc: 'Create a circle and share the invite QR with the people you trust. Owner approval keeps it private.' },
-              { step: '03', title: 'See your circle live', desc: 'Everyone appears on the shared map in real time. SOS, check-ins, and alerts are always one tap away.' },
-            ].map((s) => (
-              <div key={s.step} className="text-center relative">
-                <div className="font-display w-14 h-14 border border-accent-gold/40 bg-accent-gold/10 text-accent-gold font-semibold text-lg rounded-2xl flex items-center justify-center mx-auto mb-5">
-                  {s.step}
-                </div>
-                <h3 className="text-lg font-bold text-dark-text mb-2">{s.title}</h3>
-                <p className="text-dark-muted text-sm leading-relaxed">{s.desc}</p>
-              </div>
-            ))}
           </div>
         </div>
       </section>
@@ -573,9 +331,9 @@ export default function Home() {
               Pricing
             </div>
             <h2 className="font-display text-4xl md:text-5xl font-semibold text-dark-text mb-4 tracking-tight">What is <span className="text-gradient">knowing they&apos;re safe</span> worth?</h2>
-            <p className="text-lg text-dark-muted max-w-xl mx-auto">Probably a lot. Loxymity is a few cents a day. Pick the features you need — never a per-person bill — and every plan keeps the promise: <span className="text-dark-text font-medium">your location is never sold.</span></p>
+            <p className="text-lg text-dark-muted max-w-xl mx-auto">Probably a lot. Loxymity is a few cents a day. Pick the features you need — never a per-person bill — and every plan keeps the promise: <span className="text-dark-text font-medium">we never sell your location data. Not to advertisers, not to data brokers, not to anyone.</span></p>
           </div>
-          <p className="text-center text-dark-muted text-sm mb-12">Prices in USD, billed monthly. <span className="text-brand-success font-medium">Switch to annual and save up to 29%.</span></p>
+          <p className="text-center text-dark-muted text-sm mb-12">Prices in USD, billed monthly. <span className="text-brand-success font-medium">Pay yearly and save up to 29%</span> — that&apos;s months free versus the monthly rate.</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
             {[
               {
@@ -599,8 +357,7 @@ export default function Home() {
                 name: 'Gold',
                 price: '$7.99',
                 cadence: 'per month',
-                daily: 'about 26¢ a day',
-                annual: 'or $69.99/yr — save $26',
+                annualMo: '$5.83', annualSave: '27%', annualTotal: '$69.99',
                 cta: 'Get Gold',
                 features: [
                   'Everything in Free, plus:',
@@ -616,8 +373,7 @@ export default function Home() {
                 name: 'Platinum',
                 price: '$14.99',
                 cadence: 'per month',
-                daily: 'about 49¢ a day',
-                annual: 'or $129.99/yr — save $50',
+                annualMo: '$10.83', annualSave: '28%', annualTotal: '$129.99',
                 cta: 'Start 7-day free trial',
                 highlight: true,
                 badge: 'Most popular',
@@ -635,8 +391,7 @@ export default function Home() {
                 name: 'Infinite',
                 price: '$19.99',
                 cadence: 'per month',
-                daily: 'about 66¢ a day',
-                annual: 'or $169.99/yr — save $70',
+                annualMo: '$14.17', annualSave: '29%', annualTotal: '$169.99',
                 cta: 'Go Infinite',
                 features: [
                   'Everything in Platinum, plus:',
@@ -671,12 +426,21 @@ export default function Home() {
                   <span className={`font-display font-bold text-dark-text ${plan.name === 'Free' ? 'text-5xl font-black' : 'text-4xl'}`}>{plan.price}</span>
                   {plan.name !== 'Free' && <span className="text-dark-muted text-sm">/mo</span>}
                 </p>
-                <p className="text-dark-muted text-xs mb-1">{plan.cadence}</p>
-                {plan.daily && <p className="text-primary text-xs font-medium mb-1">{plan.daily}</p>}
-                <p className="text-brand-success text-xs font-medium mb-4 min-h-[1rem]">{plan.annual || ' '}</p>
+                <p className="text-dark-muted text-xs mb-3">{plan.cadence}</p>
+                {plan.annualMo ? (
+                  <div className="rounded-lg bg-brand-success/8 border border-brand-success/20 px-2.5 py-2 mb-4">
+                    <p className="text-brand-success text-xs font-bold leading-tight">
+                      Pay yearly → {plan.annualMo}/mo
+                      <span className="ml-1.5 bg-brand-success/15 rounded px-1 py-0.5 text-[10px]">save {plan.annualSave}</span>
+                    </p>
+                    <p className="text-dark-muted text-[10px] mt-0.5">{plan.annualTotal} billed once a year vs {plan.price}/mo</p>
+                  </div>
+                ) : (
+                  <div className="mb-4" />
+                )}
                 <div className="inline-flex items-center gap-1.5 self-start bg-brand-success/10 border border-brand-success/25 text-brand-success text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full mb-6">
-                  <span className="w-1.5 h-1.5 bg-brand-success rounded-full" />
-                  Never sold
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 0h10.5a2.25 2.25 0 012.25 2.25v6.75a2.25 2.25 0 01-2.25 2.25H6.75a2.25 2.25 0 01-2.25-2.25v-6.75a2.25 2.25 0 012.25-2.25z" /></svg>
+                  Location data — never sold
                 </div>
                 <ul className="flex flex-col gap-2.5 mb-8 flex-1">
                   {plan.features.map((f, i) => (
