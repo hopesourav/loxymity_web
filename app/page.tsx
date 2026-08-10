@@ -35,7 +35,7 @@ export default function Home() {
       </nav>
 
       {/* ── Hero ────────────────────────────────────────────────────────── */}
-      <section className="relative pt-32 pb-0 px-6 text-center bg-dark-bg overflow-hidden">
+      <section className="relative pt-32 pb-20 lg:pb-24 px-6 bg-dark-bg overflow-hidden">
         {/* Ambient aurora */}
         <div className="aurora" aria-hidden="true">
           <span className="a1" /><span className="a2" /><span className="a3" />
@@ -54,41 +54,46 @@ export default function Home() {
           }}
         />
 
-        <div className="relative max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 gradient-border card-premium text-dark-muted font-hud uppercase tracking-wide text-sm font-semibold px-4 py-1.5 rounded-full mb-6 animate-fade-up">
-            <span className="w-1.5 h-1.5 bg-primary rounded-full animate-halo" />
-            The family locator that never sells your data
+        <div className="relative max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-10">
+          {/* Copy */}
+          <div className="flex-1 text-center lg:text-left">
+            <div className="inline-flex items-center gap-2 gradient-border card-premium text-dark-muted font-hud uppercase tracking-wide text-sm font-semibold px-4 py-1.5 rounded-full mb-6 animate-fade-up">
+              <span className="w-1.5 h-1.5 bg-primary rounded-full animate-halo" />
+              The family locator that never sells your data
+            </div>
+            <h1 className="font-display text-dark-text text-5xl md:text-[4.25rem] font-semibold tracking-tight leading-[1.08] mb-6 animate-fade-up" style={{ animationDelay: '0.08s' }}>
+              Never wonder<br />
+              <span className="italic text-gradient text-gradient-anim">where they are</span> again.
+            </h1>
+            <p className="text-xl text-dark-muted max-w-xl mx-auto lg:mx-0 mb-6 leading-relaxed animate-fade-up" style={{ animationDelay: '0.16s' }}>
+              A private, real-time map of everyone you love — with SOS, safety check-ins,
+              and instant answers from WhatsApp &amp; Alexa. All the safety of the big
+              trackers, none of the data-selling. <span className="text-dark-text font-medium">Your location is never sold. Ever.</span>
+            </p>
+            <p className="text-sm text-dark-muted mb-10 animate-fade-up" style={{ animationDelay: '0.24s' }}>Free to start · Peace of mind from less than 50¢ a day.</p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-up" style={{ animationDelay: '0.32s' }} id="download">
+              <a
+                href="#"
+                className="inline-flex items-center justify-center gap-3 bg-dark-surface hover:bg-dark-border border border-dark-border text-dark-text font-semibold px-7 py-4 rounded-2xl transition-colors text-base"
+              >
+                <AppleIcon />
+                Download on the App Store
+              </a>
+              <a
+                href="#"
+                className="inline-flex items-center justify-center gap-3 bg-primary hover:bg-primary-dark text-dark-bg font-semibold px-7 py-4 rounded-2xl transition-colors text-base"
+              >
+                <PlayIcon dark />
+                Get it on Google Play
+              </a>
+            </div>
           </div>
-          <h1 className="font-display text-dark-text text-5xl md:text-[4.25rem] font-semibold tracking-tight leading-[1.08] mb-6 animate-fade-up" style={{ animationDelay: '0.08s' }}>
-            Never wonder<br />
-            <span className="italic text-gradient text-gradient-anim">where they are</span> again.
-          </h1>
-          <p className="text-xl text-dark-muted max-w-xl mx-auto mb-6 leading-relaxed animate-fade-up" style={{ animationDelay: '0.16s' }}>
-            A private, real-time map of everyone you love — with SOS, safety check-ins,
-            and instant answers from WhatsApp &amp; Alexa. All the safety of the big
-            trackers, none of the data-selling. <span className="text-dark-text font-medium">Your location is never sold. Ever.</span>
-          </p>
-          <p className="text-sm text-dark-muted mb-10 animate-fade-up" style={{ animationDelay: '0.24s' }}>Free to start · Peace of mind from less than 50¢ a day.</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-up" style={{ animationDelay: '0.32s' }} id="download">
-            <a
-              href="#"
-              className="inline-flex items-center justify-center gap-3 bg-dark-surface hover:bg-dark-border border border-dark-border text-dark-text font-semibold px-7 py-4 rounded-2xl transition-colors text-base"
-            >
-              <AppleIcon />
-              Download on the App Store
-            </a>
-            <a
-              href="#"
-              className="inline-flex items-center justify-center gap-3 bg-primary hover:bg-primary-dark text-dark-bg font-semibold px-7 py-4 rounded-2xl transition-colors text-base"
-            >
-              <PlayIcon dark />
-              Get it on Google Play
-            </a>
+
+          {/* Phone mockup — auto-rotating app scenes */}
+          <div className="flex-1 flex justify-center lg:justify-end w-full">
+            <HeroPhoneCarousel />
           </div>
         </div>
-
-        {/* Phone mockup — auto-rotating app scenes */}
-        <HeroPhoneCarousel />
       </section>
 
       {/* ── Trust strip ──────────────────────────────────────────────────── */}

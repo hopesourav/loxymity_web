@@ -185,10 +185,9 @@ export function HeroPhoneCarousel() {
   }, []);
 
   return (
-    <div className="relative mt-16 max-w-[285px] mx-auto">
+    <div className="relative w-full max-w-[285px] mx-auto lg:mx-0">
       <div className="animate-float" style={{ willChange: 'transform' }}>
         <div className="absolute -inset-8 bg-primary/8 blur-3xl rounded-full" />
-        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-dark-bg to-transparent pointer-events-none z-10" />
         {/* Chassis */}
         <div className="relative bg-dark-surface rounded-[3rem] p-[3px] ring-1 ring-dark-border shadow-2xl" style={{ boxShadow: '0 32px 80px rgba(0,0,0,0.45)' }}>
           <div className="bg-[#070d19] rounded-[2.8rem] overflow-hidden">
