@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { supabase } from '../../_lib/client';
+import { hasProAccess } from '../../../_lib/tiers';
 import {
   PRO_PRICE_DISPLAY, RAZORPAY_SCRIPT_URL, STRIPE_LIVE,
 } from '../../_lib/constants';
@@ -49,7 +50,7 @@ export default function UpgradePage() {
         .eq('id', session.user.id)
         .single();
 
-      if (profile?.subscription_tier === 'pro' || profile?.web_tier === 'pro') {
+      if (hasProAccess(profile)) {
         window.location.href = '/dashboard/';
         return;
       }
@@ -80,7 +81,7 @@ export default function UpgradePage() {
         .eq('id', session.user.id)
         .single();
 
-      if (profile?.subscription_tier === 'pro' || profile?.web_tier === 'pro') {
+      if (hasProAccess(profile)) {
         clearInterval(pollRef.current!);
         window.location.href = '/dashboard/';
       } else if (attempts >= 15) { // 30 s — Stripe webhooks can be slower

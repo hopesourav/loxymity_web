@@ -1,0 +1,2 @@
+# Repo is LF throughout. Prevents CRLF drift when editing from Windows.
+* text=auto eol=lf

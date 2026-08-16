@@ -1,10 +1,12 @@
+import type { Tier } from '../../_lib/tiers';
+
 export type AdminProfile = {
   id: string;
   display_name: string | null;
   avatar_url: string | null;
   google_avatar_url: string | null;
-  subscription_tier: 'free' | 'pro';
-  web_tier: 'free' | 'pro';
+  subscription_tier: Tier;
+  web_tier: Tier;
   is_admin: boolean;
 };
 

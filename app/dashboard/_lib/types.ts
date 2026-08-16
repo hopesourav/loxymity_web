@@ -1,3 +1,5 @@
+import type { Tier } from '../../_lib/tiers';
+
 export type MemberStatus = 'online' | 'stale' | 'offline' | 'sharing_off';
 
 export type UserProfile = {
@@ -5,8 +7,8 @@ export type UserProfile = {
   display_name: string | null;
   avatar_url: string | null;
   google_avatar_url: string | null;
-  subscription_tier: 'free' | 'pro';
-  web_tier: 'free' | 'pro';
+  subscription_tier: Tier;
+  web_tier: Tier;
 };
 
 export type Circle = {

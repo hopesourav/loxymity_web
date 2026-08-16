@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useAdmin } from '../_lib/adminContext';
 import type { AdminProfile, AdminLocation } from '../_lib/types';
+import { hasProAccess, effectiveTier, tierLabel } from '../../_lib/tiers';
 
 type UserRow = AdminProfile & {
   lastSeen: string | null;
@@ -15,7 +16,7 @@ export default function UsersPage() {
   const [users, setUsers] = useState<UserRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [tierFilter, setTierFilter] = useState<'all' | 'pro' | 'free'>('all');
+  const [tierFilter, setTierFilter] = useState<'all' | 'paid' | 'free'>('all');
 
   useEffect(() => {
     async function load() {
@@ -65,8 +66,7 @@ export default function UsersPage() {
       !search || (u.display_name ?? '').toLowerCase().includes(search.toLowerCase());
     const matchTier =
       tierFilter === 'all' ||
-      u.subscription_tier === tierFilter ||
-      u.web_tier === tierFilter;
+      (tierFilter === 'paid' ? hasProAccess(u) : !hasProAccess(u));
     return matchSearch && matchTier;
   });
 
@@ -86,7 +86,7 @@ export default function UsersPage() {
             onChange={(e) => setSearch(e.target.value)}
           />
           <div className="flex gap-1">
-            {(['all', 'pro', 'free'] as const).map((t) => (
+            {(['all', 'paid', 'free'] as const).map((t) => (
               <button
                 key={t}
                 onClick={() => setTierFilter(t)}
@@ -125,7 +125,7 @@ export default function UsersPage() {
               <tbody className="divide-y divide-dark-border">
                 {filtered.map((u) => {
                   const status = getStatus(u.lastSeen);
-                  const isPro = u.subscription_tier === 'pro' || u.web_tier === 'pro';
+                  const isPro = hasProAccess(u);
                   const avatarUrl = u.avatar_url ?? u.google_avatar_url;
                   return (
                     <tr key={u.id} className="hover:bg-dark-bg transition-colors">
@@ -152,7 +152,7 @@ export default function UsersPage() {
                               : 'bg-dark-bg text-dark-muted'
                           }`}
                         >
-                          {isPro ? 'Pro' : 'Free'}
+                          {tierLabel(effectiveTier(u))}
                         </span>
                       </td>
                       <td className="px-5 py-3">

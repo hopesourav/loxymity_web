@@ -35,7 +35,8 @@ export default function AdminOverviewPage() {
       ] = await Promise.all([
         supabase.from('profiles').select('id', { count: 'exact', head: true }),
         supabase.from('profiles').select('id', { count: 'exact', head: true })
-          .or('subscription_tier.eq.pro,web_tier.eq.pro'),
+          // Any paid tier: gold/platinum/infinite from the app, legacy 'pro' from web checkout.
+          .or('subscription_tier.neq.free,web_tier.neq.free'),
         supabase.from('latest_locations').select('user_id', { count: 'exact', head: true })
           .gte('reported_at', activeThreshold),
         supabase.from('latest_locations').select('user_id', { count: 'exact', head: true })
