@@ -35,7 +35,7 @@ export default function Home() {
       </nav>
 
       {/* ── Hero ────────────────────────────────────────────────────────── */}
-      <section className="relative pt-32 pb-20 lg:pb-24 px-6 bg-dark-bg overflow-hidden">
+      <section className="relative pt-32 pb-8 lg:pb-10 px-6 bg-dark-bg overflow-hidden">
         {/* Ambient aurora */}
         <div className="aurora" aria-hidden="true">
           <span className="a1" /><span className="a2" /><span className="a3" />
@@ -90,7 +90,7 @@ export default function Home() {
           </div>
 
           {/* Phone mockup — auto-rotating app scenes */}
-          <div className="flex-1 flex justify-center lg:justify-end w-full">
+          <div className="flex-1 flex justify-center lg:justify-center w-full">
             <HeroPhoneCarousel />
           </div>
         </div>
@@ -100,7 +100,7 @@ export default function Home() {
       <div className="border-b border-dark-border bg-dark-bg">
         <div className="max-w-5xl mx-auto px-6 py-7 flex flex-wrap justify-center gap-x-10 gap-y-3">
           {[
-            { label: 'Never sold. Ever.',        path: 'M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z' },
+            { label: 'Location Data Never sold. Ever.',        path: 'M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z' },
             { label: 'End-to-end encrypted',    path: 'M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z' },
             { label: 'iOS & Android',           path: 'M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 8.25h3v.75h-3v-.75z' },
             { label: 'Adaptive battery tracking', path: 'M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z' },
