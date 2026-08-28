@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useDashboard } from '../../_lib/context';
-import { HISTORY_RETENTION_DAYS } from '../../_lib/constants';
+import { historyRetentionDays, effectiveTier } from '../../../_lib/tiers';
 import type { LocationHistoryPoint } from '../../_lib/types';
 import { IconHistory, IconPlay, IconPause, IconSkipForward, IconUser } from '../../_components/Icons';
 
@@ -13,14 +13,17 @@ function fmt(iso: string) {
 }
 
 function todayISO() { return new Date().toISOString().slice(0, 10); }
-function minDate() {
+function minDate(retentionDays: number) {
   const d = new Date();
-  d.setDate(d.getDate() - HISTORY_RETENTION_DAYS);
+  d.setDate(d.getDate() - retentionDays);
   return d.toISOString().slice(0, 10);
 }
 
 export default function HistoryPage() {
-  const { supabase, members } = useDashboard();
+  const { supabase, members, profile } = useDashboard();
+  // Tier-driven, not a flat 7 — see historyRetentionDays(). A flat constant was
+  // blocking paying users from history they had bought.
+  const retentionDays = historyRetentionDays(effectiveTier(profile));
 
   const [selectedMemberId, setSelectedMemberId] = useState<string>('');
   const [date, setDate]   = useState(todayISO());
@@ -149,11 +152,11 @@ export default function HistoryPage() {
           </div>
           {/* Date */}
           <div className="flex flex-col gap-1">
-            <label className="text-xs text-dark-muted">Date (last {HISTORY_RETENTION_DAYS} days)</label>
+            <label className="text-xs text-dark-muted">Date (last {retentionDays} days)</label>
             <input
               type="date"
               value={date}
-              min={minDate()}
+              min={minDate(retentionDays)}
               max={todayISO()}
               onChange={e => setDate(e.target.value)}
               className="bg-dark-bg border border-dark-border rounded-lg px-2.5 py-1.5 text-sm text-dark-text focus:outline-none focus:ring-1 focus:ring-primary"

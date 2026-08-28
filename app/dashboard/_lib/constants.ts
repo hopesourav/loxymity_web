@@ -1,5 +1,7 @@
-// Update this when the backend extends retention (migration driven).
-export const HISTORY_RETENTION_DAYS = 7;
+// HISTORY_RETENTION_DAYS was removed: it was a flat 7 for every user, which
+// hard-blocked Gold/Platinum/Infinite subscribers from history they had paid
+// for. Retention is tier-driven now — see historyRetentionDays() in
+// app/_lib/tiers.ts, which mirrors the server window in migration 0088.
 
 // Flip to true once Stripe India registration is approved and env vars are set.
 // No rebuild of other dashboard features needed — only the upgrade page reads this.

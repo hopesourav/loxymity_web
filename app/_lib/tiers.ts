@@ -29,6 +29,29 @@ export function tierLabel(tier: string | null | undefined): string {
   return tier!.charAt(0).toUpperCase() + tier!.slice(1);
 }
 
+/**
+ * Days of location history a tier can actually see.
+ *
+ * MUST mirror the server transit window in migration 0088
+ * (`archive_location_to_history`): infinite 180 / platinum 90 / gold 30, with
+ * free floored at 7 for the geofence reconciler. Legacy `pro` maps to platinum,
+ * as it does everywhere else.
+ *
+ * This was previously a flat `HISTORY_RETENTION_DAYS = 7` constant, which
+ * clamped the dashboard date picker to a week for EVERY user — so Gold,
+ * Platinum and Infinite subscribers were hard-blocked from history they had
+ * paid for. That was a correctness bug, not a copy one.
+ */
+export function historyRetentionDays(tier: string | null | undefined): number {
+  switch (tier) {
+    case 'infinite': return 180;
+    case 'platinum': return 90;
+    case 'pro':      return 90;
+    case 'gold':     return 30;
+    default:         return 7;
+  }
+}
+
 /** The higher of a profile's two tiers, for badge display. */
 export function effectiveTier(
   profile: { subscription_tier?: string | null; web_tier?: string | null } | null | undefined,
