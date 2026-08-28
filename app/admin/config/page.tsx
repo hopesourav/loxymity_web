@@ -41,6 +41,13 @@ interface OverrideRow {
   updated_at: string;
 }
 
+/** `profiles` has no email column — phone is the secondary identifier. */
+interface Profile {
+  id: string;
+  display_name: string | null;
+  phone: string | null;
+}
+
 interface AuditRow {
   id: number;
   key: string;
@@ -98,21 +105,49 @@ export default function ConfigPage() {
   const [draft, setDraft] = useState<Record<string, string>>({});
   const [expiryHours, setExpiryHours] = useState<number | null>(24);
 
+  // Target scope. '' = everyone (a global row); otherwise a single user id.
+  // Per-user overrides are the staged-rollout lever: try a change on one handset,
+  // then a cohort, then the fleet. The database resolves user-scoped rows over
+  // global ones, so a canary is unaffected by whatever the fleet is set to.
+  const [target, setTarget] = useState<string>('');
+  const [people, setPeople] = useState<Profile[]>([]);
+  const [userOverrides, setUserOverrides] = useState<OverrideRow[]>([]);
+
   const load = useCallback(async () => {
-    const [k, o, a] = await Promise.all([
+    const [k, o, a, p] = await Promise.all([
       supabase.from('app_config_keys').select('*').order('kind').order('key'),
       supabase.from('app_config').select('*'),
       supabase.from('app_config_audit').select('*').order('changed_at', { ascending: false }).limit(25),
+      supabase.from('profiles').select('id, display_name, phone').order('display_name').limit(200),
     ]);
     setKeys((k.data ?? []) as KeyRow[]);
+
+    // An expired row still exists in the table — fetch_app_config filters it out
+    // rather than deleting it, so the app has already reverted to its compiled
+    // default. Treat it as inactive here too, or the page would report a feature
+    // as killed when it is running normally.
+    const live = ((o.data ?? []) as OverrideRow[]).filter(
+      (r) => !r.expires_at || new Date(r.expires_at).getTime() > Date.now(),
+    );
+
     const map: Record<string, OverrideRow> = {};
-    for (const row of (o.data ?? []) as OverrideRow[]) {
-      if (row.user_id === null) map[row.key] = row;   // this page edits global scope
+    for (const row of live) {
+      // The editors below show the override for the CURRENTLY SELECTED target, so
+      // switching target changes what the toggles and inputs reflect.
+      const matches = target === '' ? row.user_id === null : row.user_id === target;
+      if (matches) map[row.key] = row;
     }
     setOverrides(map);
+    setUserOverrides(live.filter((r) => r.user_id !== null));
+    setPeople((p.data ?? []) as Profile[]);
     setAudit((a.data ?? []) as AuditRow[]);
     setLoading(false);
-  }, [supabase]);
+  }, [supabase, target]);
+
+  const nameFor = (id: string) => {
+    const p = people.find((x) => x.id === id);
+    return p?.display_name || p?.phone || `${id.slice(0, 8)}…`;
+  };
 
   useEffect(() => { void load(); }, [load]);
 
@@ -125,18 +160,27 @@ export default function ConfigPage() {
     setBusy(null);
   };
 
+  /** null for the global row, so it matches the partial unique index in 0127. */
+  const scopeUser = () => (target === '' ? null : target);
+
   const killFlag = (row: KeyRow, reason: string) =>
     run(row.key, async () =>
       supabase.from('app_config').insert({
         key: row.key,
         value: row.safe_value,
+        user_id: scopeUser(),
         expires_at: expiresAtFrom(expiryHours),
         reason: reason || 'admin console',
         updated_by: userId,
       }));
 
-  const clearOverride = (key: string) =>
-    run(key, async () => supabase.from('app_config').delete().eq('key', key).is('user_id', null));
+  /** Deletes only the row for the selected scope — clearing a canary must not
+   *  touch the fleet-wide override, and vice versa. */
+  const clearOverride = (key: string, forUser: string | null = scopeUser()) =>
+    run(key, async () => {
+      const q = supabase.from('app_config').delete().eq('key', key);
+      return forUser === null ? q.is('user_id', null) : q.eq('user_id', forUser);
+    });
 
   const setNumber = (row: KeyRow, raw: string, reason: string) => {
     const n = Number(raw);
@@ -144,17 +188,28 @@ export default function ConfigPage() {
     const min = row.min_value ?? -Infinity;
     const max = row.max_value ?? Infinity;
     if (n < min || n > max) { setError(`${row.key}: must be between ${min} and ${max}`); return Promise.resolve(); }
-    return run(row.key, async () =>
-      supabase.from('app_config').upsert(
-        {
-          key: row.key,
-          value: n,
-          expires_at: expiresAtFrom(expiryHours),
-          reason: reason || 'admin console',
-          updated_by: userId,
-        },
-        { onConflict: 'key' },
-      ));
+    // Update-then-insert rather than upsert: 0127 enforces uniqueness with two
+    // PARTIAL indexes (one where user_id is null, one where it is not), and
+    // PostgREST's on_conflict cannot infer a partial index. Doing it this way also
+    // keeps the audit trail honest — an edit records old -> new, where a
+    // delete+insert would log a spurious "restored to default" in between.
+    const forUser = scopeUser();
+    const patch = {
+      value: n,
+      expires_at: expiresAtFrom(expiryHours),
+      reason: reason || 'admin console',
+      updated_by: userId,
+    };
+
+    return run(row.key, async () => {
+      const upd = supabase.from('app_config').update(patch).eq('key', row.key);
+      const scoped = forUser === null ? upd.is('user_id', null) : upd.eq('user_id', forUser);
+      const { data, error: updErr } = await scoped.select();
+      if (updErr) return { error: updErr };
+      if (data && data.length > 0) return { error: null };
+
+      return supabase.from('app_config').insert({ key: row.key, user_id: forUser, ...patch });
+    });
   };
 
   const flags = keys.filter((k) => k.kind === 'flag');
@@ -174,14 +229,22 @@ export default function ConfigPage() {
         </p>
       </header>
 
-      {/* The single most important thing an operator can know right now. */}
-      <div className="bg-brand-warning/10 border border-brand-warning/30 rounded-3xl p-4">
-        <p className="text-sm text-brand-warning font-medium">Shadow mode</p>
+      {/* The single most important thing an operator can know before touching
+          anything: whether these controls are live. Shadow mode ended in v0.8.865
+          (REMOTE_CONFIG_APPLY = true) — leaving the old "does not apply" banner up
+          would be worse than having none, because it invites a change made on the
+          assumption it is a dry run. */}
+      <div className="bg-brand-danger/10 border border-brand-danger/30 rounded-3xl p-4">
+        <p className="text-sm text-brand-danger font-medium">These controls are live</p>
         <p className="text-sm text-dark-muted mt-1">
-          The app fetches and logs these values but does <strong>not</strong> apply them yet
-          (<code className="text-xs">REMOTE_CONFIG_APPLY = false</code>). Changes here are safe to
-          make and will show up in device logs, but will not alter behaviour until that flag ships
-          as true.
+          Changes reach devices on their next launch or foreground resume — typically
+          minutes, not immediately. Apps older than <strong>v0.8.865</strong> fetch and log
+          these values but do not apply them, so a change affects only updated installs.
+        </p>
+        <p className="text-sm text-dark-muted mt-2">
+          Kill switches can only turn a feature <strong>off</strong>, never on, so the worst
+          outcome of a mistake here is a degraded app rather than a broken one. Every change
+          is reversible from this page and, unless you chose otherwise, expires on its own.
         </p>
       </div>
 
@@ -191,35 +254,97 @@ export default function ConfigPage() {
         </div>
       )}
 
-      {/* Expiry applies to whatever you change next. Defaulting to 24h is deliberate:
-          a kill switch nobody remembers to turn off is how a feature stays dead for
-          months (see migration 0114's header, and 0102 for the cautionary tale). */}
-      <div className="bg-dark-surface border border-dark-border rounded-3xl p-4 flex items-center gap-3">
-        <span className="text-sm text-dark-muted">New overrides expire after</span>
-        <select
-          value={expiryHours ?? ''}
-          onChange={(e) => setExpiryHours(e.target.value === '' ? null : Number(e.target.value))}
-          className="bg-dark-bg border border-dark-border rounded-xl px-3 py-1.5 text-sm text-dark-text"
-        >
-          {EXPIRY_OPTIONS.map((o) => (
-            <option key={o.label} value={o.hours ?? ''}>{o.label}</option>
-          ))}
-        </select>
-        {expiryHours === null && (
-          <span className="text-xs text-brand-warning">
-            A permanent kill switch is how a feature silently stays dead. Prefer a window.
-          </span>
-        )}
+      {/* Target and expiry both apply to whatever you change NEXT, and the editors
+          below reflect the selected target — so switching it changes what the
+          toggles and inputs are showing you, not just where a write lands.
+          Expiry defaults to 24h deliberately: a kill switch nobody remembers to
+          turn off is how a feature stays dead for months (migration 0114's header,
+          and 0102 for the cautionary tale). */}
+      <div className="bg-dark-surface border border-dark-border rounded-3xl p-4 space-y-3">
+        <div className="flex items-center gap-3 flex-wrap">
+          <span className="text-sm text-dark-muted">Apply to</span>
+          <select
+            value={target}
+            onChange={(e) => setTarget(e.target.value)}
+            className="bg-dark-bg border border-dark-border rounded-xl px-3 py-1.5 text-sm text-dark-text max-w-xs"
+          >
+            <option value="">Everyone (whole fleet)</option>
+            {people.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.display_name || p.phone || p.id.slice(0, 8)}
+              </option>
+            ))}
+          </select>
+          {target !== '' && (
+            <span className="text-xs text-primary">
+              Canary — only this account is affected. A per-user override wins over the
+              fleet-wide value, so it is unaffected by whatever Everyone is set to.
+            </span>
+          )}
+        </div>
+
+        <div className="flex items-center gap-3 flex-wrap">
+          <span className="text-sm text-dark-muted">New overrides expire after</span>
+          <select
+            value={expiryHours ?? ''}
+            onChange={(e) => setExpiryHours(e.target.value === '' ? null : Number(e.target.value))}
+            className="bg-dark-bg border border-dark-border rounded-xl px-3 py-1.5 text-sm text-dark-text"
+          >
+            {EXPIRY_OPTIONS.map((o) => (
+              <option key={o.label} value={o.hours ?? ''}>{o.label}</option>
+            ))}
+          </select>
+          {expiryHours === null && (
+            <span className="text-xs text-brand-warning">
+              A permanent kill switch is how a feature silently stays dead. Prefer a window.
+            </span>
+          )}
+        </div>
+
+        <p className="text-xs text-dark-muted/70">
+          For anything that affects battery or background tracking, try one account first,
+          watch Device Health for 24 h, then widen to Everyone.
+        </p>
       </div>
+
+      {/* Per-user overrides are easy to forget precisely because they affect one
+          person, so they get their own always-visible list rather than living only
+          behind the target selector. */}
+      {userOverrides.length > 0 && (
+        <section>
+          <h2 className="text-sm font-semibold text-dark-muted uppercase tracking-wide mb-3">
+            Active canaries
+          </h2>
+          <div className="bg-dark-surface border border-dark-border rounded-3xl divide-y divide-dark-border">
+            {userOverrides.map((o) => (
+              <div key={`${o.key}:${o.user_id}`} className="p-3 flex items-center justify-between gap-4 text-sm">
+                <div className="min-w-0">
+                  <code className="text-dark-text">{o.key}</code>
+                  <span className="text-dark-muted"> = {JSON.stringify(o.value)}</span>
+                  <span className="text-dark-muted/70"> · {nameFor(o.user_id as string)}</span>
+                  <span className="text-dark-muted/70"> · {expiryLabel(o.expires_at)}</span>
+                </div>
+                <button
+                  onClick={() => void clearOverride(o.key, o.user_id)}
+                  disabled={busy === o.key}
+                  className="shrink-0 px-3 py-1 rounded-xl text-xs border border-dark-border text-dark-text hover:bg-dark-bg disabled:opacity-50"
+                >
+                  Clear
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* ── Kill switches ───────────────────────────────────────────────────── */}
       <section>
         <h2 className="text-sm font-semibold text-dark-muted uppercase tracking-wide mb-3">
-          Kill switches
+          Kill switches {target !== '' && <span className="text-primary normal-case">· {nameFor(target)} only</span>}
         </h2>
         <p className="text-sm text-dark-muted mb-4">
           These can only turn a feature <strong>off</strong>. Enabling anything requires an app
-          release — that is enforced by the database, not just by this page.
+          release — enforced by the database and again by the app on read, not just by this page.
         </p>
 
         <div className="bg-dark-surface border border-dark-border rounded-3xl divide-y divide-dark-border">
@@ -283,7 +408,7 @@ export default function ConfigPage() {
       {/* ── Tunables ────────────────────────────────────────────────────────── */}
       <section>
         <h2 className="text-sm font-semibold text-dark-muted uppercase tracking-wide mb-3">
-          Tunables
+          Tunables {target !== '' && <span className="text-primary normal-case">· {nameFor(target)} only</span>}
         </h2>
         <p className="text-sm text-dark-muted mb-4">
           Values outside the stated range are rejected by the database and clamped again by the
