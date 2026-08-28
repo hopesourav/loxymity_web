@@ -149,8 +149,9 @@ export default function PrivacyPolicy() {
                 recent position is stored.
               </li>
               <li>
-                <strong>Location history</strong> — retained for up to 30 days (Pro subscribers)
-                or 7 days (Free), then automatically deleted.
+                <strong>Location history</strong> — retention depends on your plan: 7 days on
+                Free, 30 days on Gold, 90 days on Platinum and 180 days on Infinite. Older
+                points are deleted automatically.
               </li>
               <li>
                 <strong>Contacts</strong> — retained until you delete your account or revoke

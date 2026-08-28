@@ -338,7 +338,7 @@ export default function Home() {
             <h2 className="font-display text-4xl md:text-5xl font-semibold text-dark-text mb-4 tracking-tight">What is <span className="text-gradient">knowing they&apos;re safe</span> worth?</h2>
             <p className="text-lg text-dark-muted max-w-xl mx-auto">Probably a lot. Loxymity is a few cents a day. Pick the features you need — never a per-person bill — and every plan keeps the promise: <span className="text-dark-text font-medium">we never sell your location data. Not to advertisers, not to data brokers, not to anyone.</span></p>
           </div>
-          <p className="text-center text-dark-muted text-sm mb-12">Prices in USD, billed monthly. <span className="text-brand-success font-medium">Pay yearly and save up to 29%</span> — that&apos;s months free versus the monthly rate.</p>
+          <p className="text-center text-dark-muted text-sm mb-12">Monthly prices shown are for annual plans. <span className="text-brand-success font-medium">Monthly billing is available on every plan</span> at the price listed on each card.</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
             {[
               {
@@ -360,15 +360,15 @@ export default function Home() {
               },
               {
                 name: 'Gold',
-                price: '$7.99',
-                cadence: 'per month',
-                annualMo: '$5.83', annualSave: '27%', annualTotal: '$69.99',
+                price: '$4.99',
+                cadence: 'per month, billed annually',
+                annualSave: '38%', annualTotal: '$59.88', trueMonthly: '$7.99',
                 cta: 'Get Gold',
                 features: [
                   'Everything in Free, plus:',
                   'Up to 10 members',
                   '30 days location history',
-                  'In-app voice & video calls',
+                  'In-app voice calls',
                   'Arrival & departure alerts',
                   'Member battery status',
                   'Browser share links · 1 iBeacon token',
@@ -376,9 +376,9 @@ export default function Home() {
               },
               {
                 name: 'Platinum',
-                price: '$14.99',
-                cadence: 'per month',
-                annualMo: '$10.83', annualSave: '28%', annualTotal: '$129.99',
+                price: '$9.99',
+                cadence: 'per month, billed annually',
+                annualSave: '33%', annualTotal: '$119.88', trueMonthly: '$14.99',
                 cta: 'Start 7-day free trial',
                 highlight: true,
                 badge: 'Most popular',
@@ -386,7 +386,7 @@ export default function Home() {
                   'Everything in Gold, plus:',
                   'Up to 15 members',
                   '90 days location history',
-                  'Unlimited voice & video calls',
+                  'In-app voice & video calls',
                   'Street View on any pin',
                   'Driving reports & auto check-ins',
                   'WhatsApp & Alexa queries (30/day) · 20 beacons',
@@ -394,13 +394,13 @@ export default function Home() {
               },
               {
                 name: 'Infinite',
-                price: '$19.99',
-                cadence: 'per month',
-                annualMo: '$14.17', annualSave: '29%', annualTotal: '$169.99',
+                price: '$13.99',
+                cadence: 'per month, billed annually',
+                annualSave: '30%', annualTotal: '$167.88', trueMonthly: '$19.99',
                 cta: 'Go Infinite',
                 features: [
                   'Everything in Platinum, plus:',
-                  'Unlimited members',
+                  'Up to 15 members',
                   '180 days location history',
                   'Privacy Shield — see who viewed you',
                   'Location blur & ghost mode',
@@ -432,13 +432,13 @@ export default function Home() {
                   {plan.name !== 'Free' && <span className="text-dark-muted text-sm">/mo</span>}
                 </p>
                 <p className="text-dark-muted text-xs mb-3">{plan.cadence}</p>
-                {plan.annualMo ? (
+                {plan.annualTotal ? (
                   <div className="rounded-lg bg-brand-success/8 border border-brand-success/20 px-2.5 py-2 mb-4">
                     <p className="text-brand-success text-xs font-bold leading-tight">
-                      Pay yearly → {plan.annualMo}/mo
-                      <span className="ml-1.5 bg-brand-success/15 rounded px-1 py-0.5 text-[10px]">save {plan.annualSave}</span>
+                      Save {plan.annualSave} vs monthly
                     </p>
-                    <p className="text-dark-muted text-[10px] mt-0.5">{plan.annualTotal} billed once a year vs {plan.price}/mo</p>
+                    <p className="text-dark-muted text-[10px] mt-0.5">Billed annually — {plan.annualTotal}/year</p>
+                    <p className="text-dark-muted text-[10px] mt-0.5">Prefer monthly? {plan.trueMonthly}/month</p>
                   </div>
                 ) : (
                   <div className="mb-4" />
@@ -495,7 +495,7 @@ export default function Home() {
                 'Only circle members you approve can see your location.',
                 'All data is encrypted in transit and at rest.',
                 'Privacy Shield (Infinite): see who viewed you, blur your location, or go into ghost mode.',
-                'Location history is automatically deleted after 30 days.',
+                'Location history is kept for 7 days on Free, then 30, 90 or 180 days by plan.',
               ].map((point) => (
                 <div key={point} className="flex items-start gap-3">
                   <div className="w-5 h-5 bg-accent-cyan/15 border border-accent-cyan/30 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
