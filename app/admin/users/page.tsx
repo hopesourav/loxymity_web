@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useAdmin } from '../_lib/adminContext';
 import type { AdminProfile, AdminLocation } from '../_lib/types';
-import { hasProAccess, effectiveTier, tierLabel } from '../../_lib/tiers';
+import { hasDashboardAccess, effectiveTier, tierLabel } from '../../_lib/tiers';
 
 type UserRow = AdminProfile & {
   lastSeen: string | null;
@@ -66,7 +66,7 @@ export default function UsersPage() {
       !search || (u.display_name ?? '').toLowerCase().includes(search.toLowerCase());
     const matchTier =
       tierFilter === 'all' ||
-      (tierFilter === 'paid' ? hasProAccess(u) : !hasProAccess(u));
+      (tierFilter === 'paid' ? hasDashboardAccess(u) : !hasDashboardAccess(u));
     return matchSearch && matchTier;
   });
 
@@ -125,7 +125,7 @@ export default function UsersPage() {
               <tbody className="divide-y divide-dark-border">
                 {filtered.map((u) => {
                   const status = getStatus(u.lastSeen);
-                  const isPro = hasProAccess(u);
+                  const isPro = hasDashboardAccess(u);
                   const avatarUrl = u.avatar_url ?? u.google_avatar_url;
                   return (
                     <tr key={u.id} className="hover:bg-dark-bg transition-colors">

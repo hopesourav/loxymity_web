@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LogoMark } from '../../_components/Logo';
 import { useDashboard } from '../_lib/context';
+import { effectiveTier, tierLabel } from '../../_lib/tiers';
 import {
   IconMap, IconActivity, IconHistory, IconFence,
   IconCircle, IconShare, IconChevronDown, IconLogout, IconX,
@@ -22,7 +23,7 @@ type Props = { open: boolean; onClose: () => void };
 
 export default function Sidebar({ open, onClose }: Props) {
   const path = usePathname();
-  const { circles, activeCircleId, setActiveCircleId, userEmail, supabase } = useDashboard();
+  const { circles, activeCircleId, setActiveCircleId, userEmail, supabase, profile } = useDashboard();
   const activeCircle = circles.find(c => c.id === activeCircleId);
 
   async function signOut() {
@@ -45,8 +46,10 @@ export default function Sidebar({ open, onClose }: Props) {
           <span className="font-display text-2xl font-bold text-dark-text tracking-tight block leading-tight">
             Loxymity
           </span>
+          {/* Was a hardcoded "Pro" badge, which mislabelled every Gold,
+              Platinum and Infinite subscriber. Reads the real tier now. */}
           <span className="text-xs font-semibold bg-primary/20 text-primary rounded-full px-2 py-0.5">
-            Pro
+            {tierLabel(effectiveTier(profile))}
           </span>
         </div>
         {/* Close button — mobile only */}

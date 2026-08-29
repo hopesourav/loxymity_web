@@ -7,8 +7,9 @@
 // No rebuild of other dashboard features needed — only the upgrade page reads this.
 export const STRIPE_LIVE = false;
 
-// Update to match the Razorpay plan price set in the Razorpay dashboard.
-export const PRO_PRICE_DISPLAY = '₹399 / month';
+// PRO_PRICE_DISPLAY was removed. It hardcoded '₹399 / month' for the single
+// legacy "Pro Dashboard" SKU that the upgrade page no longer sells. Prices now
+// come from app/_lib/pricing.ts, shared with the marketing pricing grid.
 
 // Seconds after which a member's location is considered stale (amber dot).
 export const STALE_THRESHOLD_MS = 10 * 60 * 1000; // 10 min

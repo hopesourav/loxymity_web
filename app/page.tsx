@@ -23,7 +23,7 @@ export default function Home() {
               href="/dashboard/login/"
               className="text-sm font-semibold text-dark-muted hover:text-dark-text transition-colors"
             >
-              Pro Dashboard
+              Dashboard
             </a>
             <a
               href="#download"

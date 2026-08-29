@@ -14,8 +14,10 @@ export function isPaidTier(tier: string | null | undefined): boolean {
   return !!tier && tier !== 'free';
 }
 
-/** Dashboard access = a paid subscription on either the app or the web plan. */
-export function hasProAccess(
+/** Dashboard access = any paid tier (gold and above) on either the app or the
+ *  web plan. Named `hasProAccess` until the legacy Pro SKU was retired; the
+ *  gate itself never keyed on 'pro' specifically. */
+export function hasDashboardAccess(
   profile: { subscription_tier?: string | null; web_tier?: string | null } | null | undefined,
 ): boolean {
   if (!profile) return false;

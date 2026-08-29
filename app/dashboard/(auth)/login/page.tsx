@@ -56,7 +56,7 @@ export default function LoginPage() {
         <div className="text-center mb-8">
           <Image src="/icon.png" alt="Loxymity" width={96} height={96} className="rounded-2xl mx-auto mb-4" />
           <p className="font-display text-3xl font-bold text-dark-text">Loxymity</p>
-          <p className="text-dark-muted text-sm mt-1">Sign in to your Pro account</p>
+          <p className="text-dark-muted text-sm mt-1">Sign in to your account</p>
         </div>
 
         <form onSubmit={handleSubmit} className="bg-dark-surface border border-dark-border rounded-2xl p-6 space-y-4">

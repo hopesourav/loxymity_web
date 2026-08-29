@@ -11,7 +11,7 @@ import type {
   UserProfile, Circle, DashboardMember, SosAlert,
   LatestLocation, CircleMemberRow,
 } from '../_lib/types';
-import { hasProAccess } from '../../_lib/tiers';
+import { hasDashboardAccess } from '../../_lib/tiers';
 import Sidebar from '../_components/Sidebar';
 import SOSBanner from '../_components/SOSBanner';
 import { IconMenu } from '../_components/Icons';
@@ -47,7 +47,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
     if (profileErr || !profile) { router.replace('/dashboard/login/'); return; }
 
-    if (!hasProAccess(profile as UserProfile)) { router.replace('/dashboard/upgrade/'); return; }
+    if (!hasDashboardAccess(profile as UserProfile)) { router.replace('/dashboard/upgrade/'); return; }
 
     // Load circles where user is an active member
     const { data: memberships } = await supabase

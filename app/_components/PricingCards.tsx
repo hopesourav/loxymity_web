@@ -15,109 +15,12 @@
  * The manual switcher is not decoration: timezone detection fails for VPN users
  * and travellers, so there has to be a way to correct it that does not involve
  * changing device settings.
+ *
+ * Prices themselves live in `_lib/pricing.ts` so the dashboard checkout quotes
+ * the same numbers this page advertises.
  */
 import { useEffect, useState } from 'react';
-
-type Currency = 'USD' | 'INR';
-
-type Plan = {
-  name: string;
-  price: string;
-  cadence: string;
-  cta: string;
-  features: string[];
-  annualSave?: string;
-  annualTotal?: string;
-  trueMonthly?: string;
-  highlight?: boolean;
-  badge?: string;
-};
-
-// Annual totals are the headline x 12 EXACTLY. A total that divided to, say,
-// $4.99083 would make the displayed monthly figure an understatement, which both
-// stores and consumer law treat as misleading.
-// Infinite is $13.99 / ₹549 rather than $14.99 / ₹599 deliberately: those are
-// Platinum's TRUE MONTHLY prices, so the two tiers would show the same number on
-// one page. ₹549 also buys the strongest line here — Infinite works out cheaper
-// per month than Platinum billed monthly.
-const PLANS: Record<Currency, Plan[]> = {
-  USD: [
-    {
-      name: 'Free', price: '$0', cadence: 'Forever free — no card required', cta: 'Start free',
-      features: [
-        'Up to 5 members', '2 days location history', '2 geofences',
-        'Real-time shared map', 'SOS emergency alerts',
-        'Safety check-in & activity feed', 'WhatsApp & Alexa queries (10/mo)',
-      ],
-    },
-    {
-      name: 'Gold', price: '$4.99', cadence: 'per month, billed annually',
-      annualSave: '38%', annualTotal: '$59.88', trueMonthly: '$7.99', cta: 'Get Gold',
-      features: [
-        'Everything in Free, plus:', 'Up to 10 members', '30 days location history',
-        'In-app voice calls', 'Arrival & departure alerts', 'Member battery status',
-        'Browser share links · 1 iBeacon token',
-      ],
-    },
-    {
-      name: 'Platinum', price: '$9.99', cadence: 'per month, billed annually',
-      annualSave: '33%', annualTotal: '$119.88', trueMonthly: '$14.99',
-      cta: 'Start 7-day free trial', highlight: true, badge: 'Most popular',
-      features: [
-        'Everything in Gold, plus:', 'Up to 15 members', '90 days location history',
-        'In-app voice & video calls', 'Street View on any pin',
-        'Driving reports & auto check-ins', 'WhatsApp & Alexa queries (30/day) · 20 beacons',
-      ],
-    },
-    {
-      name: 'Infinite', price: '$13.99', cadence: 'per month, billed annually',
-      annualSave: '30%', annualTotal: '$167.88', trueMonthly: '$19.99', cta: 'Go Infinite',
-      features: [
-        'Everything in Platinum, plus:', 'Up to 15 members', '180 days location history',
-        'Privacy Shield — see who viewed you', 'Location blur & ghost mode',
-        'Retention control & data export', 'Priority support',
-      ],
-    },
-  ],
-  INR: [
-    {
-      name: 'Free', price: '₹0', cadence: 'Forever free — no card required', cta: 'Start free',
-      features: [
-        'Up to 5 members', '2 days location history', '2 geofences',
-        'Real-time shared map', 'SOS emergency alerts',
-        'Safety check-in & activity feed', 'WhatsApp & Alexa queries (10/mo)',
-      ],
-    },
-    {
-      name: 'Gold', price: '₹199', cadence: 'per month, billed annually',
-      annualSave: '33%', annualTotal: '₹2,388', trueMonthly: '₹299', cta: 'Get Gold',
-      features: [
-        'Everything in Free, plus:', 'Up to 10 members', '30 days location history',
-        'In-app voice calls', 'Arrival & departure alerts', 'Member battery status',
-        'Browser share links · 1 iBeacon token',
-      ],
-    },
-    {
-      name: 'Platinum', price: '₹399', cadence: 'per month, billed annually',
-      annualSave: '33%', annualTotal: '₹4,788', trueMonthly: '₹599',
-      cta: 'Start 7-day free trial', highlight: true, badge: 'Most popular',
-      features: [
-        'Everything in Gold, plus:', 'Up to 15 members', '90 days location history',
-        'In-app voice & video calls', 'Street View on any pin',
-        'Driving reports & auto check-ins', 'WhatsApp & Alexa queries (30/day) · 20 beacons',
-      ],
-    },
-    {
-      name: 'Infinite', price: '₹549', cadence: 'per month, billed annually',
-      annualSave: '31%', annualTotal: '₹6,588', trueMonthly: '₹799', cta: 'Go Infinite',
-      features: [
-        'Everything in Platinum, plus:', 'Up to 15 members', '180 days location history',
-        'Privacy Shield — see who viewed you', 'Location blur & ghost mode',
-        'Retention control & data export', 'Priority support',
-      ],
-    },
-  ],
-};
+import { PLANS, detectCurrency, type Currency } from '../_lib/pricing';
 
 function CheckIcon() {
   return (
@@ -126,17 +29,6 @@ function CheckIcon() {
       <path d="M5 13l4 4L19 7" />
     </svg>
   );
-}
-
-/** Timezone beats navigator.language here: a phone set to en-GB but sitting in
- *  Kolkata should see rupees, and IANA zone names are stable where locale tags
- *  are not. Wrapped because Intl can throw in hardened browser configs. */
-function detectCurrency(): Currency {
-  try {
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone ?? '';
-    if (tz === 'Asia/Kolkata' || tz === 'Asia/Calcutta') return 'INR';
-  } catch { /* fall through to USD */ }
-  return 'USD';
 }
 
 export default function PricingCards() {
