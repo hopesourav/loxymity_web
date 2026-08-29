@@ -1,6 +1,7 @@
 import { LogoFull } from './_components/Logo';
 import { DifferentiatorCarousel } from './_components/DifferentiatorCarousel';
 import { HeroPhoneCarousel } from './_components/HeroPhoneCarousel';
+import PricingCards from './_components/PricingCards';
 
 export default function Home() {
   return (
@@ -339,135 +340,7 @@ export default function Home() {
             <p className="text-lg text-dark-muted max-w-xl mx-auto">Probably a lot. Loxymity is a few cents a day. Pick the features you need — never a per-person bill — and every plan keeps the promise: <span className="text-dark-text font-medium">we never sell your location data. Not to advertisers, not to data brokers, not to anyone.</span></p>
           </div>
           <p className="text-center text-dark-muted text-sm mb-12">Monthly prices shown are for annual plans. <span className="text-brand-success font-medium">Monthly billing is available on every plan</span> at the price listed on each card.</p>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
-            {[
-              {
-                name: 'Free',
-                price: '$0',
-                cadence: 'Forever free — no card required',
-                daily: null,
-                annual: null,
-                cta: 'Start free',
-                features: [
-                  'Up to 5 members',
-                  '2 days location history',
-                  '2 geofences',
-                  'Real-time shared map',
-                  'SOS emergency alerts',
-                  'Safety check-in & activity feed',
-                  'WhatsApp & Alexa queries (10/mo)',
-                ],
-              },
-              {
-                name: 'Gold',
-                price: '$4.99',
-                cadence: 'per month, billed annually',
-                annualSave: '38%', annualTotal: '$59.88', trueMonthly: '$7.99',
-                cta: 'Get Gold',
-                features: [
-                  'Everything in Free, plus:',
-                  'Up to 10 members',
-                  '30 days location history',
-                  'In-app voice calls',
-                  'Arrival & departure alerts',
-                  'Member battery status',
-                  'Browser share links · 1 iBeacon token',
-                ],
-              },
-              {
-                name: 'Platinum',
-                price: '$9.99',
-                cadence: 'per month, billed annually',
-                annualSave: '33%', annualTotal: '$119.88', trueMonthly: '$14.99',
-                cta: 'Start 7-day free trial',
-                highlight: true,
-                badge: 'Most popular',
-                features: [
-                  'Everything in Gold, plus:',
-                  'Up to 15 members',
-                  '90 days location history',
-                  'In-app voice & video calls',
-                  'Street View on any pin',
-                  'Driving reports & auto check-ins',
-                  'WhatsApp & Alexa queries (30/day) · 20 beacons',
-                ],
-              },
-              {
-                name: 'Infinite',
-                price: '$13.99',
-                cadence: 'per month, billed annually',
-                annualSave: '30%', annualTotal: '$167.88', trueMonthly: '$19.99',
-                cta: 'Go Infinite',
-                features: [
-                  'Everything in Platinum, plus:',
-                  'Up to 15 members',
-                  '180 days location history',
-                  'Privacy Shield — see who viewed you',
-                  'Location blur & ghost mode',
-                  'Retention control & data export',
-                  'Priority support',
-                ],
-              },
-            ].map((plan) => (
-              <div
-                key={plan.name}
-                className={`relative flex flex-col rounded-3xl p-7 lift ${
-                  plan.highlight
-                    ? 'card-premium border-2 border-primary/50 lg:scale-[1.04] z-10 isolate'
-                    : 'card-premium gradient-border'
-                }`}
-                style={plan.highlight ? { boxShadow: '0 30px 80px -20px rgba(201,162,39,0.38), 0 0 0 1px rgba(201,162,39,0.28)' } : undefined}
-              >
-                {plan.highlight && (
-                  <div className="absolute -inset-px rounded-3xl pointer-events-none animate-halo -z-10" aria-hidden="true" style={{ background: 'radial-gradient(120% 60% at 50% 0%, rgba(201,162,39,0.14), transparent 60%)' }} />
-                )}
-                {plan.badge && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-dark-bg text-[10px] font-bold uppercase tracking-wide px-3 py-1 rounded-full shadow-lg">
-                    {plan.badge}
-                  </div>
-                )}
-                <p className="font-hud uppercase tracking-wide text-sm font-semibold text-dark-muted mb-2">{plan.name}</p>
-                <p className="flex items-baseline gap-1 mb-1">
-                  <span className={`font-display font-bold text-dark-text ${plan.name === 'Free' ? 'text-5xl font-black' : 'text-4xl'}`}>{plan.price}</span>
-                  {plan.name !== 'Free' && <span className="text-dark-muted text-sm">/mo</span>}
-                </p>
-                <p className="text-dark-muted text-xs mb-3">{plan.cadence}</p>
-                {plan.annualTotal ? (
-                  <div className="rounded-lg bg-brand-success/8 border border-brand-success/20 px-2.5 py-2 mb-4">
-                    <p className="text-brand-success text-xs font-bold leading-tight">
-                      Save {plan.annualSave} vs monthly
-                    </p>
-                    <p className="text-dark-muted text-[10px] mt-0.5">Billed annually — {plan.annualTotal}/year</p>
-                    <p className="text-dark-muted text-[10px] mt-0.5">Prefer monthly? {plan.trueMonthly}/month</p>
-                  </div>
-                ) : (
-                  <div className="mb-4" />
-                )}
-                <div className="inline-flex items-center gap-1.5 self-start bg-brand-success/10 border border-brand-success/25 text-brand-success text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full mb-6">
-                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 0h10.5a2.25 2.25 0 012.25 2.25v6.75a2.25 2.25 0 01-2.25 2.25H6.75a2.25 2.25 0 01-2.25-2.25v-6.75a2.25 2.25 0 012.25-2.25z" /></svg>
-                  Location data — never sold
-                </div>
-                <ul className="flex flex-col gap-2.5 mb-8 flex-1">
-                  {plan.features.map((f, i) => (
-                    <li key={f} className={`flex items-start gap-2.5 text-sm ${i === 0 && plan.name !== 'Free' ? 'text-dark-text font-semibold' : 'text-dark-muted'}`}>
-                      {!(i === 0 && plan.name !== 'Free') && <span className="mt-0.5"><CheckIcon /></span>}
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <a
-                  href="#download"
-                  className={`block text-center font-semibold px-6 py-3 rounded-xl transition-colors ${
-                    plan.highlight
-                      ? 'bg-primary hover:bg-primary-dark text-dark-bg font-bold'
-                      : 'bg-dark-border hover:bg-[#333944] text-dark-text'
-                  }`}
-                >
-                  {plan.cta}
-                </a>
-              </div>
-            ))}
-          </div>
+          <PricingCards />
           {/* Risk reversal */}
           <div className="mt-10 flex flex-wrap justify-center gap-x-8 gap-y-3">
             {['7-day free Platinum trial', 'Cancel anytime', 'No ads, ever', 'Your data is never sold'].map((r) => (
@@ -479,7 +352,7 @@ export default function Home() {
               </div>
             ))}
           </div>
-          <p className="text-center text-dark-muted text-xs mt-6">Localized pricing shown in your region&apos;s store. Member counts are generous household caps — never per-seat billing.</p>
+          <p className="text-center text-dark-muted text-xs mt-6">Prices shown in USD and INR; other regions are billed the local equivalent. Member counts are generous household caps — never per-seat billing.</p>
         </div>
       </section>
 
