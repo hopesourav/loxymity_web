@@ -120,6 +120,43 @@ export default function PricingCards() {
         ))}
       </div>
 
+      {/* Where history actually lives.
+          Worth stating plainly because it is a genuine differentiator no
+          competitor offers, AND because the three layers do different jobs.
+          The phone is the PRIMARY store — calling it a "backup" would be
+          backwards, and would mislead anyone who later loses the device. The
+          server window is what your circle can see. Vault is the only one of
+          the three that survives a lost phone, which is precisely why it is
+          worth paying for. */}
+      <div className="mt-12 max-w-3xl mx-auto rounded-2xl border border-dark-border bg-dark-surface p-6">
+        <p className="text-dark-text font-semibold text-center mb-4">
+          Your location history lives in three places
+        </p>
+        <div className="grid sm:grid-cols-3 gap-4 text-sm">
+          <div>
+            <p className="text-brand-success font-semibold">On your phone</p>
+            <p className="text-dark-muted mt-1">
+              Unlimited, on every plan including Free. Your device keeps the full
+              record — you can shorten it any time in Data &amp; Storage.
+            </p>
+          </div>
+          <div>
+            <p className="text-primary font-semibold">On our servers</p>
+            <p className="text-dark-muted mt-1">
+              30, 90 or 180 days by plan. This is the window your circle can see,
+              and what syncs to a new device.
+            </p>
+          </div>
+          <div>
+            <p className="text-dark-text font-semibold">Vault backup</p>
+            <p className="text-dark-muted mt-1">
+              End-to-end encrypted, on paid plans. The only copy that survives a
+              lost or reset phone — we cannot read it.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* R32. Per-call rounding means many short calls exhaust an allowance on
           far less real talk time. Saying so at the point of sale is the honest
           version; leaving it to be discovered is a fair complaint. */}

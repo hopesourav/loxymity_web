@@ -434,7 +434,11 @@ export default function Home() {
               },
               {
                 q: 'Can I see where someone was earlier today?',
-                a: "Yes. Every plan includes location history — 2 days on Free, scaling up to 30, 90, and 180 days on Gold, Platinum, and Infinite. Tap any circle member on the map to replay their location trail and see exactly where they were and when.",
+                a: "Yes. Tap any circle member on the map to replay their trail. Your own phone keeps an unlimited record on every plan, including Free. What your circle can see is the server window — 2 days on Free, then 30, 90 and 180 days on Gold, Platinum and Infinite. For comparison, most family-locator apps stop at 30 days on their most expensive plan.",
+              },
+              {
+                q: 'What happens to my history if I lose my phone?',
+                a: "Your phone holds the full record, so a lost or reset device loses whatever sits outside your plan's server window. That is exactly what Vault is for: an end-to-end encrypted backup on paid plans that restores to a new phone. We cannot read it — the encryption key never leaves your device.",
               },
               {
                 q: 'Is my data ever sold or shared with third parties?',
