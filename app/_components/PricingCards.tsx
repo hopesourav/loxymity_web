@@ -119,6 +119,13 @@ export default function PricingCards() {
           </div>
         ))}
       </div>
+
+      {/* R32. Per-call rounding means many short calls exhaust an allowance on
+          far less real talk time. Saying so at the point of sale is the honest
+          version; leaving it to be discovered is a fair complaint. */}
+      <p className="text-center text-dark-muted text-xs mt-8">
+        Calls are billed in whole minutes, minimum one minute per call.
+      </p>
     </>
   );
 }

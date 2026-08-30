@@ -51,7 +51,7 @@ export const PLANS: Record<Currency, Plan[]> = {
       annualSave: '38%', annualTotal: '$59.88', trueMonthly: '$7.99', cta: 'Get Gold',
       features: [
         'Everything in Free, plus:', 'Up to 10 members', '30 days location history',
-        'In-app voice calls', 'Arrival & departure alerts', 'Member battery status',
+        'In-app voice calls (billed per minute)', 'Arrival & departure alerts', 'Member battery status',
         'Browser share links · 1 iBeacon token',
       ],
     },
@@ -61,7 +61,7 @@ export const PLANS: Record<Currency, Plan[]> = {
       cta: 'Start 7-day free trial', highlight: true, badge: 'Most popular',
       features: [
         'Everything in Gold, plus:', 'Up to 15 members', '90 days location history',
-        'In-app voice & video calls', 'Street View on any pin',
+        'In-app voice & video calls (billed per minute)', 'Street View on any pin',
         'Driving reports & auto check-ins', 'WhatsApp & Alexa queries (30/day) · 20 beacons',
       ],
     },
@@ -89,7 +89,7 @@ export const PLANS: Record<Currency, Plan[]> = {
       annualSave: '33%', annualTotal: '₹2,388', trueMonthly: '₹299', cta: 'Get Gold',
       features: [
         'Everything in Free, plus:', 'Up to 10 members', '30 days location history',
-        'In-app voice calls', 'Arrival & departure alerts', 'Member battery status',
+        'In-app voice calls (billed per minute)', 'Arrival & departure alerts', 'Member battery status',
         'Browser share links · 1 iBeacon token',
       ],
     },
@@ -99,7 +99,7 @@ export const PLANS: Record<Currency, Plan[]> = {
       cta: 'Start 7-day free trial', highlight: true, badge: 'Most popular',
       features: [
         'Everything in Gold, plus:', 'Up to 15 members', '90 days location history',
-        'In-app voice & video calls', 'Street View on any pin',
+        'In-app voice & video calls (billed per minute)', 'Street View on any pin',
         'Driving reports & auto check-ins', 'WhatsApp & Alexa queries (30/day) · 20 beacons',
       ],
     },
