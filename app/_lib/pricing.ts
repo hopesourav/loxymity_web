@@ -62,14 +62,14 @@ export const PLANS: Record<Currency, Plan[]> = {
       features: [
         'Everything in Gold, plus:', 'Up to 15 members', '90 days location history',
         'In-app voice & video calls (billed per minute)', 'Street View on any pin',
-        'Driving reports & auto check-ins', 'WhatsApp & Alexa queries (30/day) · 20 beacons',
+        'Driving reports & auto check-ins', 'WhatsApp & Alexa queries (300/month) · 20 beacons',
       ],
     },
     {
       id: 'infinite', name: 'Infinite', price: '$13.99', cadence: 'per month, billed annually',
       annualSave: '30%', annualTotal: '$167.88', trueMonthly: '$19.99', cta: 'Go Infinite',
       features: [
-        'Everything in Platinum, plus:', 'Up to 15 members', '180 days location history',
+        'Everything in Platinum, plus:', '180 days location history', '100 places · 5 circles',
         'Privacy Shield — see who viewed you', 'Location blur & ghost mode',
         'Retention control & data export', 'Priority support',
       ],
@@ -100,14 +100,14 @@ export const PLANS: Record<Currency, Plan[]> = {
       features: [
         'Everything in Gold, plus:', 'Up to 15 members', '90 days location history',
         'In-app voice & video calls (billed per minute)', 'Street View on any pin',
-        'Driving reports & auto check-ins', 'WhatsApp & Alexa queries (30/day) · 20 beacons',
+        'Driving reports & auto check-ins', 'WhatsApp & Alexa queries (300/month) · 20 beacons',
       ],
     },
     {
       id: 'infinite', name: 'Infinite', price: '₹549', cadence: 'per month, billed annually',
       annualSave: '31%', annualTotal: '₹6,588', trueMonthly: '₹799', cta: 'Go Infinite',
       features: [
-        'Everything in Platinum, plus:', 'Up to 15 members', '180 days location history',
+        'Everything in Platinum, plus:', '180 days location history', '100 places · 5 circles',
         'Privacy Shield — see who viewed you', 'Location blur & ghost mode',
         'Retention control & data export', 'Priority support',
       ],
