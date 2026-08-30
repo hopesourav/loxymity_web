@@ -151,7 +151,9 @@ export default function PrivacyPolicy() {
               <li>
                 <strong>Location history</strong> — retention depends on your plan: 7 days on
                 Free, 30 days on Gold, 90 days on Platinum and 180 days on Infinite. Older
-                points are deleted automatically.
+                points are deleted automatically. Retention is how long we STORE a point;
+                the history you can view on a Free plan is the most recent 2 days, while the
+                remainder is held only to run geofence checks.
               </li>
               <li>
                 <strong>Contacts</strong> — retained until you delete your account or revoke

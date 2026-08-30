@@ -41,7 +41,7 @@ export const PLANS: Record<Currency, Plan[]> = {
     {
       id: null, name: 'Free', price: '$0', cadence: 'Forever free — no card required', cta: 'Start free',
       features: [
-        'Up to 5 members', '2 days location history', '2 geofences',
+        'Up to 5 members', '2 days location history', '2 places · 1 circle',
         'Real-time shared map', 'SOS emergency alerts',
         'Safety check-in & activity feed', 'WhatsApp & Alexa queries (10/mo)',
       ],
@@ -52,7 +52,7 @@ export const PLANS: Record<Currency, Plan[]> = {
       features: [
         'Everything in Free, plus:', 'Up to 10 members', '30 days location history',
         'In-app voice calls (billed per minute)', 'Arrival & departure alerts', 'Member battery status',
-        'Browser share links · 1 iBeacon token',
+        '10 places · 2 circles', 'Browser share links · 1 iBeacon token',
       ],
     },
     {
@@ -62,7 +62,8 @@ export const PLANS: Record<Currency, Plan[]> = {
       features: [
         'Everything in Gold, plus:', 'Up to 15 members', '90 days location history',
         'In-app voice & video calls (billed per minute)', 'Street View on any pin',
-        'Driving reports & auto check-ins', 'WhatsApp & Alexa queries (300/month) · 20 beacons',
+        'Driving reports & auto check-ins', '50 places · 3 circles',
+        'WhatsApp & Alexa queries (300/month) · 20 beacons',
       ],
     },
     {
@@ -79,7 +80,7 @@ export const PLANS: Record<Currency, Plan[]> = {
     {
       id: null, name: 'Free', price: '₹0', cadence: 'Forever free — no card required', cta: 'Start free',
       features: [
-        'Up to 5 members', '2 days location history', '2 geofences',
+        'Up to 5 members', '2 days location history', '2 places · 1 circle',
         'Real-time shared map', 'SOS emergency alerts',
         'Safety check-in & activity feed', 'WhatsApp & Alexa queries (10/mo)',
       ],
@@ -90,7 +91,7 @@ export const PLANS: Record<Currency, Plan[]> = {
       features: [
         'Everything in Free, plus:', 'Up to 10 members', '30 days location history',
         'In-app voice calls (billed per minute)', 'Arrival & departure alerts', 'Member battery status',
-        'Browser share links · 1 iBeacon token',
+        '10 places · 2 circles', 'Browser share links · 1 iBeacon token',
       ],
     },
     {
@@ -100,7 +101,8 @@ export const PLANS: Record<Currency, Plan[]> = {
       features: [
         'Everything in Gold, plus:', 'Up to 15 members', '90 days location history',
         'In-app voice & video calls (billed per minute)', 'Street View on any pin',
-        'Driving reports & auto check-ins', 'WhatsApp & Alexa queries (300/month) · 20 beacons',
+        'Driving reports & auto check-ins', '50 places · 3 circles',
+        'WhatsApp & Alexa queries (300/month) · 20 beacons',
       ],
     },
     {

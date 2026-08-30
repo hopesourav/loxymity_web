@@ -368,7 +368,7 @@ export default function Home() {
                 'Only circle members you approve can see your location.',
                 'All data is encrypted in transit and at rest.',
                 'Privacy Shield (Infinite): see who viewed you, blur your location, or go into ghost mode.',
-                'Location history is kept for 7 days on Free, then 30, 90 or 180 days by plan.',
+                'Location history is stored for 7 days on Free, then 30, 90 or 180 days by plan — Free plans can view the most recent 2 days.',
               ].map((point) => (
                 <div key={point} className="flex items-start gap-3">
                   <div className="w-5 h-5 bg-accent-cyan/15 border border-accent-cyan/30 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
