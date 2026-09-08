@@ -496,7 +496,7 @@ export default function Home() {
             <div className="mb-2">
               <LogoFull className="text-xl font-bold opacity-80" />
             </div>
-            <p className="text-dark-muted text-sm">© {new Date().getFullYear()} Sawsib Infotech. All rights reserved.</p>
+            <p className="text-dark-muted text-sm">© {new Date().getFullYear()} AMSEK RESEARCH LABS LLP. All rights reserved.</p>
           </div>
           <div className="flex flex-wrap gap-6 text-sm text-dark-muted">
             <a href="/privacy" className="hover:text-dark-text transition-colors">Privacy Policy</a>

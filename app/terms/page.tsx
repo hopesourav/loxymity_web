@@ -30,7 +30,7 @@ export default function TermsOfService() {
             Last updated: May 2026
           </p>
           <p className="text-dark-muted text-sm mt-1">
-            Sawsib Infotech (&ldquo;we&rdquo;, &ldquo;us&rdquo;, &ldquo;our&rdquo;)
+            AMSEK RESEARCH LABS LLP (&ldquo;we&rdquo;, &ldquo;us&rdquo;, &ldquo;our&rdquo;)
           </p>
         </div>
       </header>
@@ -43,7 +43,7 @@ export default function TermsOfService() {
             <p className="text-gray-600 leading-relaxed">
               These Terms of Service (&ldquo;Terms&rdquo;) govern your use of
               the Loxymity mobile application and related services (collectively,
-              the &ldquo;Service&rdquo;), operated by Sawsib Infotech. By
+              the &ldquo;Service&rdquo;), operated by AMSEK RESEARCH LABS LLP. By
               creating an account or using the Service, you agree to be bound by
               these Terms. If you do not agree, do not use the Service.
             </p>
@@ -208,7 +208,7 @@ export default function TermsOfService() {
             </h2>
             <p className="text-gray-600 leading-relaxed">
               The Loxymity name, logo, and all associated branding, designs,
-              and software are the property of Sawsib Infotech and are
+              and software are the property of AMSEK RESEARCH LABS LLP and are
               protected by applicable intellectual property laws. You may not
               copy, modify, distribute, or create derivative works of any part
               of the Service without our prior written consent.
@@ -222,8 +222,7 @@ export default function TermsOfService() {
             </h2>
             <div className="bg-gray-50 rounded-2xl p-6 text-gray-600 space-y-3">
               <p>
-                To the maximum extent permitted by applicable law, Sawsib
-                Infotech and its officers, employees, and affiliates shall not
+                To the maximum extent permitted by applicable law, AMSEK RESEARCH LABS LLP and its officers, employees, and affiliates shall not
                 be liable for any indirect, incidental, special, consequential,
                 or punitive damages arising out of or related to your use of
                 the Service.
@@ -269,7 +268,7 @@ export default function TermsOfService() {
               9. Indemnification
             </h2>
             <p className="text-gray-600 leading-relaxed">
-              You agree to indemnify, defend, and hold harmless Sawsib Infotech
+              You agree to indemnify, defend, and hold harmless AMSEK RESEARCH LABS LLP
               and its officers, employees, and affiliates from any claims,
               damages, losses, or expenses (including reasonable legal fees)
               arising out of your use of the Service, your violation of these
@@ -355,7 +354,7 @@ export default function TermsOfService() {
               If you have any questions about these Terms, please contact us:
             </p>
             <div className="bg-gray-50 rounded-2xl p-6 mt-4">
-              <p className="font-semibold text-gray-900">Sawsib Infotech</p>
+              <p className="font-semibold text-gray-900">AMSEK RESEARCH LABS LLP</p>
               <p className="text-gray-600 mt-1">
                 Email:{' '}
                 <a
@@ -386,7 +385,7 @@ export default function TermsOfService() {
             <div className="mb-2">
               <LogoFull className="text-xl font-bold opacity-80" />
             </div>
-            <p className="text-dark-muted text-sm">&copy; {new Date().getFullYear()} Sawsib Infotech. All rights reserved.</p>
+            <p className="text-dark-muted text-sm">&copy; {new Date().getFullYear()} AMSEK RESEARCH LABS LLP. All rights reserved.</p>
           </div>
           <div className="flex gap-6 text-sm text-dark-muted">
             <a href="/privacy" className="hover:text-dark-text transition-colors">Privacy Policy</a>

@@ -31,9 +31,9 @@ export default function PrivacyPolicy() {
 
           <Section title="1. Who we are">
             <p>
-              Loxymity is operated by <strong>Sawsib Infotech</strong>. References to
+              Loxymity is operated by <strong>AMSEK RESEARCH LABS LLP</strong>. References to
               &ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo; in this policy refer to
-              Sawsib Infotech. You can reach us at{' '}
+              AMSEK RESEARCH LABS LLP. You can reach us at{' '}
               <a href="mailto:privacy@loxymity.com" className="text-indigo-600 underline">
                 privacy@loxymity.com
               </a>.
@@ -212,7 +212,7 @@ export default function PrivacyPolicy() {
               <a href="mailto:privacy@loxymity.com" className="text-indigo-600 underline">
                 privacy@loxymity.com
               </a>{' '}
-              or write to: Sawsib Infotech, privacy@loxymity.com.
+              or write to: AMSEK RESEARCH LABS LLP, privacy@loxymity.com.
             </p>
           </Section>
 
@@ -225,7 +225,7 @@ export default function PrivacyPolicy() {
             <div className="mb-2">
               <LogoFull className="text-xl font-bold opacity-80" />
             </div>
-            <p className="text-dark-muted text-sm">© {new Date().getFullYear()} Sawsib Infotech. All rights reserved.</p>
+            <p className="text-dark-muted text-sm">© {new Date().getFullYear()} AMSEK RESEARCH LABS LLP. All rights reserved.</p>
           </div>
           <div className="flex gap-6 text-sm text-dark-muted">
             <Link href="/privacy" className="text-dark-text">Privacy Policy</Link>
