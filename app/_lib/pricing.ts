@@ -43,7 +43,8 @@ export const PLANS: Record<Currency, Plan[]> = {
       features: [
         'Up to 5 members', '2 days location history', '2 places · 1 circle',
         'Real-time shared map', 'SOS emergency alerts',
-        'Safety check-in & activity feed', 'WhatsApp & Alexa queries (10/mo)',
+        'Circle chat & activity feed', 'WhatsApp & Alexa queries (10/mo)',
+        'Flight tracking (20/mo)',
       ],
     },
     {
@@ -51,8 +52,10 @@ export const PLANS: Record<Currency, Plan[]> = {
       annualSave: '38%', annualTotal: '$59.88', trueMonthly: '$7.99', cta: 'Get Gold',
       features: [
         'Everything in Free, plus:', 'Up to 10 members', '30 days location history',
-        'In-app voice calls (billed per minute)', 'Arrival & departure alerts', 'Member battery status',
+        '120 voice-call minutes a month, included', 'Arrival & departure alerts', 'Member battery status',
+        'Street View on any pin (10 looks/mo)',
         '10 places · 2 circles', 'Browser share links · 1 iBeacon token',
+        'WhatsApp & Alexa queries (100/mo)', 'Flight tracking (40/mo)',
       ],
     },
     {
@@ -61,9 +64,10 @@ export const PLANS: Record<Currency, Plan[]> = {
       cta: 'Start 7-day free trial', highlight: true, badge: 'Most popular',
       features: [
         'Everything in Gold, plus:', 'Up to 15 members', '90 days location history',
-        'In-app voice & video calls (billed per minute)', 'Street View on any pin',
-        'Driving reports & auto check-ins', '50 places · 3 circles',
-        'WhatsApp & Alexa queries (300/month) · 20 beacons',
+        '240 voice + 60 video minutes a month, included', 'Street View (30 looks/mo)',
+        'Driving reports & road-quality scores', 'Unlimited flight tracking',
+        '50 places · 3 circles',
+        'WhatsApp & Alexa queries (300/mo) · 20 beacons',
       ],
     },
     {
@@ -71,6 +75,7 @@ export const PLANS: Record<Currency, Plan[]> = {
       annualSave: '30%', annualTotal: '$167.88', trueMonthly: '$19.99', cta: 'Go Infinite',
       features: [
         'Everything in Platinum, plus:', '180 days location history', '100 places · 5 circles',
+        '360 voice + 100 video minutes a month', 'Street View (60 looks/mo)',
         'Privacy Shield — see who viewed you', 'Location blur & ghost mode',
         'Retention control & data export', 'Priority support',
       ],
@@ -82,7 +87,8 @@ export const PLANS: Record<Currency, Plan[]> = {
       features: [
         'Up to 5 members', '2 days location history', '2 places · 1 circle',
         'Real-time shared map', 'SOS emergency alerts',
-        'Safety check-in & activity feed', 'WhatsApp & Alexa queries (10/mo)',
+        'Circle chat & activity feed', 'WhatsApp & Alexa queries (10/mo)',
+        'Flight tracking (20/mo)',
       ],
     },
     {
@@ -90,8 +96,10 @@ export const PLANS: Record<Currency, Plan[]> = {
       annualSave: '33%', annualTotal: '₹2,388', trueMonthly: '₹299', cta: 'Get Gold',
       features: [
         'Everything in Free, plus:', 'Up to 10 members', '30 days location history',
-        'In-app voice calls (billed per minute)', 'Arrival & departure alerts', 'Member battery status',
+        '120 voice-call minutes a month, included', 'Arrival & departure alerts', 'Member battery status',
+        'Street View on any pin (10 looks/mo)',
         '10 places · 2 circles', 'Browser share links · 1 iBeacon token',
+        'WhatsApp & Alexa queries (100/mo)', 'Flight tracking (40/mo)',
       ],
     },
     {
@@ -100,9 +108,10 @@ export const PLANS: Record<Currency, Plan[]> = {
       cta: 'Start 7-day free trial', highlight: true, badge: 'Most popular',
       features: [
         'Everything in Gold, plus:', 'Up to 15 members', '90 days location history',
-        'In-app voice & video calls (billed per minute)', 'Street View on any pin',
-        'Driving reports & auto check-ins', '50 places · 3 circles',
-        'WhatsApp & Alexa queries (300/month) · 20 beacons',
+        '240 voice + 60 video minutes a month, included', 'Street View (30 looks/mo)',
+        'Driving reports & road-quality scores', 'Unlimited flight tracking',
+        '50 places · 3 circles',
+        'WhatsApp & Alexa queries (300/mo) · 20 beacons',
       ],
     },
     {
@@ -110,6 +119,7 @@ export const PLANS: Record<Currency, Plan[]> = {
       annualSave: '31%', annualTotal: '₹6,588', trueMonthly: '₹799', cta: 'Go Infinite',
       features: [
         'Everything in Platinum, plus:', '180 days location history', '100 places · 5 circles',
+        '360 voice + 100 video minutes a month', 'Street View (60 looks/mo)',
         'Privacy Shield — see who viewed you', 'Location blur & ghost mode',
         'Retention control & data export', 'Priority support',
       ],

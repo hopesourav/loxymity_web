@@ -27,7 +27,7 @@ export default function TermsOfService() {
             Terms of Service
           </h1>
           <p className="text-dark-muted">
-            Last updated: May 2026
+            Last updated: September 2026
           </p>
           <p className="text-dark-muted text-sm mt-1">
             AMSEK RESEARCH LABS LLP (&ldquo;we&rdquo;, &ldquo;us&rdquo;, &ldquo;our&rdquo;)
@@ -59,8 +59,16 @@ export default function TermsOfService() {
               families and close friends. The Service allows users to create
               private circles, share their live location with circle members,
               set geofence alerts, track iBeacon tokens, and send SOS alerts.
-              The Service is provided on an &ldquo;as is&rdquo; and &ldquo;as
-              available&rdquo; basis.
+              The Service also includes in-app messaging, in-app voice and video
+              calling, driving reports, flight tracking, official weather and
+              disaster alerts, an AI assistant reachable in the app and through
+              WhatsApp and Alexa, encrypted backups (Loxymity Vault), and an
+              offline courier that lets nearby devices relay location and
+              messages when one of them has no internet connection. Individual
+              features may require a paid plan, may be limited by usage
+              allowances, and may be added, changed or withdrawn. The Service is
+              provided on an &ldquo;as is&rdquo; and &ldquo;as available&rdquo;
+              basis.
             </p>
           </section>
 
@@ -166,33 +174,106 @@ export default function TermsOfService() {
             </ul>
           </section>
 
-          {/* 5. Subscriptions and Payments */}
+          {/* 5. Calls, Recording and Messaging */}
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              5. Subscriptions and Payments
+              5. Calls, Recording and Messaging
+            </h2>
+            <p className="text-gray-600 leading-relaxed mb-3">
+              <strong>
+                In-app voice calls are recorded automatically from the moment
+                the call begins.
+              </strong>{' '}
+              By placing or answering an in-app voice call, you consent to that
+              call being recorded, and you confirm that you have the authority
+              to consent on your own behalf. Recording is a property of the
+              Service rather than a per-call setting, so you will not be
+              prompted before each call. Video calls are not recorded.
+            </p>
+            <ul className="list-disc pl-6 space-y-2 text-gray-600">
+              <li>
+                Recordings are encrypted at rest, retained for 28 days, and then
+                deleted automatically.
+              </li>
+              <li>
+                Laws governing the recording of conversations vary by
+                jurisdiction, and some require the consent of every party. You
+                are responsible for your own compliance, and you should inform
+                anyone you call in-app that these calls are recorded. If you do
+                not want a conversation recorded, use your ordinary telephone
+                service instead.
+              </li>
+              <li>
+                Messages you send through the Service are delivered to the
+                circle or member you address them to and are retained as
+                described in our Privacy Policy. You are responsible for the
+                content you send.
+              </li>
+              <li>
+                If you enable the offline courier, your device may carry
+                encrypted packets on behalf of other users and other devices may
+                carry yours. Packets are encrypted end-to-end and a relaying
+                device cannot read what it carries. You may disable this at any
+                time.
+              </li>
+            </ul>
+          </section>
+
+          {/* 6. Subscriptions and Payments */}
+          <section>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              6. Subscriptions and Payments
             </h2>
             <ul className="list-disc pl-6 space-y-2 text-gray-600">
               <li>
-                Loxymity offers a free tier and a paid Pro subscription.
-                Subscription pricing is displayed in the app and may vary by
-                region.
+                Loxymity offers a free tier and three paid plans — Gold,
+                Platinum and Infinite. Pricing is displayed in the app and on
+                our website and varies by region.
               </li>
               <li>
-                Subscriptions are managed through RevenueCat and processed by
-                the Apple App Store or Google Play Store.
+                A paid plan is purchased for a <strong>circle</strong>, not for
+                an individual seat, and only the owner or an admin of that
+                circle can buy or change it. Every member of that circle then
+                receives the viewing entitlements of the plan for as long as
+                they remain a member, at no additional cost and regardless of
+                their own plan. Storage and object allowances — such as how many
+                circles or places you may create — always resolve from your own
+                plan.
               </li>
               <li>
-                Pro subscriptions auto-renew at the end of each billing period
+                Plans include monthly allowances for metered features, such as
+                voice and video call minutes, Street View lookups and assistant
+                queries. Allowances reset each billing period and do not carry
+                over. Exceeding an allowance disables that feature until the
+                period resets; it never results in an additional charge.
+              </li>
+              <li>
+                Purchases made inside the mobile app are processed by the Apple
+                App Store or Google Play and managed through RevenueCat.
+                Purchases made on our website are processed by Stripe or
+                Razorpay.
+              </li>
+              <li>
+                Subscriptions auto-renew at the end of each billing period
                 unless cancelled at least 24 hours before the renewal date.
               </li>
               <li>
                 Cancellation takes effect at the end of the current billing
-                period. You will retain access to Pro features until that date.
+                period. You, and the members of the circle the plan covers,
+                retain access to the plan features until that date.
               </li>
               <li>
-                Refunds are handled according to the policies of the Apple App
-                Store or Google Play Store, as applicable. We do not process
-                refunds directly.
+                For purchases made through the Apple App Store or Google Play,
+                refunds are handled according to those stores&apos; policies and
+                we do not process them directly. For purchases made on our
+                website, contact{' '}
+                <a
+                  href="mailto:support@loxymity.com"
+                  className="text-primary hover:text-primary-dark font-medium"
+                >
+                  support@loxymity.com
+                </a>
+                .
               </li>
               <li>
                 We reserve the right to change subscription pricing. Existing
@@ -201,10 +282,10 @@ export default function TermsOfService() {
             </ul>
           </section>
 
-          {/* 6. Intellectual Property */}
+          {/* 7. Intellectual Property */}
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              6. Intellectual Property
+              7. Intellectual Property
             </h2>
             <p className="text-gray-600 leading-relaxed">
               The Loxymity name, logo, and all associated branding, designs,
@@ -215,10 +296,10 @@ export default function TermsOfService() {
             </p>
           </section>
 
-          {/* 7. Limitation of Liability */}
+          {/* 8. Limitation of Liability */}
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              7. Limitation of Liability
+              8. Limitation of Liability
             </h2>
             <div className="bg-gray-50 rounded-2xl p-6 text-gray-600 space-y-3">
               <p>
@@ -247,10 +328,10 @@ export default function TermsOfService() {
             </div>
           </section>
 
-          {/* 8. Disclaimer of Warranties */}
+          {/* 9. Disclaimer of Warranties */}
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              8. Disclaimer of Warranties
+              9. Disclaimer of Warranties
             </h2>
             <p className="text-gray-600 leading-relaxed">
               The Service is provided &ldquo;as is&rdquo; and &ldquo;as
@@ -262,10 +343,10 @@ export default function TermsOfService() {
             </p>
           </section>
 
-          {/* 9. Indemnification */}
+          {/* 10. Indemnification */}
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              9. Indemnification
+              10. Indemnification
             </h2>
             <p className="text-gray-600 leading-relaxed">
               You agree to indemnify, defend, and hold harmless AMSEK RESEARCH LABS LLP
@@ -276,10 +357,10 @@ export default function TermsOfService() {
             </p>
           </section>
 
-          {/* 10. Termination */}
+          {/* 11. Termination */}
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              10. Termination
+              11. Termination
             </h2>
             <ul className="list-disc pl-6 space-y-2 text-gray-600">
               <li>
@@ -299,10 +380,10 @@ export default function TermsOfService() {
             </ul>
           </section>
 
-          {/* 11. Privacy */}
+          {/* 12. Privacy */}
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              11. Privacy
+              12. Privacy
             </h2>
             <p className="text-gray-600 leading-relaxed">
               Your use of the Service is also governed by our{' '}
@@ -318,10 +399,10 @@ export default function TermsOfService() {
             </p>
           </section>
 
-          {/* 12. Changes to These Terms */}
+          {/* 13. Changes to These Terms */}
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              12. Changes to These Terms
+              13. Changes to These Terms
             </h2>
             <p className="text-gray-600 leading-relaxed">
               We may revise these Terms at any time by posting the updated
@@ -332,10 +413,10 @@ export default function TermsOfService() {
             </p>
           </section>
 
-          {/* 13. Governing Law */}
+          {/* 14. Governing Law */}
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              13. Governing Law
+              14. Governing Law
             </h2>
             <p className="text-gray-600 leading-relaxed">
               These Terms shall be governed by and construed in accordance with
@@ -345,10 +426,10 @@ export default function TermsOfService() {
             </p>
           </section>
 
-          {/* 14. Contact */}
+          {/* 15. Contact */}
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              14. Contact Us
+              15. Contact Us
             </h2>
             <p className="text-gray-600 leading-relaxed">
               If you have any questions about these Terms, please contact us:

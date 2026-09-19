@@ -67,8 +67,9 @@ export default function Home() {
               <span className="italic text-gradient text-gradient-anim">where they are</span> again.
             </h1>
             <p className="text-xl text-dark-muted max-w-xl mx-auto lg:mx-0 mb-6 leading-relaxed animate-fade-up" style={{ animationDelay: '0.16s' }}>
-              A private, real-time map of everyone you love — with SOS, safety check-ins,
-              and instant answers from WhatsApp &amp; Alexa. All the safety of the big
+              A private, real-time map of everyone you love — with SOS, chat, driving
+              reports, and instant answers from WhatsApp &amp; Alexa. It even keeps working
+              when a phone has no signal. All the safety of the big
               trackers, none of the data-selling. <span className="text-dark-text font-medium">Your location is never sold. Ever.</span>
             </p>
             <p className="text-sm text-dark-muted mb-10 animate-fade-up" style={{ animationDelay: '0.24s' }}>Free to start · Peace of mind from less than 50¢ a day.</p>
@@ -107,6 +108,7 @@ export default function Home() {
             { label: 'Adaptive battery tracking', path: 'M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z' },
             { label: 'No ads. Ever.',            path: 'M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636' },
             { label: 'Real-time. No refresh.',   path: 'M9.348 14.651a3.75 3.75 0 010-5.303m5.304 0a3.75 3.75 0 010 5.303m-7.425 2.122a6.75 6.75 0 010-9.546m9.546 0a6.75 6.75 0 010 9.546M5.106 18.894c-3.808-3.808-3.808-9.98 0-13.789m13.788 0c3.808 3.808 3.808 9.981 0 13.79M12 12h.008v.007H12V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z' },
+            { label: 'Works offline',            path: 'M8.288 15.038a5.25 5.25 0 017.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12.53 18.22l-.53.53-.53-.53a.75.75 0 011.06 0z' },
           ].map(({ label, path }) => (
             <div key={label} className="flex items-center gap-2 text-dark-muted text-sm font-medium">
               <span className="w-7 h-7 rounded-full border border-accent-cyan/25 bg-dark-surface flex items-center justify-center flex-shrink-0">
@@ -171,6 +173,37 @@ export default function Home() {
                 title: 'Battery-friendly by design',
                 desc: 'Adaptive tracking speeds up when moving and eases off when still — real-time when it counts, gentle on battery.',
               },
+              {
+                iconPath: 'M8.288 15.038a5.25 5.25 0 017.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12.53 18.22l-.53.53-.53-.53a.75.75 0 011.06 0z',
+                iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
+                title: 'Keeps working with no signal',
+                desc: 'Out of coverage, in a basement, phone out of data? Nearby Loxymity phones quietly carry your encrypted location onward until one of them reaches the internet. They cannot read a thing they carry.',
+              },
+              {
+                iconPath: 'M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12',
+                iconColor: 'text-primary', iconBg: 'bg-primary/10',
+                title: 'Driving reports',
+                desc: 'Every trip scored and graded, with time stuck in traffic separated from time actually moving — plus a road-smoothness reading. Road quality never counts against the driver.',
+                badge: 'Premium',
+              },
+              {
+                iconPath: 'M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5',
+                iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
+                title: 'Flight tracking',
+                desc: 'Add a flight number and watch the aircraft move across the map. Everyone in the circle gets the landing notification — no more refreshing an airline app.',
+              },
+              {
+                iconPath: 'M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z',
+                iconColor: 'text-brand-danger', iconBg: 'bg-brand-danger/10',
+                title: 'Official hazard alerts',
+                desc: 'Government weather and disaster warnings, matched against where your circle actually is — so you get the ones that matter and not the ones that do not.',
+              },
+              {
+                iconPath: 'M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.068.157 2.148.279 3.238.364.466.037.893.281 1.153.671L12 21l2.652-3.978c.26-.39.687-.634 1.153-.67 1.09-.086 2.17-.208 3.238-.365 1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z',
+                iconColor: 'text-brand-success', iconBg: 'bg-brand-success/10',
+                title: 'Circle chat & messages',
+                desc: 'Group chat for the circle and one-to-one messages, with “On my way” and “Arrived safely” as one tap. Messages relay over Bluetooth too, so they get through without a connection.',
+              },
             ].map((f) => (
               <div key={f.title} className="card-premium gradient-border lift rounded-2xl p-7 group relative">
                 {f.badge && (
@@ -201,7 +234,11 @@ export default function Home() {
               {[
                 { t: 'Private circles with owner approval' },
                 { t: 'Full activity feed & history' },
-                { t: 'Safety check-in' },
+                { t: '“On my way” / “Arrived safely” in one tap' },
+                { t: 'Loxy, the in-app assistant' },
+                { t: 'Shared live ETA on a trip' },
+                { t: 'Works offline — map, trail & history' },
+                { t: 'Loxymity Vault encrypted backup', p: true },
                 { t: 'Member battery status', p: true },
                 { t: 'Motion & stillness alerts' },
                 { t: 'iBeacon / BLE tokens', p: true },
@@ -210,6 +247,8 @@ export default function Home() {
                 { t: 'Browser share links', p: true },
                 { t: 'QR & link invites' },
                 { t: 'Arrival & departure alerts', p: true },
+                { t: 'Nearby landmarks, not just coordinates' },
+                { t: 'Free week of Platinum for referrals' },
                 { t: 'On-device processing, never sold' },
               ].map((item) => (
                 <div key={item.t} className="flex items-start gap-2.5 text-sm text-dark-muted">
@@ -290,9 +329,11 @@ export default function Home() {
           <div className="flex flex-wrap justify-center gap-3 mb-20">
             {[
               { t: 'One-tap SOS', c: '#B5453F' },
-              { t: 'Safety check-in', c: '#5C8F6B' },
+              { t: '“Arrived safely” in one tap', c: '#5C8F6B' },
               { t: 'Live activity feed', c: '#5F82A5' },
               { t: 'Motion & stillness alerts', c: '#C9A227' },
+              { t: 'Official hazard alerts', c: '#B5453F' },
+              { t: 'Works with no signal', c: '#5F82A5' },
             ].map((chip) => (
               <span key={chip.t} className="inline-flex items-center gap-2 bg-dark-bg border border-dark-border rounded-full px-4 py-2 text-sm text-dark-text font-medium">
                 <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: chip.c }} />
@@ -340,6 +381,10 @@ export default function Home() {
             <p className="text-lg text-dark-muted max-w-xl mx-auto">Probably a lot. Loxymity is a few cents a day. Pick the features you need — never a per-person bill — and every plan keeps the promise: <span className="text-dark-text font-medium">we never sell your location data. Not to advertisers, not to data brokers, not to anyone.</span></p>
           </div>
           <p className="text-center text-dark-muted text-sm mb-12">Monthly prices shown are for annual plans. <span className="text-brand-success font-medium">Monthly billing is available on every plan</span> at the price listed on each card.</p>
+          <div className="max-w-2xl mx-auto mb-12 card-premium gradient-border rounded-2xl p-6 text-center">
+            <p className="text-dark-text font-semibold mb-1">One person pays. The whole circle is covered.</p>
+            <p className="text-dark-muted text-sm leading-relaxed">A plan belongs to the circle, not to a seat. When one member upgrades, everyone in that circle gets the longer history, the calling minutes, Street View and the driving reports — on their own free account, at no extra cost. Nobody else has to buy anything.</p>
+          </div>
           <PricingCards />
           {/* Risk reversal */}
           <div className="mt-10 flex flex-wrap justify-center gap-x-8 gap-y-3">
@@ -352,7 +397,7 @@ export default function Home() {
               </div>
             ))}
           </div>
-          <p className="text-center text-dark-muted text-xs mt-6">Prices shown in USD and INR; other regions are billed the local equivalent. Member counts are generous household caps — never per-seat billing.</p>
+          <p className="text-center text-dark-muted text-xs mt-6">Prices shown in USD and INR; other regions are billed the local equivalent. Member counts are household caps, not seats — Gold covers 10 people and Platinum and Infinite each cover 15, for one price. Metered allowances reset monthly and never bill you for overage; they simply pause until the next period.</p>
         </div>
       </section>
 
@@ -368,7 +413,9 @@ export default function Home() {
                 'Only circle members you approve can see your location.',
                 'All data is encrypted in transit and at rest.',
                 'Privacy Shield (Infinite): see who viewed you, blur your location, or go into ghost mode.',
-                'Location history is stored for 7 days on Free, then 30, 90 or 180 days by plan — Free plans can view the most recent 2 days.',
+                'Server-side history runs 2 days on Free, then 30, 90 or 180 days by plan — and a free member of a paid circle gets that circle\u2019s window. Your own phone keeps its copy for as long as you want, on every plan.',
+                'When your phone relays another member\u2019s location offline, it cannot read what it carries — packets are encrypted end-to-end.',
+                'In-app voice calls are recorded and kept 28 days. We say so plainly here, in the FAQ, and in section 5 of the Terms.',
               ].map((point) => (
                 <div key={point} className="flex items-start gap-3">
                   <div className="w-5 h-5 bg-accent-cyan/15 border border-accent-cyan/30 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -410,7 +457,7 @@ export default function Home() {
               },
               {
                 q: 'Will Loxymity drain my battery?',
-                a: "Loxymity uses adaptive tracking that automatically adjusts based on your movement. When you're stationary, location updates slow down dramatically. When you're moving, accuracy increases. Most users see less than 3–5% additional battery use per day.",
+                a: "Loxymity uses adaptive tracking that automatically adjusts based on your movement, with no fixed polling interval. While you are moving it reports at most once a minute, and only after you have moved 20 metres. The moment you stop it drops to once every ten minutes. Below 20% battery it stays in the slower mode even while you move, unless you are charging — and a drive in progress is the one thing allowed to override that, down to 10%.",
               },
               {
                 q: 'Who can see where I am?',
@@ -418,7 +465,7 @@ export default function Home() {
               },
               {
                 q: 'Is Loxymity available on both iPhone and Android?',
-                a: "Yes. Loxymity is available on both iOS and Android. All features, including real-time maps, SOS alerts, safety check-ins, iBeacon tracking, and geo-fencing, work across both platforms.",
+                a: "Yes. Loxymity is available on both iOS and Android, and circles mix freely across the two. Real-time maps, SOS alerts, chat, calls, driving reports, flight tracking, geo-fencing and iBeacon tracking all work on both.",
               },
               {
                 q: 'What happens when someone sends an SOS?',
@@ -426,7 +473,7 @@ export default function Home() {
               },
               {
                 q: 'How is this different from sharing location on WhatsApp or Google Maps?',
-                a: "Those tools offer basic, temporary location sharing as a side feature. Loxymity is purpose-built for continuous family and friend tracking: a dedicated shared map, geofencing with custom dwell times, arrival/departure alerts, iBeacon support, battery status, SOS alerts, in-app voice and video calls, Street View on any pin, WhatsApp and Alexa location queries, and a full activity feed — all in one app, and your location is never sold.",
+                a: "Those tools offer basic, temporary location sharing as a side feature. Loxymity is purpose-built for continuous family and friend tracking: a dedicated shared map, geofencing with custom dwell times, arrival/departure alerts, iBeacon support, battery status, SOS alerts, in-app voice and video calls, circle chat, driving reports, flight tracking, official hazard alerts, Street View on any pin, WhatsApp and Alexa location queries, and a full activity feed — all in one app, and your location is never sold. It also keeps working when a phone has no signal, which none of them do.",
               },
               {
                 q: 'Can I ask where someone is from WhatsApp or Alexa?',
@@ -441,8 +488,24 @@ export default function Home() {
                 a: "Your phone holds the full record, so a lost or reset device loses whatever sits outside your plan's server window. That is exactly what Vault is for: an end-to-end encrypted backup on paid plans that restores to a new phone. We cannot read it — the encryption key never leaves your device.",
               },
               {
+                q: 'Are in-app calls recorded?',
+                a: "Yes — in-app voice calls are recorded automatically from the moment the call starts, so there is no prompt each time. Recordings are encrypted, kept for 28 days, and then deleted. Video calls are not recorded. Recording law varies by country and in some places every party must consent, so tell the people you call in-app, and use your ordinary phone dialler for anything you would rather not have recorded. This is set out in section 5 of our Terms.",
+              },
+              {
+                q: 'How can it work when my phone has no internet?',
+                a: "Other Loxymity phones near you can carry your location onward. Your phone hands a small, end-to-end encrypted packet to any nearby device over Bluetooth, and whichever one reaches the internet first passes it on. The phone doing the carrying cannot read it and learns nothing about you, and the location still only ever reaches the circles you already share with. You can switch it off at any time.",
+              },
+              {
+                q: 'What is in a driving report?',
+                a: "Each trip gets a score and a grade, a route, distance and duration, and an honest split between time actually moving and time stuck in traffic. Loxymity also measures road roughness from your phone's accelerometer and reports a smoothness index for the road you drove on. That figure never counts against your score — you did not build the road. Driving reports are on Platinum and above, and everyone in a Platinum circle gets them.",
+              },
+              {
+                q: 'Do I have to buy a plan for every family member?',
+                a: "No. A plan belongs to a circle, not to a seat. One person upgrades the circle and every member gets the longer history, the calling minutes, Street View and driving reports on their own free account. There is no per-person bill at any tier.",
+              },
+              {
                 q: 'Is my data ever sold or shared with third parties?',
-                a: "Never. Loxymity has no advertising and your location data is not sold or shared with any third parties. We use Supabase for secure database hosting and RevenueCat for subscription management — both under strict data processing agreements.",
+                a: "Never. Loxymity has no advertising, your location data is not sold, and we do not use your content to train models. We do rely on service providers to run the app — Supabase for the database (hosted in Mumbai, India), Agora for calls, Cloudflare for encrypted backups, Google Maps for mapping, Groq for interpreting assistant questions, and RevenueCat, Stripe and Razorpay for payments. Each is contractually a processor acting on our instructions, and the full list is in our Privacy Policy.",
               },
             ].map(({ q, a }) => (
               <details key={q} className="py-5 group">
