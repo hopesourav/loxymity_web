@@ -127,7 +127,15 @@ export default function PoiPage() {
   }, [facets, tierFilter]);
 
   // ── Viewport load ──────────────────────────────────────────────────────────
+  //
+  // Sequence-guarded. Panning emits a new bbox every 250 ms and the responses
+  // do not come back in order — a slow wide view landing after a fast zoomed-in
+  // one would repaint the map with the stale result. Only the newest request is
+  // allowed to write state.
+  const reqSeq = useRef(0);
+
   const loadViewport = useCallback(async (b: Bbox) => {
+    const seq = ++reqSeq.current;
     setLoading(true);
     setLoadError('');
     const { data, error } = await supabase.rpc('admin_pois_in_bbox', {
@@ -141,8 +149,20 @@ export default function PoiPage() {
       p_q: nameFilter.trim() || null,
       p_limit: MAX_ROWS,
     });
+    if (seq !== reqSeq.current) return;   // superseded — drop it
     setLoading(false);
-    if (error) { setLoadError(error.message); return; }
+    if (error) {
+      // 57014 is the 8 s statement timeout on the `authenticated` role. It
+      // should not happen any more (0219 made the RPC SECURITY DEFINER so the
+      // GiST index is usable), but if it comes back the useful advice is to
+      // narrow the view rather than to read the raw Postgres string.
+      setLoadError(
+        error.code === '57014'
+          ? 'Query timed out — zoom in or narrow the filters.'
+          : `${error.message}${error.code ? ` (${error.code})` : ''}`,
+      );
+      return;
+    }
     const list = (data ?? []) as (PoiRow & { total_in_view: number })[];
     setRows(list.map(({ total_in_view: _t, ...r }) => r));
     setTotalInView(list.length ? Number(list[0].total_in_view) : 0);
