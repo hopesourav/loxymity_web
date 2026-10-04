@@ -1,0 +1,16 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["98ND3XLL82.com.amsekresearch.loxymity"],
+        "components": [
+          { "/": "/join/*", "comment": "Circle invite: /join/<CODE>" },
+          { "/": "/join", "?": { "code": "?*" }, "comment": "Circle invite: /join?code=<CODE>" },
+          { "/": "/join/", "?": { "code": "?*" } },
+          { "/": "/refer", "?": { "code": "?*" }, "comment": "Referral" },
+          { "/": "/refer/", "?": { "code": "?*" } }
+        ]
+      }
+    ]
+  }
+}

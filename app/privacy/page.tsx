@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 export default function PrivacyPolicy() {
-  const effective = 'September 19, 2026';
+  const effective = 'October 4, 2026';
 
   return (
     <div className="min-h-screen bg-dark-bg">
@@ -103,11 +103,23 @@ export default function PrivacyPolicy() {
                 the key is derived from your backup password, which never leaves your device.
               </li>
               <li>
-                <strong>Contact data (optional)</strong> — if you grant contacts permission, we
-                collect names, phone numbers, and email addresses from your device contacts.
-                This data is used solely to suggest people to invite to your circle and, with your
-                consent, for marketing communications. You may revoke this permission at any time in
-                your device settings.
+                <strong>Contacts (optional, on your device only)</strong> — if you allow contacts
+                access, the app reads names, phone numbers and email addresses <em>on your phone</em>{' '}
+                so you can pick people to invite. Your contacts are <strong>never uploaded, stored
+                or shared</strong> by Loxymity, and we never contact anyone in your address book.
+                Invites are sent by you, from your own WhatsApp, messaging or email app, one person
+                at a time. You can turn contacts access off at any time in your device settings.
+              </li>
+              <li>
+                <strong>Usage statistics (optional)</strong> — if you agree when you sign up, which
+                setup steps you complete (for example &ldquo;circle created&rdquo; or &ldquo;invite
+                sent&rdquo;), with no names, phone numbers, contacts or locations. Used only to
+                improve sign-up and setup. Never collected from anyone under 18.
+              </li>
+              <li>
+                <strong>Sign in with Apple</strong> — if you use it, the name and email (or private
+                relay address) Apple provides, and a token we use only to revoke Apple sign-in when
+                you delete your account.
               </li>
             </ul>
           </Section>
@@ -128,12 +140,12 @@ export default function PrivacyPolicy() {
               <li>To answer questions you ask the assistant, in the app, in WhatsApp, or via Alexa.</li>
               <li>To improve the reliability and performance of the service.</li>
               <li>
-                To suggest circle invites based on your contacts (only if permission granted).
+                To let you pick people from your phone&apos;s contacts when inviting them (on your
+                device only — see section 2).
               </li>
               <li>
-                To send relevant product updates to people in your contacts list who may benefit from
-                Loxymity (only if you have granted contact access and only to contacts who have not
-                opted out).
+                To understand where new users get stuck during setup (only with your consent, never
+                for anyone under 18).
               </li>
             </ul>
             <p className="mt-3">
@@ -328,16 +340,22 @@ export default function PrivacyPolicy() {
                 Vault deletes the stored copy.
               </li>
               <li>
-                <strong>Contacts</strong> — retained until you delete your account or revoke
-                contacts permission.
+                <strong>Contacts</strong> — not retained. They are read on your device when you
+                invite someone and are never sent to us.
               </li>
               <li>
-                <strong>Account data</strong> — retained until you delete your account. Account
-                deletion requests can be sent to{' '}
+                <strong>Usage statistics</strong> — deleted after 90 days.
+              </li>
+              <li>
+                <strong>Account data</strong> — retained until you delete your account. You can
+                delete it in the app (You → Delete account): you are signed out immediately and
+                your account, location history, files and Apple sign-in link are deleted
+                automatically. Call recordings expire on their own within 28 days. You can also
+                email{' '}
                 <a href="mailto:support@loxymity.com" className="text-indigo-600 underline">
                   support@loxymity.com
                 </a>
-                ; data is removed within 30 days.
+                .
               </li>
             </ul>
           </Section>
@@ -361,9 +379,18 @@ export default function PrivacyPolicy() {
 
           <Section title="10. Children">
             <p>
-              Loxymity is not directed at children under 13 (or under 16 in the EU). We do not
-              knowingly collect personal information from children. If you believe a child has
-              provided us with personal data, please contact us and we will delete it promptly.
+              Loxymity is a family app. Under India&apos;s Digital Personal Data Protection Act,
+              anyone under 18 is a child, so we ask every person&apos;s age when they sign up. A
+              person under 18 can only use Loxymity after a parent or legal guardian invites them
+              from the parent&apos;s own Loxymity account and confirms they are the child&apos;s
+              parent or guardian; we record that confirmation. Until then we do not share or track
+              the child&apos;s location, and an account that is not confirmed within 7 days is
+              deleted.
+            </p>
+            <p className="mt-3">
+              For children&apos;s accounts we do not show offers or upgrades, do not give referral
+              rewards, and do not collect usage statistics. If you believe a child is using
+              Loxymity without a parent&apos;s consent, contact us and we will act promptly.
             </p>
           </Section>
 

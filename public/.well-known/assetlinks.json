@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.amsekresearch.loxymity",
+      "sha256_cert_fingerprints": [
+        "6C:42:66:81:9C:21:F9:DC:21:46:6D:B7:3F:7C:04:6F:31:C4:F3:C2:03:B7:38:C7:1E:79:2F:C9:B0:E6:A3:98"
+      ]
+    }
+  }
+]

@@ -27,7 +27,7 @@ export default function TermsOfService() {
             Terms of Service
           </h1>
           <p className="text-dark-muted">
-            Last updated: September 2026
+            Last updated: October 2026
           </p>
           <p className="text-dark-muted text-sm mt-1">
             AMSEK RESEARCH LABS LLP (&ldquo;we&rdquo;, &ldquo;us&rdquo;, &ldquo;our&rdquo;)
@@ -86,8 +86,11 @@ export default function TermsOfService() {
                 credentials and for all activity that occurs under your account.
               </li>
               <li>
-                Accounts for children under 13 must be created and managed by a
-                parent or legal guardian.
+                You must be 18 or older to create an account yourself. A person under
+                18 may use Loxymity only after their parent or legal guardian invites
+                them from the parent&apos;s own account and confirms they are the
+                child&apos;s parent or guardian. That parent or guardian is responsible
+                for the child&apos;s use of Loxymity.
               </li>
               <li>
                 You agree to provide accurate, current, and complete information
