@@ -68,9 +68,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         await supabase.auth.mfa.unenroll({ factorId: f.id });
       }
     }
+    // `issuer` must be explicit. Without it Supabase Auth uses the host of the project's Site URL,
+    // which is the app's deep-link scheme `loxymity://` — no host — so every enrolment failed with
+    // 500 "Issuer must be set" (auth logs, 2026-10-17). It is also the name the authenticator shows.
     const { data: enrolled, error: enrollError } = await supabase.auth.mfa.enroll({
       factorType: 'totp',
       friendlyName: 'Loxymity Admin',
+      issuer: 'Loxymity',
     });
     if (enrollError || !enrolled) {
       setMfaError(enrollError?.message ?? 'Could not start authenticator setup.');
@@ -194,6 +198,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           />
 
           {mfaError && <p className="text-brand-danger text-xs mb-3">{mfaError}</p>}
+          {mfaError && !factorId && (
+            <button
+              onClick={() => { setMfaError(''); checkSession(); }}
+              className="w-full mb-3 py-2.5 border border-dark-border rounded-xl text-sm text-dark-text hover:border-primary transition-colors"
+            >
+              Try again
+            </button>
+          )}
 
           <button
             onClick={handleVerifyCode}
