@@ -443,7 +443,7 @@ export default function PrivacyPolicy() {
           Under the DPDP Act anyone under 18 is a child. We ask everyone&rsquo;s age at sign-up. A child can
           use Loxymity only after a parent or lawful guardian — an adult with a verified phone number on
           their own account — invites them and confirms they are the child&rsquo;s parent or guardian; we
-          record that confirmation as verifiable consent. Without it, a child who is not in any circle is
+          record that confirmation as the parent&rsquo;s consent. Without it, a child who is not in any circle is
           not tracked and their account is deleted after 7 days. A child who is already in a circle can
           keep sharing with it for up to 14 days while consent is completed.
         </p>
