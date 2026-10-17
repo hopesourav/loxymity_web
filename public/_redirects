@@ -1,0 +1,4 @@
+# Cloudflare Pages rewrites (200 = serve the target, keep the URL).
+# https://loxymity.com/join/<CODE> is one static page that reads the code from the address bar.
+/join/:code/  /join/  200
+/join/:code   /join/  200
