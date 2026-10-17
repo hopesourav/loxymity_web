@@ -37,7 +37,7 @@ export default function PrivacyPolicy() {
                 Locations, messages and calls are encrypted in transit and protected on our servers, but
                 they are <strong>not end-to-end encrypted</strong>. Only Vault backups are.
               </li>
-              <li>In-app voice calls are recorded and kept for 28 days.</li>
+              <li>In-app voice calls are recorded and kept for 28 days — never when a child is on the call.</li>
               <li>You can pause sharing, leave circles, turn features off and delete your account in the app.</li>
             </List>
           </Callout>
@@ -80,7 +80,8 @@ export default function PrivacyPolicy() {
               who invites a child. Used for verification, WhatsApp and Alexa, and safety features.
             </li>
             <li>
-              <strong>Age and consent records:</strong> whether you are 18 or older, which versions of
+              <strong>Age and consent records:</strong> we ask for the month and year you were born but
+              keep only whether you are 18 or older — never the date. We also keep which versions of
               these documents you accepted and when, your usage-statistics choice, and, for children, the
               parent or guardian&rsquo;s confirmation.
             </li>
@@ -92,6 +93,10 @@ export default function PrivacyPolicy() {
               way&rdquo;, &ldquo;Arrived safely&rdquo;); SOS messages and responses.
             </li>
             <li><strong>Support and requests:</strong> what you send us, and our replies.</li>
+            <li>
+              <strong>Blocks and reports:</strong> who you block, and when you report a message, your
+              reason and a copy of the message — kept even if the sender later deletes it.
+            </li>
           </List>
         </Sub>
 
@@ -104,8 +109,9 @@ export default function PrivacyPolicy() {
             <li>
               <strong>Phone status sent with each location:</strong> battery level and charging; activity
               (still, walking, in a vehicle) and today&rsquo;s step count; network type and, on Android, the
-              name of the Wi-Fi network you are connected to; ringer mode; when the screen was last on and
-              whether the phone is idle.
+              name of the Wi-Fi network you are connected to (never stored for anyone under 18, or for an
+              account that has not told us its age); ringer mode; when the screen was last on and whether
+              the phone is idle.
             </li>
             <li>
               <strong>Device and app:</strong> make, model, operating system and app version, an identifier
@@ -261,8 +267,8 @@ export default function PrivacyPolicy() {
             <li>your live location and when it was last updated;</li>
             <li>your location history, for as far back as the circle&rsquo;s plan allows;</li>
             <li>
-              your battery and charging, activity and steps, network type and (on Android) Wi-Fi network
-              name, ringer mode, and when your phone was last active;
+              your battery and charging, activity and steps, network type and (on Android, for adults)
+              Wi-Fi network name, ringer mode, and when your phone was last active;
             </li>
             <li>your arrivals at and departures from places, and your schedule checks;</li>
             <li>
@@ -299,8 +305,8 @@ export default function PrivacyPolicy() {
         <Sub title="4.5 Our team">
           <p>
             A small number of authorised people can access data when it is needed to support you, fix a
-            problem, keep the Service secure, investigate a reported safety or abuse issue, or meet a legal
-            obligation.
+            problem, keep the Service secure, review a report, investigate a safety or abuse issue, or
+            meet a legal obligation.
           </p>
         </Sub>
         <Sub title="4.6 Authorities and others">
@@ -315,10 +321,11 @@ export default function PrivacyPolicy() {
 
       <Section title="5. Calls and recordings">
         <p>
-          In-app calls are carried by Agora. <strong>Voice calls are recorded automatically</strong>, from
-          when the call starts ringing until it ends, so an unanswered call is recorded on the
-          caller&rsquo;s side. A &ldquo;Recording&rdquo; notice shows on the call screen. Video calls are not
-          recorded at present. Recordings are stored encrypted by Cloudflare R2, kept for 28 days and then
+          In-app calls are carried by Agora, and you can call only people you share a circle with.{' '}
+          <strong>Voice calls are recorded automatically</strong>, from when the call starts ringing until
+          it ends, so an unanswered call is recorded on the caller&rsquo;s side. A &ldquo;Recording&rdquo;
+          notice shows on the call screen. Calls in which either person is under 18 are never recorded,
+          and video calls are not recorded at present. Recordings are stored encrypted by Cloudflare R2, kept for 28 days and then
           deleted automatically. They are not available in the app; we access one only to investigate a
           safety, abuse or legal matter reported to us, or when the law requires it. Call records (who,
           when, how long) are kept with your account. Recording laws vary, and our{' '}
@@ -377,7 +384,9 @@ export default function PrivacyPolicy() {
             ['Assistant conversations in the app', '30 days.'],
             ['WhatsApp messages', 'Content 30 days; the record that a message was handled, 90 days.'],
             ['Alexa requests and saved WhatsApp questions', 'Until you ask us to delete them.'],
-            ['Call recordings', '28 days.'],
+            ['Call recordings', '28 days. Calls involving anyone under 18 are not recorded.'],
+            ['A child’s history on any phone that keeps a copy (including a parent’s) and in backups', 'At most 7 days.'],
+            ['Reports and the copy of a reported message', 'As long as needed to deal with the report and any related safety or legal matter.'],
             ['Call records, SOS alerts and responses, safety and place events, the viewing record, schedules you keep', 'While your account exists. Schedule checks: 30 days. Flights: 30 days.'],
             ['Offline-relay sightings', '7 days (undelivered relay packets: 1 day).'],
             ['Notification records', '30 days.'],
@@ -395,7 +404,7 @@ export default function PrivacyPolicy() {
             Delete it in the app (You → Delete account). You are signed out and your account is blocked
             at once, and deletion normally completes within a day: your profile, photo, location data,
             drives, places, messages, diagnostic logs and the Apple sign-in link are removed. Circles you
-            own pass to another adult member, or are deleted if no one is left; direct-message threads are
+            own pass to another adult member, or are deleted if no other adult is left; direct-message threads are
             removed for both people. Call recordings expire within 28 days. We keep only what the law
             requires us to keep, and copies in our providers&rsquo; backups are overwritten in their normal
             cycle. If you used Vault, Alexa or WhatsApp, email{' '}
@@ -440,19 +449,28 @@ export default function PrivacyPolicy() {
 
       <Section title="10. Children">
         <p>
-          Under the DPDP Act anyone under 18 is a child. We ask everyone&rsquo;s age at sign-up. A child can
-          use Loxymity only after a parent or lawful guardian — an adult with a verified phone number on
-          their own account — invites them and confirms they are the child&rsquo;s parent or guardian; we
-          record that confirmation as the parent&rsquo;s consent. Without it, a child who is not in any circle is
-          not tracked and their account is deleted after 7 days. A child who is already in a circle can
-          keep sharing with it for up to 14 days while consent is completed.
+          Under the DPDP Act anyone under 18 is a child. We ask everyone&rsquo;s month and year of birth
+          at sign-up and keep only whether they are an adult. <strong>Children under 13 cannot use
+          Loxymity.</strong> A child aged 13 to 17 can use it only after a parent or lawful guardian — an
+          adult with a verified phone number on their own account — invites them with a child invite and
+          confirms they are the child&rsquo;s parent or guardian; we record that confirmation as the
+          parent&rsquo;s consent. Without it, a child who is not in any circle is not tracked and their
+          account is deleted after 7 days. A child who is already in a circle can keep sharing with it for
+          up to 14 days while consent is completed.
         </p>
+        <p>A child&rsquo;s account is limited, and our servers and the app enforce the limits:</p>
+        <List>
+          <li>a child cannot create circles, invite anyone, be made a circle owner, or create a share link — and no share link ever shows a child&rsquo;s location;</li>
+          <li>calls involving a child are not recorded, and the Wi-Fi network name is never stored for a child;</li>
+          <li>a child&rsquo;s location history is kept for at most 7 days on any phone that keeps a copy, including a parent&rsquo;s, and in backups;</li>
+          <li>a circle is never handed to a child when the last adult leaves or deletes their account — it is deleted instead;</li>
+          <li>children see no plans, offers or referral rewards, get no billing notifications, and no usage statistics are collected from them;</li>
+          <li>a child cannot block the parent or guardian who consented for them, but can report anything to us.</li>
+        </List>
         <p>
-          For children we show no offers, sell nothing, give no referral rewards and collect no usage
-          statistics. Children&rsquo;s in-app voice calls are recorded like everyone else&rsquo;s. Parents
-          in countries with other rules for children&rsquo;s data (for example the EU, UK or US) must give
-          any consent those rules require before inviting a child. If you believe a child is using
-          Loxymity without a parent&rsquo;s consent, write to{' '}
+          Parents in countries with other rules for children&rsquo;s data (for example the EU, UK or US)
+          must give any consent those rules require before inviting a child. If you believe a child is
+          using Loxymity without a parent&rsquo;s consent, write to{' '}
           <a href="mailto:privacy@loxymity.com">privacy@loxymity.com</a> and we will act promptly.
         </p>
       </Section>
@@ -461,6 +479,11 @@ export default function PrivacyPolicy() {
         <Sub title="In the app, at any time">
           <List>
             <li>Pause sharing (Settings → Share my location), leave a circle, or delete your account.</li>
+            <li>
+              Block someone: it stops direct messages and calls between you in both directions and hides
+              their circle chat on your phone. It does not change who can see your location — for that,
+              leave the circle or ask its owner. Report any message to us from the app.
+            </li>
             <li>
               Turn off Drive Tracking, Share Drives With Circle, Crash detection, Fall detection, Findable
               when offline, read receipts, Smart Routine Alerts and individual notification types.

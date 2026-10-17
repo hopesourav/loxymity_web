@@ -159,7 +159,7 @@ export default function Home() {
                 iconPath: 'M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z',
                 iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
                 title: 'In-app voice & video',
-                desc: 'Call any member by name, right from the map — no phone number needed. Voice calls are free; video comes with Platinum and Infinite. Voice calls are recorded.',
+                desc: 'Call any member by name, right from the map — no phone number needed. Voice calls are free; video comes with Platinum and Infinite. Voice calls between adults are recorded.',
               },
               {
                 iconPath: 'M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z',
@@ -409,7 +409,8 @@ export default function Home() {
                 'Privacy Shield (Infinite): see who viewed your location, go into ghost mode, auto-delete history, export your data.',
                 'Your circle can open 2 days of history on Free, then 30, 90 or 180 days by plan. Your own phone keeps its copy for as long as you want, on every plan.',
                 'A phone that relays someone else\u2019s location offline cannot read what it carries.',
-                'In-app voice calls are recorded and kept 28 days, and a Recording notice shows on every call. Messages and calls are not end-to-end encrypted.',
+                'In-app voice calls are recorded and kept 28 days (never when a child is on the call), and a Recording notice shows on every call. Messages and calls are not end-to-end encrypted.',
+                'Block anyone, and report any message — we keep a copy and review every report.',
               ].map((point) => (
                 <div key={point} className="flex items-start gap-3">
                   <div className="w-5 h-5 bg-accent-cyan/15 border border-accent-cyan/30 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -487,7 +488,7 @@ export default function Home() {
               },
               {
                 q: 'Are in-app calls recorded?',
-                a: 'Yes. In-app voice calls are recorded automatically from when the call starts ringing, and a “Recording” notice shows on the call screen. Recordings are encrypted, kept for 28 days and then deleted, and are not available in the app. Video calls are not recorded at present. Recording laws vary and some places require everyone’s consent, so tell the people you call — and use your ordinary phone dialler for anything you would rather not have recorded.',
+                a: 'Yes. In-app voice calls are recorded automatically from when the call starts ringing, and a “Recording” notice shows on the call screen. Recordings are encrypted, kept for 28 days and then deleted, and are not available in the app. Calls involving anyone under 18 are never recorded, and video calls are not recorded at present. Recording laws vary and some places require everyone’s consent, so tell the people you call — and use your ordinary phone dialler for anything you would rather not have recorded.',
               },
               {
                 q: 'How can it work when my phone has no internet?',

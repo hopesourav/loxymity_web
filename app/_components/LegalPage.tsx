@@ -112,5 +112,20 @@ export function Table({ head, rows }: { head: string[]; rows: React.ReactNode[][
   );
 }
 
-export const LEGAL_VERSION = '2026-10-17';
-export const LEGAL_EFFECTIVE = '17 October 2026';
+/**
+ * Version of the published Terms + Privacy Policy. MUST equal TERMS_VERSION and PRIVACY_VERSION in
+ * the app (src/lib/legal.ts): the app asks every user to accept the version it was built with.
+ *
+ * 2026-10-17.1 = the child-safety Phase 0 release (migrations 0271–0273 + the app build carrying
+ * them). Publish it the day that release ships, not before: until then 2026-10-17 is the accurate
+ * text. Set LEGAL_EFFECTIVE to that day when merging — the build refuses to run while it is unset,
+ * so this version cannot reach loxymity.com by accident.
+ */
+export const LEGAL_VERSION = '2026-10-17.1';
+export const LEGAL_EFFECTIVE: string = 'SET-ON-RELEASE';
+
+if (LEGAL_EFFECTIVE === 'SET-ON-RELEASE') {
+  throw new Error(
+    'LEGAL_EFFECTIVE is unset: set it (app/_components/LegalPage.tsx) to the day the child-safety release ships.',
+  );
+}
