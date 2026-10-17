@@ -21,13 +21,20 @@
  *
  * When the real rail lands, delete the mock branch. Nothing else on this page
  * depends on it: the post-payment polling below is shared by both.
+ *
+ * UNTIL A WEB RAIL IS LIVE (`WEB_CHECKOUT_LIVE`), plans are sold only in the app through the
+ * App Store and Google Play, so for everyone except the mock rail this page explains that
+ * instead of offering a checkout button that can only fail.
  */
 
 import { useState, useEffect, useRef } from 'react';
 import { supabase } from '../../_lib/client';
 import { hasDashboardAccess } from '../../../_lib/tiers';
-import { PLANS, detectCurrency, type Currency, type PlanId } from '../../../_lib/pricing';
-import { RAZORPAY_SCRIPT_URL, STRIPE_LIVE } from '../../_lib/constants';
+import {
+  PLAN_CARDS, detectCurrency, formatPrice, perMonthOfAnnual, planPrice,
+  type Currency, type PlanId,
+} from '../../../_lib/pricing';
+import { RAZORPAY_SCRIPT_URL, STRIPE_LIVE, WEB_CHECKOUT_LIVE } from '../../_lib/constants';
 import { IconCheck } from '../../_components/Icons';
 
 type Stage = 'wall' | 'processing' | 'timeout';
@@ -188,9 +195,12 @@ export default function UpgradePage() {
 
   function choose(plan: PlanId) {
     if (mockAvailable) return handleMock(plan);
+    if (!WEB_CHECKOUT_LIVE) return;
     if (STRIPE_LIVE) return handleStripe(plan);
     return handleRazorpay(plan);
   }
+
+  const canCheckout = mockAvailable || WEB_CHECKOUT_LIVE;
 
   if (checking) return <Spinner />;
 
@@ -231,7 +241,7 @@ export default function UpgradePage() {
 
   // Free is not purchasable, and this page is only reachable by a user who
   // already has it — so it is filtered out rather than shown as an option.
-  const paidPlans = PLANS[currency].filter((p) => p.id !== null);
+  const paidPlans = PLAN_CARDS.filter((p) => p.id !== null);
 
   return (
     <div className="min-h-dvh bg-dark-bg px-4 py-12">
@@ -240,8 +250,18 @@ export default function UpgradePage() {
           <p className="font-display text-3xl font-bold text-dark-text">Loxymity</p>
         </div>
         <p className="text-center text-dark-muted mb-8">
-          Choose a plan to unlock the web dashboard — and everything in the app.
+          The web dashboard comes with a plan you pay for yourself.
         </p>
+
+        {!canCheckout && (
+          <div className="max-w-lg mx-auto mb-8 rounded-xl border border-primary/30 bg-primary/5 px-4 py-3 text-center">
+            <p className="text-sm text-dark-text font-semibold">Subscribe in the Loxymity app</p>
+            <p className="text-xs text-dark-muted mt-1">
+              Plans are bought in the app and billed by the App Store or Google Play: open a circle,
+              then Plans. Once you&apos;re subscribed, sign in here again.
+            </p>
+          </div>
+        )}
 
         {mockAvailable && (
           <div className="max-w-lg mx-auto mb-8 rounded-xl border border-dashed border-dark-border px-4 py-3 text-center">
@@ -295,32 +315,30 @@ export default function UpgradePage() {
                 </div>
               )}
               <p className="uppercase tracking-wide text-sm font-semibold text-dark-muted mb-2">{plan.name}</p>
+              {/* Billed amount first (App Store 3.1.2 / consumer law): the per-month figure of an
+                  annual plan is only the small line underneath. 1-circle prices. */}
               <p className="flex items-baseline gap-1 mb-1">
-                <span className="font-display text-4xl font-bold text-dark-text">{plan.price}</span>
-                <span className="text-dark-muted text-sm">/mo</span>
+                <span className="font-display text-4xl font-bold text-dark-text">
+                  {formatPrice(planPrice(plan.id!, 1, 'annual', currency), currency)}
+                </span>
+                <span className="text-dark-muted text-sm">/ year</span>
               </p>
-              <p className="text-dark-muted text-xs mb-3">{plan.cadence}</p>
-              {/* The billed total has to sit beside the derived monthly figure —
-                  a per-month headline on an annual commitment is misleading
-                  without it, and the monthly alternative must stay visible. */}
-              <div className="rounded-lg bg-brand-success/8 border border-brand-success/20 px-2.5 py-2 mb-5">
-                <p className="text-brand-success text-xs font-bold leading-tight">
-                  Save {plan.annualSave} vs monthly
-                </p>
-                <p className="text-dark-muted text-[10px] mt-0.5">Billed annually — {plan.annualTotal}/year</p>
-                <p className="text-dark-muted text-[10px] mt-0.5">Prefer monthly? {plan.trueMonthly}/month</p>
-              </div>
+              <p className="text-dark-muted text-xs mb-5">
+                about {perMonthOfAnnual(planPrice(plan.id!, 1, 'annual', currency), currency)} a month ·
+                or {formatPrice(planPrice(plan.id!, 1, 'monthly', currency), currency)} monthly · 1 circle
+              </p>
 
+              <p className="text-dark-text text-sm font-semibold mb-2">{plan.tagline}</p>
               <ul className="flex flex-col gap-2 mb-6 flex-1">
-                {plan.features.map((f, i) => (
-                  <li key={f} className={`flex items-start gap-2 text-sm ${i === 0 ? 'text-dark-text font-semibold' : 'text-dark-muted'}`}>
-                    {i !== 0 && <IconCheck className="text-brand-success shrink-0 mt-0.5" size={15} />}
+                {plan.features.map((f) => (
+                  <li key={f} className="flex items-start gap-2 text-sm text-dark-muted">
+                    <IconCheck className="text-brand-success shrink-0 mt-0.5" size={15} />
                     {f}
                   </li>
                 ))}
               </ul>
 
-              <button
+              {canCheckout && <button
                 onClick={() => choose(plan.id!)}
                 disabled={busy !== null || circles.length === 0}
                 className={`w-full px-5 py-3 rounded-xl text-sm font-bold transition-opacity disabled:opacity-50 ${
@@ -330,7 +348,7 @@ export default function UpgradePage() {
                 }`}
               >
                 {busy === plan.id ? 'Opening checkout…' : `Choose ${plan.name}`}
-              </button>
+              </button>}
             </div>
           ))}
         </div>

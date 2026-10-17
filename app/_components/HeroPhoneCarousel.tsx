@@ -94,11 +94,11 @@ function SceneSos() {
             </div>
           </div>
           <div className="flex gap-1.5">
-            <div className="flex-1 text-center text-[10px] font-bold text-white rounded-lg py-1.5" style={{ backgroundColor: '#B5453F' }}>Call now</div>
-            <div className="flex-1 text-center text-[10px] font-semibold text-dark-text rounded-lg py-1.5 bg-dark-surface border border-dark-border">Directions</div>
+            <div className="flex-1 text-center text-[10px] font-bold text-white rounded-lg py-1.5" style={{ backgroundColor: '#B5453F' }}>On my way</div>
+            <div className="flex-1 text-center text-[10px] font-semibold text-dark-text rounded-lg py-1.5 bg-dark-surface border border-dark-border">Call</div>
           </div>
         </div>
-        <p className="text-dark-muted text-[9px] text-center">Every circle member was alerted instantly — with exact GPS.</p>
+        <p className="text-dark-muted text-[9px] text-center">The whole circle is alerted with Rohan’s exact location.</p>
       </div>
     </div>
   );
@@ -124,7 +124,7 @@ function SceneGeofence() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-dark-text text-[11px] font-semibold leading-tight">Rohan arrived at School</p>
-            <p className="text-dark-muted text-[9px] leading-tight">Geofence · 3:24 PM</p>
+            <p className="text-dark-muted text-[9px] leading-tight">Place alert · 3:24 PM</p>
           </div>
         </div>
         <div className="rounded-xl px-3 py-2.5 flex items-center gap-2.5 bg-dark-surface border border-dark-border opacity-70">
@@ -133,7 +133,7 @@ function SceneGeofence() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-dark-text text-[11px] font-semibold leading-tight">Ananya left Office</p>
-            <p className="text-dark-muted text-[9px] leading-tight">Geofence · 3:02 PM</p>
+            <p className="text-dark-muted text-[9px] leading-tight">Place alert · 3:02 PM</p>
           </div>
         </div>
       </div>
@@ -145,7 +145,7 @@ function SceneGeofence() {
 function SceneActivity() {
   const rows = [
     { c: '#5C8F6B', t: 'Ananya checked in safe', s: 'Just now', p: 'M9 12.75L11.25 15 15 9.75' },
-    { c: '#5F82A5', t: 'Rohan entered School zone', s: '3:24 PM', p: 'M15 10.5a3 3 0 11-6 0 3 3 0 016 0z' },
+    { c: '#5F82A5', t: 'Rohan arrived at School', s: '3:24 PM', p: 'M15 10.5a3 3 0 11-6 0 3 3 0 016 0z' },
     { c: '#C9A227', t: 'Sourav asked Alexa “where’s Rohan?”', s: '2:10 PM', p: 'M12 18.75a6 6 0 006-6v-1.5' },
     { c: '#C08B3E', t: 'Rohan’s battery low (34%)', s: '1:48 PM', p: 'M21 10.5h.375c.621 0 1.125.504 1.125 1.125v2.25' },
   ];

@@ -25,7 +25,7 @@ const SLIDES: Slide[] = [
   {
     tag: 'Ask Alexa',
     title: 'Ask Alexa where your family is',
-    desc: 'Link your phone number and just ask out loud. Alexa answers from your live circle — hands-free peace of mind.',
+    desc: 'Enable the skill, link your phone number and ask out loud. Alexa answers from your live circle — hands-free.',
     iconPath: 'M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z',
     iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
   },
@@ -39,14 +39,14 @@ const SLIDES: Slide[] = [
   {
     tag: 'Works with no signal',
     title: 'It still works when the network does not',
-    desc: 'Nearby Loxymity phones quietly carry your encrypted location onward until one of them reaches the internet. They cannot read a byte of it. No other family locator does this.',
+    desc: 'Nearby Loxymity phones carry your encrypted location — or your SOS — over Bluetooth until one of them reaches the internet. The phones carrying it cannot read it.',
     iconPath: 'M8.288 15.038a5.25 5.25 0 017.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12.53 18.22l-.53.53-.53-.53a.75.75 0 011.06 0z',
     iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
   },
   {
     tag: 'One price, whole circle',
     title: 'One person pays. Everyone is covered.',
-    desc: 'A plan belongs to the circle, not to a seat. Upgrade once and every member gets the longer history, the minutes and the reports on their own free account.',
+    desc: 'A plan covers circles, not seats. Put a circle on a plan and every member gets the longer history, more places, the driving reports and the minutes on their own free account.',
     iconPath: 'M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z',
     iconColor: 'text-primary', iconBg: 'bg-primary/10',
   },
@@ -67,14 +67,14 @@ const SLIDES: Slide[] = [
   {
     tag: 'Official alerts',
     title: 'Government hazard warnings, filtered to your people',
-    desc: 'Cyclone, flood and heat warnings from the official feeds, matched against where your circle actually is — with plain advice underneath, never instead of, the authority instruction.',
+    desc: 'Cyclone, flood, heat and storm warnings from the official feeds in India and the US, matched against where your circle actually is — with the authority’s own instruction, never replaced.',
     iconPath: 'M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z',
     iconColor: 'text-brand-danger', iconBg: 'bg-brand-danger/10',
   },
   {
     tag: 'Never sold. Ever.',
     title: 'Your location is never sold',
-    desc: 'Processed on-device wherever possible and never handed to advertisers or data brokers. Privacy is the whole point — not a paywall.',
+    desc: 'Never handed to advertisers or data brokers, never used for ads, never used to train AI. What the app keeps on your phone is encrypted, and App Lock keeps it behind Face ID or fingerprint.',
     iconPath: 'M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z',
     iconColor: 'text-brand-success', iconBg: 'bg-brand-success/10',
   },
@@ -84,13 +84,6 @@ const SLIDES: Slide[] = [
     desc: 'Speeds up when you’re moving, slows right down when you’re still. No fixed polling — real-time when it matters, gentle on your battery.',
     iconPath: 'M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z',
     iconColor: 'text-primary', iconBg: 'bg-primary/10',
-  },
-  {
-    tag: 'Hardware tokens',
-    title: 'iBeacon & BLE tokens',
-    desc: 'Attach a token to a bag, bike, or car. The nearby app-user network crowds-sources its location — no GPS in the token required.',
-    iconPath: 'M9.348 14.651a3.75 3.75 0 010-5.303m5.304 0a3.75 3.75 0 010 5.303m-7.425 2.122a6.75 6.75 0 010-9.546m9.546 0a6.75 6.75 0 010 9.546M5.106 18.894c-3.808-3.808-3.808-9.98 0-13.789m13.788 0c3.808 3.808 3.808 9.981 0 13.79M12 12h.008v.007H12V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z',
-    iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
   },
   {
     tag: 'Street View',
