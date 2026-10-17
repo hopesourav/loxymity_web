@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useDashboard } from '../../_lib/context';
 import { historyRetentionDays, effectiveTier } from '../../../_lib/tiers';
 import type { LocationHistoryPoint } from '../../_lib/types';
+import { MAP_TILE_URL, mapTileOptions } from '../../../_lib/mapTiles';
 import { IconHistory, IconPlay, IconPause, IconSkipForward, IconUser } from '../../_components/Icons';
 
 type Speed = 1 | 10 | 60;
@@ -49,10 +50,8 @@ export default function HistoryPage() {
     if (!mapRef.current || mapObjRef.current) return;
     import('leaflet').then(L => {
       leafletRef.current = L;
-      const map = L.map(mapRef.current!, { zoomControl: true, attributionControl: false }).setView([20.5937, 78.9629], 5);
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        subdomains: 'abcd', maxZoom: 19,
-      }).addTo(map);
+      const map = L.map(mapRef.current!, { zoomControl: true }).setView([20.5937, 78.9629], 5);
+      L.tileLayer(MAP_TILE_URL, mapTileOptions()).addTo(map);
       mapObjRef.current = map;
     });
     return () => { mapObjRef.current?.remove(); mapObjRef.current = null; };

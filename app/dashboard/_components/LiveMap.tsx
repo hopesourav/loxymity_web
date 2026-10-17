@@ -3,7 +3,7 @@
 import { useEffect, useRef, useCallback } from 'react';
 import type { Map as LeafletMap, Marker } from 'leaflet';
 import type { DashboardMember } from '../_lib/types';
-import { CARTO_DARK_TILE_URL, CARTO_ATTRIBUTION } from '../_lib/constants';
+import { MAP_TILE_URL, mapTileOptions } from '../../_lib/mapTiles';
 
 // Status → pin ring colour (matches Tailwind config brand colours)
 const STATUS_COLOR: Record<DashboardMember['status'], string> = {
@@ -27,7 +27,7 @@ function makeIcon(L: typeof import('leaflet'), member: DashboardMember) {
         color:#fff;font-weight:700;font-size:13px;
         box-shadow:0 2px 8px rgba(0,0,0,0.5);
         opacity:${opacity};
-        font-family:Inter,system-ui,sans-serif;
+        font-family:var(--font-inter),system-ui,sans-serif;
       ">${member.avatar_url
         ? `<img src="${member.avatar_url}" style="width:100%;height:100%;border-radius:50%;object-fit:cover" />`
         : initial
@@ -66,11 +66,7 @@ export default function LiveMap({ members, focusMemberId }: Props) {
     delete L.Icon.Default.prototype._getIconUrl;
 
     const map = L.map(mapDivRef.current, { zoomControl: true, attributionControl: true });
-    L.tileLayer(CARTO_DARK_TILE_URL, {
-      attribution: CARTO_ATTRIBUTION,
-      maxZoom: 19,
-      subdomains: 'abcd',
-    }).addTo(map);
+    L.tileLayer(MAP_TILE_URL, mapTileOptions()).addTo(map);
 
     map.setView([20, 78], 5); // Default: India
     mapRef.current = map;

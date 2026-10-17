@@ -20,6 +20,7 @@
 import { useEffect, useRef } from 'react';
 import { TIERS, tierSpec } from '../_lib/poiTiers';
 import { labelFor } from '../_lib/poiTiers';
+import { MAP_TILE_URL, mapTileOptions } from '../../../_lib/mapTiles';
 import type {
   Bbox, CoverageMode, CoverageScan, DupePair, MapMode, NearestPoiHit, PoiRow,
 } from '../_lib/types';
@@ -87,15 +88,11 @@ export default function PoiMap({
       const map = Lmod.map(hostRef.current, {
         preferCanvas: true,
         zoomControl: true,
-        attributionControl: false,
         // Kolkata — where the directory is densest, so the first frame is useful.
         center: [22.5726, 88.3639],
         zoom: 13,
       });
-      Lmod.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        subdomains: 'abcd',
-        maxZoom: 19,
-      }).addTo(map);
+      Lmod.tileLayer(MAP_TILE_URL, mapTileOptions()).addTo(map);
 
       // Order matters: the scan grid is a full-bleed fill and has to sit
       // under everything else, so it is added first.

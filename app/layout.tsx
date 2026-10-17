@@ -1,5 +1,10 @@
 import type { Metadata } from 'next';
+import { Inter, Fraunces } from 'next/font/google';
 import './globals.css';
+
+// Downloaded at build time and served from loxymity.com — no request to Google from visitors.
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
+const fraunces = Fraunces({ subsets: ['latin'], style: ['normal', 'italic'], variable: '--font-fraunces', display: 'swap' });
 
 export const metadata: Metadata = {
   title: 'Loxymity — See where your circle is, right now',
@@ -27,7 +32,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${inter.variable} ${fraunces.variable}`}>
       <body className="bg-dark-bg text-dark-text antialiased">{children}</body>
     </html>
   );

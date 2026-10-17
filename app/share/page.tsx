@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import type { Map as LeafletMap, Marker, Circle } from 'leaflet';
+import { MAP_TILE_URL, mapTileOptions } from '../_lib/mapTiles';
 
 type LocationData = {
   lat: number;
@@ -100,10 +101,7 @@ export default function SharePage() {
       });
 
       const map = L.map(mapDivRef.current, { zoomControl: true, attributionControl: true });
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        maxZoom: 19,
-      }).addTo(map);
+      L.tileLayer(MAP_TILE_URL, mapTileOptions(false)).addTo(map);
       map.setView([location.lat, location.lng], 16);
 
       markerRef.current = L.marker([location.lat, location.lng]).addTo(map);
@@ -196,7 +194,7 @@ const styles: Record<string, React.CSSProperties> = {
   wrapper: {
     display: 'flex', flexDirection: 'column',
     height: '100dvh', width: '100%',
-    backgroundColor: '#0F172A', fontFamily: 'Inter, system-ui, sans-serif',
+    backgroundColor: '#0F172A', fontFamily: 'var(--font-inter), system-ui, sans-serif',
   },
   header: {
     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -232,7 +230,7 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'flex', flexDirection: 'column',
     alignItems: 'center', justifyContent: 'center',
     height: '100dvh', backgroundColor: '#0F172A',
-    fontFamily: 'Inter, system-ui, sans-serif', padding: '0 24px', textAlign: 'center',
+    fontFamily: 'var(--font-inter), system-ui, sans-serif', padding: '0 24px', textAlign: 'center',
   },
   spinner: {
     width: 36, height: 36, borderRadius: '50%',

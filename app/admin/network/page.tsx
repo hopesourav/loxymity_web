@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useAdmin } from '../_lib/adminContext';
 import type { BeaconToken, GeofenceRow } from '../_lib/types';
+import { MAP_TILE_URL, mapTileOptions } from '../../_lib/mapTiles';
 
 type Stats = {
   totalBeacons: number;
@@ -83,9 +84,7 @@ export default function NetworkPage() {
       const map = L.map(mapRef.current).setView([20, 0], 2);
       leafletMapRef.current = map;
 
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '© OSM contributors © CARTO',
-      }).addTo(map);
+      L.tileLayer(MAP_TILE_URL, mapTileOptions()).addTo(map);
 
       const beaconIcon = L.divIcon({
         html: `<div style="background:#5C6BF8;color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(92,107,248,0.4)">📡</div>`,

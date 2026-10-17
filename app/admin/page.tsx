@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useAdmin } from './_lib/adminContext';
 import type { OverviewStats, SosAlert, AdminLocation } from './_lib/types';
+import { MAP_TILE_URL, mapTileOptions } from '../_lib/mapTiles';
 
 const ACTIVE_MS = 15 * 60 * 1000;
 const STALE_MS = 60 * 60 * 1000;
@@ -91,9 +92,7 @@ export default function AdminOverviewPage() {
       const map = L.map(mapRef.current).setView([20, 78], 4);
       leafletMapRef.current = map;
 
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '© OSM contributors © CARTO',
-      }).addTo(map);
+      L.tileLayer(MAP_TILE_URL, mapTileOptions()).addTo(map);
 
       const now = Date.now();
       for (const loc of locations) {
