@@ -385,7 +385,7 @@ export default function PrivacyPolicy() {
             ['WhatsApp messages', 'Content 30 days; the record that a message was handled, 90 days.'],
             ['Alexa requests and saved WhatsApp questions', 'Until you ask us to delete them.'],
             ['Call recordings', '28 days. Calls involving anyone under 18 are not recorded.'],
-            ['A child’s history on any phone that keeps a copy (including a parent’s) and in backups', 'At most 7 days.'],
+            ['A child’s history on any phone that keeps a copy (including a parent’s) and in backups', '48 hours.'],
             ['Reports and the copy of a reported message', 'As long as needed to deal with the report and any related safety or legal matter.'],
             ['Call records, SOS alerts and responses, safety and place events, the viewing record, schedules you keep', 'While your account exists. Schedule checks: 30 days. Flights: 30 days.'],
             ['Offline-relay sightings', '7 days (undelivered relay packets: 1 day).'],
@@ -462,7 +462,7 @@ export default function PrivacyPolicy() {
         <List>
           <li>a child cannot create circles, invite anyone, be made a circle owner, or create a share link — and no share link ever shows a child&rsquo;s location;</li>
           <li>calls involving a child are not recorded, and the Wi-Fi network name is never stored for a child;</li>
-          <li>a child&rsquo;s location history is kept for at most 7 days on any phone that keeps a copy, including a parent&rsquo;s, and in backups;</li>
+          <li>a child&rsquo;s location history is kept for at most 48 hours on any phone that keeps a copy, including a parent&rsquo;s, and in backups;</li>
           <li>a circle is never handed to a child when the last adult leaves or deletes their account — it is deleted instead;</li>
           <li>children see no plans, offers or referral rewards, get no billing notifications, and no usage statistics are collected from them;</li>
           <li>a child cannot block the parent or guardian who consented for them, but can report anything to us.</li>
