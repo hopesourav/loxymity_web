@@ -4,11 +4,16 @@ import { useState, useEffect, useCallback } from 'react';
 import { useDashboard } from '../../_lib/context';
 import { IconCircle, IconUser, IconCopy, IconRefresh, IconTrash, IconCheck, IconX } from '../../_components/Icons';
 
-type Role = 'admin' | 'member';
+// Same server paths as the app (src/backend/circles.ts): invites are single-use 8-character
+// codes from create_invite and open https://loxymity.com/join/<CODE>; roles change through
+// set_member_role and members leave through remove_member. Direct table writes are refused by
+// RLS (no UPDATE/DELETE policy on circle_members; invites have no token/status columns).
+type Role = 'owner' | 'admin' | 'member';
 
 type MemberRow = {
   user_id: string;
   role: Role;
+  status: 'pending' | 'active';
   joined_at: string;
   display_name: string | null;
   avatar_url: string | null;
@@ -17,11 +22,22 @@ type MemberRow = {
 type InviteRow = {
   id: string;
   circle_id: string;
-  token: string;
-  status: string;
+  code: string;
   created_at: string;
   expires_at: string | null;
 };
+
+const INVITE_ERRORS: Record<string, string> = {
+  circle_full: 'This circle is full on its current plan.',
+  circle_expired: 'This temporary circle has ended.',
+  rate_limited: 'Too many invites just now — try again in a little while.',
+  not_member: 'Only members of this circle can invite people.',
+  not_supported: 'Invites are not available for this circle.',
+};
+
+function prettyCode(code: string): string {
+  return code.length === 8 ? `${code.slice(0, 4)}-${code.slice(4)}` : code;
+}
 
 export default function CirclePage() {
   const { supabase, activeCircleId, userId, circles } = useDashboard();
@@ -36,26 +52,30 @@ export default function CirclePage() {
   const [error, setError]       = useState('');
 
   const activeCircle = circles.find(c => c.id === activeCircleId);
-  const isAdmin = members.find(m => m.user_id === userId)?.role === 'admin';
+  const myRole = members.find(m => m.user_id === userId)?.role;
+  const isAdmin = myRole === 'owner' || myRole === 'admin';
 
   async function load() {
     setLoading(true);
     const [{ data: mems }, { data: invs }] = await Promise.all([
       supabase
         .from('circle_members')
-        .select('user_id,role,joined_at,profiles!user_id(display_name,avatar_url)')
+        .select('user_id,role,status,joined_at,profiles!user_id(display_name,avatar_url)')
         .eq('circle_id', activeCircleId),
       supabase
         .from('invites')
-        .select('id,circle_id,token,status,created_at,expires_at')
+        .select('id,circle_id,code,created_at,expires_at')
         .eq('circle_id', activeCircleId)
-        .eq('status', 'pending')
+        .is('used_at', null)
+        .is('revoked_at', null)
+        .gt('expires_at', new Date().toISOString())
         .order('created_at', { ascending: false }),
     ]);
 
     const mapped: MemberRow[] = (mems ?? []).map((m: any) => ({
       user_id: m.user_id,
       role: m.role,
+      status: m.status,
       joined_at: m.joined_at,
       display_name: m.profiles?.display_name ?? null,
       avatar_url: m.profiles?.avatar_url ?? null,
@@ -69,44 +89,53 @@ export default function CirclePage() {
 
   async function createInvite() {
     setInviteLoading(true); setError('');
-    const token = crypto.randomUUID().replace(/-/g, '').slice(0, 20);
-    const expiresAt = new Date(Date.now() + 7 * 86400_000).toISOString();
-    const { error: e } = await supabase.from('invites').insert({
-      circle_id: activeCircleId,
-      token,
-      status: 'pending',
-      expires_at: expiresAt,
+    const { data, error: e } = await supabase.rpc('create_invite', {
+      p_circle_id: activeCircleId,
+      p_for_minor: false,
     });
+    const d = data as { ok?: boolean; error?: string } | null;
     if (e) setError(e.message);
+    else if (!d?.ok) setError(INVITE_ERRORS[d?.error ?? ''] ?? 'Could not create an invite.');
     setInviteLoading(false);
     await load();
   }
 
-  async function revokeInvite(id: string) {
-    await supabase.from('invites').update({ status: 'revoked' }).eq('id', id);
+  async function revokeInvite(code: string) {
+    const { error: e } = await supabase.rpc('revoke_invite', { p_code: code });
+    if (e) setError(e.message);
     await load();
   }
 
-  function copyInviteLink(token: string) {
-    const url = `${window.location.origin}/invite/${token}`;
-    navigator.clipboard.writeText(url).then(() => {
-      setCopiedToken(token);
+  function inviteUrl(code: string) {
+    return `${window.location.origin}/join/${code}`;
+  }
+
+  function copyInviteLink(code: string) {
+    navigator.clipboard.writeText(inviteUrl(code)).then(() => {
+      setCopiedToken(code);
       setTimeout(() => setCopiedToken(null), 2000);
     });
   }
 
   async function removeMember(memberId: string) {
-    setRemoving(true);
-    await supabase.from('circle_members').delete()
-      .eq('circle_id', activeCircleId).eq('user_id', memberId);
+    setRemoving(true); setError('');
+    const { error: e } = await supabase.rpc('remove_member', {
+      p_circle_id: activeCircleId,
+      p_user_id: memberId,
+    });
+    if (e) setError(e.message);
     setRemoving(false); setRemoveId(null);
     await load();
   }
 
   async function toggleRole(memberId: string, current: Role) {
-    const newRole: Role = current === 'admin' ? 'member' : 'admin';
-    await supabase.from('circle_members').update({ role: newRole })
-      .eq('circle_id', activeCircleId).eq('user_id', memberId);
+    setError('');
+    const { error: e } = await supabase.rpc('set_member_role', {
+      p_circle_id: activeCircleId,
+      p_user_id: memberId,
+      p_role: current === 'member' ? 'owner' : 'member',
+    });
+    if (e) setError(e.message);
     await load();
   }
 
@@ -155,16 +184,18 @@ export default function CirclePage() {
                         <p className="text-sm font-medium text-dark-text truncate">
                           {m.display_name ?? 'Unknown'}{isSelf ? ' (you)' : ''}
                         </p>
-                        <p className="text-xs text-dark-muted capitalize">{m.role}</p>
+                        <p className="text-xs text-dark-muted capitalize">
+                          {m.status === 'pending' ? 'Waiting for approval in the app' : m.role}
+                        </p>
                       </div>
-                      {isAdmin && !isSelf && (
+                      {isAdmin && !isSelf && m.status === 'active' && (
                         <div className="flex items-center gap-1.5 shrink-0">
                           <button
                             onClick={() => toggleRole(m.user_id, m.role)}
                             className="px-2.5 py-1 rounded-lg text-xs border border-dark-border text-dark-muted hover:border-primary hover:text-dark-text transition-colors"
-                            title={m.role === 'admin' ? 'Demote to member' : 'Promote to admin'}
+                            title={m.role === 'member' ? 'Make an owner of this circle' : 'Make a regular member'}
                           >
-                            {m.role === 'admin' ? 'Demote' : 'Make admin'}
+                            {m.role === 'member' ? 'Make owner' : 'Make member'}
                           </button>
                           <button
                             onClick={() => setRemoveId(m.user_id)}
@@ -206,26 +237,25 @@ export default function CirclePage() {
               ) : (
                 <div className="bg-dark-surface border border-dark-border rounded-2xl overflow-hidden divide-y divide-dark-border">
                   {invites.map(inv => {
-                    const url = `${typeof window !== 'undefined' ? window.location.origin : ''}/invite/${inv.token}`;
                     const expires = inv.expires_at
                       ? new Date(inv.expires_at).toLocaleDateString([], { month: 'short', day: 'numeric' })
                       : 'No expiry';
                     return (
                       <div key={inv.id} className="flex items-center gap-3 px-4 py-3">
                         <div className="flex-1 min-w-0">
-                          <p className="text-xs font-mono text-dark-muted truncate">{inv.token}</p>
+                          <p className="text-sm font-mono text-dark-text tracking-wider">{prettyCode(inv.code)}</p>
                           <p className="text-xs text-dark-muted">Expires {expires}</p>
                         </div>
                         <button
-                          onClick={() => copyInviteLink(inv.token)}
+                          onClick={() => copyInviteLink(inv.code)}
                           className="p-1.5 text-dark-muted hover:text-dark-text transition-colors"
                           aria-label="Copy link"
                         >
-                          {copiedToken === inv.token ? <IconCheck size={14} className="text-brand-success" /> : <IconCopy size={14} />}
+                          {copiedToken === inv.code ? <IconCheck size={14} className="text-brand-success" /> : <IconCopy size={14} />}
                         </button>
                         {isAdmin && (
                           <button
-                            onClick={() => revokeInvite(inv.id)}
+                            onClick={() => revokeInvite(inv.code)}
                             className="p-1.5 text-dark-muted hover:text-brand-danger transition-colors"
                             aria-label="Revoke"
                           >
@@ -237,7 +267,7 @@ export default function CirclePage() {
                   })}
                 </div>
               )}
-              <p className="text-xs text-dark-muted mt-2">Share the link with the person you want to invite. They must have the Loxymity app installed.</p>
+              <p className="text-xs text-dark-muted mt-2">Each code works once. Send the link to one person you trust; it opens the Loxymity app, or the app store if they don&apos;t have it yet.</p>
             </section>
           </>
         )}

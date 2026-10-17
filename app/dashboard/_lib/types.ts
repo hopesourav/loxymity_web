@@ -109,7 +109,7 @@ export type InviteRow = {
 export type LocationShare = {
   id: string;
   token: string;
-  owner_id: string;
+  shared_by: string;
   expires_at: string | null;
   revoked: boolean;
   created_at: string;

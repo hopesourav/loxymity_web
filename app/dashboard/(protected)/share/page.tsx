@@ -5,12 +5,14 @@ import { useDashboard } from '../../_lib/context';
 import type { LocationShare } from '../../_lib/types';
 import { IconShare, IconCopy, IconCheck, IconTrash, IconLink, IconPlus } from '../../_components/Icons';
 
-type ExpiryOption = { label: string; hours: number };
+// Same RPCs and limits as the app (src/backend/locationShares.ts): a link lasts 1 minute to
+// 24 hours, and the URL carries the token in the #fragment, which is what /share reads.
+type ExpiryOption = { label: string; minutes: number };
 const EXPIRY_OPTIONS: ExpiryOption[] = [
-  { label: '1 hour',  hours: 1 },
-  { label: '6 hours', hours: 6 },
-  { label: '24 hours', hours: 24 },
-  { label: '7 days',  hours: 168 },
+  { label: '15 min',   minutes: 15 },
+  { label: '1 hour',   minutes: 60 },
+  { label: '6 hours',  minutes: 360 },
+  { label: '24 hours', minutes: 1440 },
 ];
 
 function timeLeft(expiresAt: string | null): string {
@@ -34,20 +36,18 @@ export default function SharePage() {
   const [shares, setShares]       = useState<LocationShare[]>([]);
   const [loading, setLoading]     = useState(true);
   const [creating, setCreating]   = useState(false);
-  const [selectedHours, setSelectedHours] = useState(24);
+  const [selectedMinutes, setSelectedMinutes] = useState(60);
   const [copiedToken, setCopiedToken] = useState<string | null>(null);
   const [revokeId, setRevokeId]   = useState<string | null>(null);
   const [error, setError]         = useState('');
 
   async function load() {
     setLoading(true);
-    const { data } = await supabase
-      .from('location_shares')
-      .select('*')
-      .eq('owner_id', userId)
-      .eq('revoked', false)
-      .order('created_at', { ascending: false });
-    setShares((data ?? []) as LocationShare[]);
+    const { data } = await supabase.rpc('list_location_shares');
+    const rows = ((data ?? []) as LocationShare[])
+      .slice()
+      .sort((a, b) => b.created_at.localeCompare(a.created_at));
+    setShares(rows);
     setLoading(false);
   }
 
@@ -55,24 +55,23 @@ export default function SharePage() {
 
   async function createShare() {
     setCreating(true); setError('');
-    const expiresAt = new Date(Date.now() + selectedHours * 3600000).toISOString();
-    const { error: e } = await supabase.from('location_shares').insert({
-      owner_id: userId,
-      expires_at: expiresAt,
+    const { data, error: e } = await supabase.rpc('create_location_share', {
+      duration_minutes: selectedMinutes,
     });
-    if (e) { setError(e.message); setCreating(false); return; }
+    if (e || !data) { setError(e?.message ?? 'Could not create the link.'); setCreating(false); return; }
     setCreating(false);
     await load();
   }
 
-  async function revokeShare(id: string) {
-    await supabase.from('location_shares').update({ revoked: true }).eq('id', id);
+  async function revokeShare(token: string) {
+    const { error: e } = await supabase.rpc('revoke_location_share', { p_token: token });
+    if (e) setError(e.message);
     setRevokeId(null);
     await load();
   }
 
   function shareUrl(token: string) {
-    return `${window.location.origin}/share/?token=${token}`;
+    return `${window.location.origin}/share/#${token}`;
   }
 
   function copyLink(token: string) {
@@ -104,10 +103,10 @@ export default function SharePage() {
             <div className="flex gap-1.5 flex-wrap">
               {EXPIRY_OPTIONS.map(opt => (
                 <button
-                  key={opt.hours}
-                  onClick={() => setSelectedHours(opt.hours)}
+                  key={opt.minutes}
+                  onClick={() => setSelectedMinutes(opt.minutes)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
-                    selectedHours === opt.hours
+                    selectedMinutes === opt.minutes
                       ? 'bg-primary/20 text-primary'
                       : 'bg-dark-surface border border-dark-border text-dark-muted hover:text-dark-text'
                   }`}
@@ -146,7 +145,7 @@ export default function SharePage() {
                     <ShareRow
                       key={s.id} share={s} copied={copiedToken === s.token}
                       onCopy={() => copyLink(s.token)}
-                      onRevoke={() => setRevokeId(s.id)}
+                      onRevoke={() => setRevokeId(s.token)}
                     />
                   ))}
                 </div>
