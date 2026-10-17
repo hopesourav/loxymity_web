@@ -5,7 +5,12 @@ import { supabase } from './_lib/client';
 import { AdminContext } from './_lib/adminContext';
 import AdminSidebar from './_components/AdminSidebar';
 
-type AuthState = 'loading' | 'unauthenticated' | 'not_admin' | 'ready';
+/**
+ * Admin access needs a second factor (TOTP). The database enforces it: is_current_user_admin()
+ * is true only for an aal2 session (migration 0266), so a password-only session sees no one
+ * else's data. This screen gets the session to aal2 — enrolling an authenticator the first time.
+ */
+type AuthState = 'loading' | 'unauthenticated' | 'not_admin' | 'mfa_enroll' | 'mfa_verify' | 'ready';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [authState, setAuthState] = useState<AuthState>('loading');
@@ -17,6 +22,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
   const [loginLoading, setLoginLoading] = useState(false);
+
+  // Second factor
+  const [factorId, setFactorId] = useState('');
+  const [qrSrc, setQrSrc] = useState('');
+  const [totpSecret, setTotpSecret] = useState('');
+  const [mfaCode, setMfaCode] = useState('');
+  const [mfaError, setMfaError] = useState('');
+  const [mfaLoading, setMfaLoading] = useState(false);
 
   const checkSession = useCallback(async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -35,8 +48,55 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     }
 
     setUserId(session.user.id);
-    setAuthState('ready');
+
+    // Already multi-factor? Then in.
+    const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+    if (aal?.currentLevel === 'aal2') { setAuthState('ready'); return; }
+
+    const { data: factors, error: factorsError } = await supabase.auth.mfa.listFactors();
+    if (factorsError) { setMfaError(factorsError.message); setAuthState('mfa_verify'); return; }
+    const verified = factors?.totp?.find((f) => f.status === 'verified');
+    if (verified) {
+      setFactorId(verified.id);
+      setAuthState('mfa_verify');
+      return;
+    }
+
+    // First time: drop any half-finished enrolment, then enrol a new authenticator.
+    for (const f of factors?.all ?? []) {
+      if (f.factor_type === 'totp' && f.status !== 'verified') {
+        await supabase.auth.mfa.unenroll({ factorId: f.id });
+      }
+    }
+    const { data: enrolled, error: enrollError } = await supabase.auth.mfa.enroll({
+      factorType: 'totp',
+      friendlyName: 'Loxymity Admin',
+    });
+    if (enrollError || !enrolled) {
+      setMfaError(enrollError?.message ?? 'Could not start authenticator setup.');
+      setAuthState('mfa_enroll');
+      return;
+    }
+    const qr = enrolled.totp.qr_code;
+    setFactorId(enrolled.id);
+    setQrSrc(qr.startsWith('data:') ? qr : `data:image/svg+xml;utf-8,${encodeURIComponent(qr)}`);
+    setTotpSecret(enrolled.totp.secret);
+    setAuthState('mfa_enroll');
   }, []);
+
+  async function handleVerifyCode() {
+    setMfaLoading(true);
+    setMfaError('');
+    const { error } = await supabase.auth.mfa.challengeAndVerify({ factorId, code: mfaCode.trim() });
+    if (error) {
+      setMfaError(error.message);
+      setMfaLoading(false);
+      return;
+    }
+    setMfaCode('');
+    await checkSession();
+    setMfaLoading(false);
+  }
 
   useEffect(() => { checkSession(); }, [checkSession]);
 
@@ -83,6 +143,70 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             className="mt-6 px-6 py-2.5 bg-dark-bg border border-dark-border rounded-xl text-sm text-dark-muted hover:text-dark-text transition-colors"
           >
             Try another account
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (authState === 'mfa_enroll' || authState === 'mfa_verify') {
+    const enrolling = authState === 'mfa_enroll';
+    return (
+      <div className="min-h-dvh bg-dark-bg flex items-center justify-center px-4">
+        <div className="bg-dark-surface border border-dark-border rounded-3xl p-8 w-full max-w-sm shadow-2xl">
+          <div className="mb-6">
+            <p className="font-display text-2xl font-bold text-dark-text">Loxymity</p>
+            <p className="text-primary text-sm font-semibold mt-0.5">
+              {enrolling ? 'Set up two-step sign-in' : 'Two-step sign-in'}
+            </p>
+          </div>
+
+          {enrolling ? (
+            <>
+              <p className="text-dark-muted text-sm mb-4">
+                Admin access needs a second step. Scan this with an authenticator app (Google
+                Authenticator, 1Password, Authy…), then enter the 6-digit code it shows.
+              </p>
+              {qrSrc && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={qrSrc} alt="Authenticator QR code" className="w-44 h-44 mx-auto mb-3 bg-white rounded-xl p-2" />
+              )}
+              {totpSecret && (
+                <p className="text-dark-muted text-xs mb-4 break-all text-center">
+                  Or enter this key: <span className="font-mono text-dark-text">{totpSecret}</span>
+                </p>
+              )}
+            </>
+          ) : (
+            <p className="text-dark-muted text-sm mb-4">Enter the 6-digit code from your authenticator app.</p>
+          )}
+
+          <label className="block text-xs font-medium text-dark-muted mb-1.5">Code</label>
+          <input
+            inputMode="numeric"
+            autoComplete="one-time-code"
+            maxLength={6}
+            className="w-full bg-dark-bg border border-dark-border rounded-xl px-4 py-3 text-sm text-dark-text placeholder-dark-muted mb-4 tracking-widest focus:outline-none focus:ring-2 focus:ring-primary"
+            placeholder="123456"
+            value={mfaCode}
+            onChange={(e) => setMfaCode(e.target.value.replace(/\D/g, ''))}
+            onKeyDown={(e) => e.key === 'Enter' && mfaCode.length === 6 && handleVerifyCode()}
+          />
+
+          {mfaError && <p className="text-brand-danger text-xs mb-3">{mfaError}</p>}
+
+          <button
+            onClick={handleVerifyCode}
+            disabled={mfaLoading || mfaCode.length !== 6 || !factorId}
+            className="w-full bg-primary hover:bg-primary-dark text-dark-bg font-bold py-3 rounded-xl text-sm transition-colors disabled:opacity-50"
+          >
+            {mfaLoading ? 'Checking…' : 'Verify'}
+          </button>
+          <button
+            onClick={signOut}
+            className="w-full mt-3 py-2.5 text-sm text-dark-muted hover:text-dark-text transition-colors"
+          >
+            Sign out
           </button>
         </div>
       </div>
