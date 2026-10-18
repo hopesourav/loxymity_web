@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../../_lib/client';
 import { IconEye, IconEyeOff, IconCheck } from '../../_components/Icons';
 
+// = app src/lib/validation.ts and the Supabase Auth minimum (set to 8 on 2026-10-18).
+const PASSWORD_MIN_LENGTH = 8;
+
 type Stage = 'request' | 'new-password' | 'done' | 'error';
 
 export default function ResetPasswordPage() {
@@ -38,7 +41,7 @@ export default function ResetPasswordPage() {
   async function handleNewPassword(e: React.FormEvent) {
     e.preventDefault();
     if (pw !== pw2) { setMessage('Passwords do not match.'); return; }
-    if (pw.length < 6) { setMessage('Password must be at least 6 characters.'); return; }
+    if (pw.length < PASSWORD_MIN_LENGTH) { setMessage(`Password must be at least ${PASSWORD_MIN_LENGTH} characters.`); return; }
     setLoading(true);
     const { error } = await supabase.auth.updateUser({ password: pw });
     setLoading(false);
@@ -84,7 +87,7 @@ export default function ResetPasswordPage() {
                 <label className="block text-xs font-medium text-dark-muted mb-1.5">New password</label>
                 <div className="relative">
                   <input
-                    type={showPw ? 'text' : 'password'} required minLength={6}
+                    type={showPw ? 'text' : 'password'} required minLength={PASSWORD_MIN_LENGTH}
                     value={pw} onChange={e => setPw(e.target.value)}
                     className="w-full bg-dark-bg border border-dark-border rounded-xl px-3.5 py-2.5 text-sm text-dark-text focus:outline-none focus:ring-2 focus:ring-primary pr-10"
                     placeholder="••••••••"
