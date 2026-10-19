@@ -54,6 +54,7 @@ export function LegalPage({ title, version, effective, intro, children }: {
           <div className="flex gap-6 text-sm text-dark-muted">
             <Link href="/privacy/" className="hover:text-dark-text transition-colors">Privacy Policy</Link>
             <Link href="/terms/" className="hover:text-dark-text transition-colors">Terms of Service</Link>
+            <Link href="/business/" className="hover:text-dark-text transition-colors">For businesses</Link>
             <Link href="/" className="hover:text-dark-text transition-colors">Home</Link>
           </div>
         </div>

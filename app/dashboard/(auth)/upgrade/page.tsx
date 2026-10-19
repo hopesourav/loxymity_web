@@ -323,8 +323,11 @@ export default function UpgradePage() {
                 </span>
                 <span className="text-dark-muted text-sm">/ year</span>
               </p>
-              <p className="text-dark-muted text-xs mb-5">
-                about {perMonthOfAnnual(planPrice(plan.id!, 1, 'annual', currency), currency)} a month ·
+              <p className="text-dark-text text-base font-semibold">
+                ≈ {perMonthOfAnnual(plan.id!, 1, currency)}/mo
+                <span className="text-dark-muted text-xs font-normal">, billed yearly</span>
+              </p>
+              <p className="text-dark-muted text-xs mt-1 mb-5">
                 or {formatPrice(planPrice(plan.id!, 1, 'monthly', currency), currency)} monthly · 1 circle
               </p>
 

@@ -18,6 +18,7 @@ export default function Home() {
             <a href="#how-it-works" className="hover:text-dark-text transition-colors">How it works</a>
             <a href="#pricing"     className="hover:text-dark-text transition-colors">Pricing</a>
             <a href="#faq"         className="hover:text-dark-text transition-colors">FAQ</a>
+            <a href="/business/"   className="hover:text-dark-text transition-colors">Business</a>
           </div>
           <div className="flex items-center gap-3">
             <a
@@ -159,7 +160,7 @@ export default function Home() {
                 iconPath: 'M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z',
                 iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
                 title: 'In-app voice & video',
-                desc: 'Call any member by name, right from the map — no phone number needed. Voice calls are free; video comes with Platinum and Infinite. Voice calls between adults are recorded.',
+                desc: 'Call any member by name, right from the map — no phone number needed. Voice calls come with every paid plan (anyone in a circle can answer, and during the hour after an SOS anyone can call); video comes with Platinum and Infinite. Voice calls between adults are recorded.',
               },
               {
                 iconPath: 'M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z',
@@ -391,7 +392,7 @@ export default function Home() {
               </div>
             ))}
           </div>
-          <p className="text-center text-dark-muted text-xs mt-6">Prices shown in USD and INR; other regions are billed the store&apos;s local price, with taxes as your store applies them. Member counts are per circle, not seats — Free circles hold 5 people, Gold 10, Platinum and Infinite 15. See the <a href="/terms/#plans" className="underline hover:text-dark-text">plan terms</a>.</p>
+          <p className="text-center text-dark-muted text-xs mt-6">Prices shown in US dollars, rupees, euros and pounds; other regions are billed the store&apos;s local price, with taxes as your store applies them. Member counts are per circle, not seats — Free circles hold 5 people, Gold 10, Platinum and Infinite 15. See the <a href="/terms/#plans" className="underline hover:text-dark-text">plan terms</a>.</p>
         </div>
       </section>
 
@@ -504,7 +505,16 @@ export default function Home() {
               },
               {
                 q: 'Can I use Loxymity to track employees or a team?',
-                a: 'Loxymity is made for families and close friends who choose to share. Using it to monitor employees, drivers, students or anyone else for an organisation makes you responsible for complying with privacy and employment law — consent, notices and the rest — as our Terms explain. Never track anyone without their knowledge and agreement.',
+                a: (
+                  <>
+                    Loxymity is made for families and close friends who choose to share — it is not a tool for monitoring
+                    employees. Using it to monitor employees, drivers, students or anyone else for an organisation makes you
+                    responsible for complying with privacy and employment law — consent, notices and the rest — as our Terms
+                    explain. Never track anyone without their knowledge and agreement. For organisations we offer safety
+                    services that people control, under a written agreement:{' '}
+                    <a href="/business/" className="text-primary hover:underline">Loxymity for organisations</a>.
+                  </>
+                ),
               },
               {
                 q: 'Is my data ever sold or shared with third parties?',
@@ -522,6 +532,19 @@ export default function Home() {
               </details>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── For organisations ───────────────────────────────────────────── */}
+      <section className="py-10 px-6 bg-dark-bg border-t border-dark-border">
+        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+          <p className="text-dark-muted">
+            <span className="text-dark-text font-semibold">For organisations</span> — lone-worker safety, a family
+            safety benefit for your people, care organisations, insurer and bank partnerships.
+          </p>
+          <a href="/business/" className="shrink-0 bg-dark-surface hover:bg-dark-border border border-dark-border text-dark-text font-semibold px-6 py-3 rounded-xl transition-colors">
+            Talk to us
+          </a>
         </div>
       </section>
 
@@ -561,6 +584,7 @@ export default function Home() {
           <div className="flex flex-wrap gap-6 text-sm text-dark-muted">
             <a href="/privacy" className="hover:text-dark-text transition-colors">Privacy Policy</a>
             <a href="/terms"   className="hover:text-dark-text transition-colors">Terms of Service</a>
+            <a href="/business/" className="hover:text-dark-text transition-colors">For businesses</a>
             <a href="mailto:support@loxymity.com" className="hover:text-dark-text transition-colors">Contact</a>
             <a href="/privacy/#contact" className="hover:text-dark-text transition-colors">Grievance Officer</a>
             <a href="/admin"   className="transition-colors" style={{ color: '#14171D' }}>Admin</a>

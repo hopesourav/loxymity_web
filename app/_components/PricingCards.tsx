@@ -15,11 +15,14 @@
  *
  * The circles selector exists because the circle count is part of the plan (one
  * subscription covers 1–3 circles), exactly as on the in-app paywall. Prices come
- * from `_lib/pricing.ts`, which is checked against the app's catalogue.
+ * from `_lib/pricing.ts`, which reads the catalogue generated from the app's.
+ *
+ * An annual card leads with the BILLED amount; the "≈ …/mo, billed yearly" line sits right under
+ * it in the price colour but smaller (see the display rule in `_lib/pricing.ts`).
  */
 import { useEffect, useState } from 'react';
 import {
-  PLAN_CARDS, MAX_CIRCLES, FREE_CIRCLES, EXTRA_CIRCLE_PRICE, TRIAL,
+  PLAN_CARDS, MAX_CIRCLES, FREE_CIRCLES, EXTRA_CIRCLE_PRICE, TRIAL, CURRENCY_OPTIONS,
   annualSaving, detectCurrency, formatPrice, perMonthOfAnnual, planPrice,
   type Currency, type Period,
 } from '../_lib/pricing';
@@ -80,7 +83,7 @@ export default function PricingCards() {
           label="Currency"
           value={currency}
           onChange={setCurrency}
-          options={[{ value: 'USD', label: '$ USD' }, { value: 'INR', label: '₹ INR' }]}
+          options={CURRENCY_OPTIONS}
         />
         <Segmented
           label="Billing"
@@ -125,9 +128,14 @@ export default function PricingCards() {
                     <span className="font-display font-bold text-dark-text text-4xl">{formatPrice(price, currency)}</span>
                     <span className="text-dark-muted text-sm">/ {per}</span>
                   </p>
-                  <p className="text-dark-muted text-xs mb-3">
+                  {period === 'annual' && (
+                    <p className="text-dark-text text-lg font-semibold leading-snug">
+                      ≈ {perMonthOfAnnual(plan.id, circles, currency)}/mo
+                      <span className="text-dark-muted text-sm font-normal">, billed yearly</span>
+                    </p>
+                  )}
+                  <p className="text-dark-muted text-xs mt-1 mb-3">
                     {circles === 1 ? 'Covers 1 circle' : `Covers ${circles} circles`}
-                    {period === 'annual' && <> · about {perMonthOfAnnual(price, currency)} a month</>}
                   </p>
                   {period === 'annual' && saving > 0 ? (
                     <p className="self-start text-brand-success text-xs font-bold bg-brand-success/8 border border-brand-success/20 rounded-lg px-2.5 py-1.5 mb-5">
