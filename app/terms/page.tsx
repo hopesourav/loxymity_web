@@ -50,10 +50,15 @@ export default function TermsOfService() {
             to form a binding contract where you live.
           </li>
           <li>
-            A person under 18 may use Loxymity only after their parent or lawful guardian invites them
-            from the parent&rsquo;s own verified Loxymity account and confirms that they are the
-            child&rsquo;s parent or guardian. The parent or guardian is responsible for the child&rsquo;s
-            account and use. Children cannot buy plans.
+            Children under 13 may not use Loxymity. A child aged 13 to 17 may use it only after their
+            parent or lawful guardian invites them with a child invite from the parent&rsquo;s own
+            verified Loxymity account and confirms that they are the child&rsquo;s parent or guardian. The
+            parent or guardian is responsible for the child&rsquo;s account and use.
+          </li>
+          <li>
+            A child&rsquo;s account is limited: it cannot create circles, invite anyone, become a circle
+            owner, create share links or buy plans, and a child cannot block the parent or guardian who
+            consented for them.
           </li>
           <li>
             You must give accurate information, keep it up to date, and use only one account for
@@ -152,7 +157,8 @@ export default function TermsOfService() {
           <p>
             A share link shows your live location, name and photo to <strong>anyone who has the
             link</strong>, without an account, until it expires (at most 24 hours) or you revoke it. You
-            decide who receives it and are responsible for it being forwarded.
+            decide who receives it and are responsible for it being forwarded. Children cannot create
+            share links, and a share link never shows a child&rsquo;s location.
           </p>
         </Sub>
         <Sub title="4.6 WhatsApp, Alexa and other linked accounts">
@@ -212,6 +218,17 @@ export default function TermsOfService() {
           authorities when we reasonably believe these rules have been broken or someone is at risk.
           We may keep and disclose information where the law requires or allows it.
         </p>
+        <Sub title="Blocking and reporting">
+          <p>
+            You can block anyone. A block stops direct messages and calls between the two of you in both
+            directions and hides their circle chat on your phone; it does not change who can see your
+            location — leave the circle, or ask its owner, for that. You can report any message or person
+            to us from the app. When you report a message we keep a copy of it, even if the sender later
+            deletes it, and we review reports and act on them under these Terms. Do not make false or
+            malicious reports. If someone is in immediate danger, contact the police or emergency services
+            first.
+          </p>
+        </Sub>
       </Section>
 
       <Section id="safety" title="6. Safety features have limits">
@@ -282,11 +299,13 @@ export default function TermsOfService() {
       <Section id="calls" title="7. Calls and recording">
         <List>
           <li>
+            You can call people you share a circle with.{' '}
             <strong>In-app voice calls are recorded automatically</strong>, from the moment a call starts
             ringing until it ends — so a call that is not answered is recorded on the caller&rsquo;s side.
             A &ldquo;Recording&rdquo; notice is shown on the call screen. There is no per-call choice: by
             placing or answering an in-app voice call you agree to it being recorded, and you confirm you
-            can agree for yourself. Video calls are not recorded at present.
+            can agree for yourself. Calls in which either person is under 18 are never recorded, and video
+            calls are not recorded at present.
           </li>
           <li>
             Recordings are stored encrypted by our storage provider, kept for 28 days and then deleted
@@ -453,7 +472,7 @@ export default function TermsOfService() {
           <li>
             You can stop using the Service at any time and delete your account in the app (You → Delete
             account). You are signed out at once and your account is then deleted as the Privacy Policy
-            describes. Circles you own pass to another adult member, or are deleted if no one else
+            describes. Circles you own pass to another adult member, or are deleted if no other adult
             remains; direct-message threads you are part of are deleted for both people.
           </li>
           <li>

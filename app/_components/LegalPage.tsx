@@ -112,5 +112,13 @@ export function Table({ head, rows }: { head: string[]; rows: React.ReactNode[][
   );
 }
 
-export const LEGAL_VERSION = '2026-10-17';
+/**
+ * Version of the published Terms + Privacy Policy. MUST equal TERMS_VERSION and PRIVACY_VERSION in
+ * the app (src/lib/legal.ts): the app asks every user to accept the version it was built with.
+ *
+ * 2026-10-17.1 = the child-safety Phase 0 release (migrations 0271–0273 + app 0.8.900). App users
+ * began accepting it on 17 October 2026 (user_consents, 0.8.900/0.8.901), so that is its effective
+ * date; the site published it on 19 October.
+ */
+export const LEGAL_VERSION = '2026-10-17.1';
 export const LEGAL_EFFECTIVE = '17 October 2026';
