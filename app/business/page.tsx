@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { LogoFull } from '../_components/Logo';
-import BusinessEnquiryForm, { BUSINESS_EMAIL } from '../_components/BusinessEnquiryForm';
+import BusinessEnquiryForm from '../_components/BusinessEnquiryForm';
+import { BUSINESS_EMAIL } from '../_lib/business';
 
 /**
  * loxymity.com/business/ — "For businesses" (business review 2026-10-19, plan §6 C).

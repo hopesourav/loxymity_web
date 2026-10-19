@@ -16,12 +16,12 @@
  * secret lives only in Supabase. NEXT_PUBLIC_TURNSTILE_SITE_KEY overrides the built-in one.
  */
 import { useEffect, useRef, useState } from 'react';
+import { BUSINESS_EMAIL } from '../_lib/business';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'https://szsipgfrxvvkgqtpwhso.supabase.co';
 const ENDPOINT = `${SUPABASE_URL}/functions/v1/business-enquiry`;
 const SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? '0x4AAAAAAFbZLcj7Q10tq87A';
 const TURNSTILE_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
-export const BUSINESS_EMAIL = 'business@loxymity.com';
 const MAILTO = `mailto:${BUSINESS_EMAIL}?subject=${encodeURIComponent('Business enquiry')}`;
 
 /** Same values as ORG_SIZES / INTERESTS / MONITORING in the app repo's _shared/businessEnquiry.ts. */
