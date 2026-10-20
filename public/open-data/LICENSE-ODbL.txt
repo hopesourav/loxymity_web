@@ -1,11 +1,39 @@
-Loxymity place names — OpenStreetMap-derived rows
+Loxymity place names — OpenStreetMap-derived database
+=====================================================
 
+File      loxymity-places-osm-2026-10-20.ndjson.gz
+          gzip; one JSON object per line
+Rows      87,608 places in the United States and 39 European countries
+Size      3,551,348 bytes
+SHA-256   a486d8a6bd2ed0c014335ad2159635fcec97424e3c18284a9868a2ee1e32ee30
+Built     2026-10-20, from Geofabrik's OpenStreetMap extracts of 2026-10-18 and 2026-10-19
+
+Licence
+-------
 This database contains information from OpenStreetMap (https://www.openstreetmap.org),
-which is made available under the Open Database License (ODbL) 1.0:
-https://opendatacommons.org/licenses/odbl/1-0/
-© OpenStreetMap contributors. This derived database (osm-derived.ndjson.gz) is likewise
-made available under the ODbL 1.0.
+© OpenStreetMap contributors, which is made available under the Open Database License
+(ODbL) 1.0: https://opendatacommons.org/licenses/odbl/1-0/
 
-Columns: id, lat, lng, tier (1 landmark/station/airport · 2 hospital/college/senior living/
-boarding school/mall · 3 locality), poi_type, name, context ("Municipality, State/Country"),
-ref (OSM n/w/r + id), lic, cc (ISO country).
+This derived database is likewise made available under the ODbL 1.0. You may copy,
+distribute and adapt it under that licence's terms, including attribution to
+"© OpenStreetMap contributors" and share-alike for derived databases.
+Copyright notice for the source data: https://www.openstreetmap.org/copyright
+
+These are the OpenStreetMap-derived places Loxymity uses to name locations in its app.
+Places taken from Wikidata (CC0) or from the US CMS nursing-home register (public
+domain) are not part of this file.
+
+Columns
+-------
+id         Loxymity's id for the place (stable across rebuilds)
+lat, lng   WGS84 coordinates
+tier       1  station, airport or well-known landmark
+           2  hospital, college, senior living, boarding school or mall
+           3  neighbourhood, suburb, town or village
+poi_type   the kind of place, e.g. "Train Station", "Hospital", "Locality"
+name       the name shown
+context    the municipality and the US state or country, e.g. "Brooklyn, NY"
+ref        the OpenStreetMap element it comes from: n / w / r + its id
+           (https://www.openstreetmap.org/node/<id>, /way/<id>, /relation/<id>)
+lic        ODbL
+cc         ISO 3166-1 country code
