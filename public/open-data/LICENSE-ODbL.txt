@@ -1,0 +1,11 @@
+Loxymity place names — OpenStreetMap-derived rows
+
+This database contains information from OpenStreetMap (https://www.openstreetmap.org),
+which is made available under the Open Database License (ODbL) 1.0:
+https://opendatacommons.org/licenses/odbl/1-0/
+© OpenStreetMap contributors. This derived database (osm-derived.ndjson.gz) is likewise
+made available under the ODbL 1.0.
+
+Columns: id, lat, lng, tier (1 landmark/station/airport · 2 hospital/college/senior living/
+boarding school/mall · 3 locality), poi_type, name, context ("Municipality, State/Country"),
+ref (OSM n/w/r + id), lic, cc (ISO country).
