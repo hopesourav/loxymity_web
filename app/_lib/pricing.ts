@@ -94,7 +94,8 @@ export type PlanCard = {
 /**
  * What each plan adds over the one below it. Mirrors the app's paywall (`app/(main)/circle-plan.tsx`
  * PLAN_CARDS), Plans & billing (`membership.tsx`) and the live `tier_limits` values (members
- * 5/10/15/15, history 2/30/90/180 days, places 2/10/50/100, temporary circles 1/5/5/5, Street View
+ * 5/10/15/15, history 2/30/90/180 days, places 2/10/50/100, temporary circles 1/2/2/2 — free ones
+ * last up to 24 hours, a plan allows one of up to 30 days (app migration 0296) — Street View
  * 5/10/30/60 a month, assistant questions 10/100/300/300 a month, flights 20/40/unlimited/unlimited
  * a month, voice calls none/unlimited/unlimited/unlimited, video minutes 0/0/60/100 a month).
  *
@@ -118,7 +119,7 @@ export const PLAN_CARDS: PlanCard[] = [
       'Circle chat and one-tap “Arrived safely”',
       'Today’s and yesterday’s history',
       '2 places with arrival & leave alerts',
-      `1 temporary circle (up to ${EVENT_CIRCLE_MEMBERS} people)`,
+      `1 temporary circle of up to ${EVENT_CIRCLE_MEMBERS} people, for up to 24 hours`,
       'Battery level & live share links for people without the app',
       'Street View 5 · assistant 10 · flights 20 a month',
     ],
@@ -132,7 +133,7 @@ export const PLAN_CARDS: PlanCard[] = [
       'Up to 10 members in each covered circle',
       '30 days of location history',
       '10 places with arrival & leave alerts',
-      '5 temporary circles at a time',
+      '2 temporary circles, one lasting up to 30 days',
       'Street View 10 · assistant 100 · flights 40 a month',
       'Web dashboard for the person who pays',
     ],

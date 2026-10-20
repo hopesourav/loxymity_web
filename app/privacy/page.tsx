@@ -285,6 +285,10 @@ export default function PrivacyPolicy() {
             members&rsquo; screens, but your exact position is still sent to their phones, so it is not a
             way to hide where you are. Circle owners can approve, remove and manage members.
           </p>
+          <p>
+            In a temporary circle, members see your location history and drives only from when you joined
+            it, and the circle ends on its own at the time its creator chose.
+          </p>
         </Sub>
         <Sub title="4.2 Anyone with a share link you create">
           <p>
@@ -296,7 +300,8 @@ export default function PrivacyPolicy() {
           <p>
             A circle member who links WhatsApp or Alexa, or asks the in-app assistant, can get your name,
             last known place, how long ago, battery and activity. WhatsApp and Alexa answers are delivered
-            by Meta and Amazon.
+            by Meta and Amazon. Only members of a permanent circle you are in can ask about you this way —
+            not someone you share only a temporary circle with.
           </p>
         </Sub>
         <Sub title="4.4 Your profile photo">
