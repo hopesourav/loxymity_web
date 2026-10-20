@@ -80,3 +80,38 @@ export type DupePair = {
   b_lat: number; b_lng: number;
   dist_m: number;
 };
+
+// ── The published tile set (0297) ────────────────────────────────────────────
+
+/**
+ * One published tile. `n` is how many POI entries the tile carries, which is
+ * NOT a count of distinct POIs: a POI is written into every tile within reach
+ * of it, so the same row appears in several tiles. Across the whole set the
+ * entries outnumber the source rows by about 1.6x.
+ */
+export type TileCell = { id: string; n: number; b: number };
+
+export type TilePublish = {
+  published_at: string;
+  source: string;
+  source_rows: number;
+  tiles: number;
+  changed: number;
+  removed: number;
+  source_changed_at: string | null;
+  git_sha: string | null;
+};
+
+/** The shape admin_poi_tile_coverage() returns. */
+export type TileCoverage = {
+  grid: { n: number; cell_lat: number; cell_lng: number };
+  enabled: boolean;
+  publish: TilePublish | null;
+  totals: { tiles: number; pois: number; bytes: number };
+  window: { tiles: number; pois: number; bytes: number };
+  /** The window held more cells than the cap: no tiles were sent, by design. */
+  truncated: boolean;
+  tiles: TileCell[];
+  /** Which bbox produced it — the overlay stays where it was measured. */
+  scope: 'world' | 'view';
+};

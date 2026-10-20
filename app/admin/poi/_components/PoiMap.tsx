@@ -21,12 +21,20 @@ import { useEffect, useRef } from 'react';
 import { TIERS, tierSpec } from '../_lib/poiTiers';
 import { labelFor } from '../_lib/poiTiers';
 import { MAP_TILE_URL, mapTileOptions } from '../../../_lib/mapTiles';
+import { TILE_HUE, densityOpacity, formatBytes, tileBounds } from '../_lib/tiles';
 import type {
-  Bbox, CoverageMode, CoverageScan, DupePair, MapMode, NearestPoiHit, PoiRow,
+  Bbox, CoverageMode, CoverageScan, DupePair, MapMode, NearestPoiHit, PoiRow, TileCoverage,
 } from '../_lib/types';
 
 /** Above this many rows in view, coverage circles are replaced by dots. */
 export const COVERAGE_MAX = 900;
+/**
+ * Above this many published cells the tile overlay drops its tooltips and goes
+ * non-interactive. Same reasoning as COVERAGE_MAX: the whole world is ~6,500
+ * cells, and 6,500 interactive paths each carrying a sticky tooltip makes the
+ * map chew every mousemove. The FILL is never dropped — it is the answer.
+ */
+export const TILE_INTERACTIVE_MAX = 1500;
 /** Below this zoom Leaflet is drawing sub-pixel circles; show dots instead. */
 export const COVERAGE_MIN_ZOOM = 11;
 
@@ -39,6 +47,7 @@ type Props = {
   probe: { lat: number; lng: number } | null;
   probeHit: NearestPoiHit | null;
   scan: CoverageScan | null;
+  tiles: TileCoverage | null;
   dupes: DupePair[] | null;
   focusedDupe: DupePair | null;
   flyTo: { lat: number; lng: number; zoom?: number; nonce: number } | null;
@@ -51,7 +60,7 @@ type Props = {
 type L = typeof import('leaflet');
 
 export default function PoiMap({
-  rows, selectedId, coverage, mode, draft, probe, probeHit, scan, dupes, focusedDupe, flyTo,
+  rows, selectedId, coverage, mode, draft, probe, probeHit, scan, tiles, dupes, focusedDupe, flyTo,
   onViewportChange, onSelect, onMapClick, onDraftDrag,
 }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
@@ -62,6 +71,7 @@ export default function PoiMap({
   const draftLayerRef = useRef<any>(null);
   const probeLayerRef = useRef<any>(null);
   const scanLayerRef = useRef<any>(null);
+  const tileLayerRef = useRef<any>(null);
   const dupeLayerRef = useRef<any>(null);
   const readyRef = useRef(false);
 
@@ -94,8 +104,10 @@ export default function PoiMap({
       });
       Lmod.tileLayer(MAP_TILE_URL, mapTileOptions()).addTo(map);
 
-      // Order matters: the scan grid is a full-bleed fill and has to sit
-      // under everything else, so it is added first.
+      // Order matters: both grids are full-bleed fills and have to sit under
+      // everything else. The tile set is the bottom-most — it is the backdrop
+      // the pins and the scan are read against.
+      tileLayerRef.current = Lmod.layerGroup().addTo(map);
       scanLayerRef.current = Lmod.layerGroup().addTo(map);
       poiLayerRef.current = Lmod.layerGroup().addTo(map);
       dupeLayerRef.current = Lmod.layerGroup().addTo(map);
@@ -304,6 +316,41 @@ export default function PoiMap({
       }
     }
   }, [probe, probeHit, rows]);
+
+  // ── Published tile set (what actually ships) ───────────────────────────────
+  useEffect(() => {
+    const Lmod = LRef.current;
+    const layer = tileLayerRef.current;
+    if (!Lmod || !layer) return;
+    layer.clearLayers();
+    if (!tiles) return;
+
+    const interactive = tiles.tiles.length <= TILE_INTERACTIVE_MAX;
+
+    for (const t of tiles.tiles) {
+      const b = tileBounds(t.id, tiles.grid);
+
+      const rect = Lmod.rectangle(
+        [[b.minLat, b.minLng], [b.maxLat, b.maxLng]],
+        {
+          color: TILE_HUE,
+          weight: interactive ? 0.5 : 0,
+          opacity: 0.5,
+          fillColor: TILE_HUE,
+          fillOpacity: densityOpacity(t.n),
+          interactive,
+        },
+      ).addTo(layer);
+
+      if (interactive) {
+        rect.bindTooltip(
+          `<b>Tile ${escapeHtml(t.id)}</b><br/>${t.n.toLocaleString('en-IN')} POI entries · ` +
+          `${escapeHtml(formatBytes(t.b))}`,
+          { direction: 'top', sticky: true },
+        );
+      }
+    }
+  }, [tiles]);
 
   // ── Coverage scan grid ─────────────────────────────────────────────────────
   useEffect(() => {

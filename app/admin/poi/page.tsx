@@ -29,7 +29,7 @@ import CoveragePanel from './_components/CoveragePanel';
 import DupesPanel from './_components/DupesPanel';
 import { TIERS, TIER_IDS, formatDistance, labelFor, tierSpec } from './_lib/poiTiers';
 import type {
-  Bbox, CoverageMode, CoverageScan, DupePair, NearestPoiHit, PoiFacet, PoiRow,
+  Bbox, CoverageMode, CoverageScan, DupePair, NearestPoiHit, PoiFacet, PoiRow, TileCoverage,
 } from './_lib/types';
 
 const MAX_ROWS = 2000;
@@ -78,6 +78,9 @@ export default function PoiPage() {
   const [tab, setTab] = useState<Tab>('list');
 
   const [scan, setScan] = useState<CoverageScan | null>(null);
+  // The published tile set. Held here, not in the panel, because the map draws
+  // it and it must survive a tab change — it is the backdrop, not a tab's state.
+  const [tiles, setTiles] = useState<TileCoverage | null>(null);
   const [dupes, setDupes] = useState<DupePair[] | null>(null);
   const [focusedDupe, setFocusedDupe] = useState<DupePair | null>(null);
 
@@ -389,6 +392,7 @@ export default function PoiPage() {
             probe={tab === 'probe' ? probe : null}
             probeHit={probeHit}
             scan={scan}
+            tiles={tiles}
             dupes={tab === 'dupes' ? dupes : null}
             focusedDupe={focusedDupe}
             flyTo={flyTo}
@@ -527,7 +531,14 @@ export default function PoiPage() {
               )}
 
               {tab === 'scan' && (
-                <CoveragePanel supabase={supabase} bbox={bbox} scan={scan} onScan={setScan} />
+                <CoveragePanel
+                  supabase={supabase}
+                  bbox={bbox}
+                  scan={scan}
+                  onScan={setScan}
+                  tiles={tiles}
+                  onTiles={setTiles}
+                />
               )}
 
               {tab === 'dupes' && (

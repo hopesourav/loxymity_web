@@ -14,18 +14,28 @@
  *
  * Not automatic on pan. A 20×20 scan is 400 nearest_poi calls (~1.2 s of
  * database time), so it is an explicit button.
+ *
+ * Since publish #6 this is no longer the whole picture: nearest_poi reads
+ * poi_directory, and about half of what ships now comes from the global
+ * snapshot, which lives only in R2. TileSetPanel sits above this one and
+ * answers the covered/not-covered question for the set that actually ships;
+ * this scan stays as the exact per-point check wherever the directory IS the
+ * source — India.
  */
 
 import { useState } from 'react';
 import type { SupabaseClient } from '@supabase/supabase-js';
+import TileSetPanel from './TileSetPanel';
 import { labelFor } from '../_lib/poiTiers';
-import type { Bbox, CoverageCell, CoverageScan } from '../_lib/types';
+import type { Bbox, CoverageCell, CoverageScan, TileCoverage } from '../_lib/types';
 
 type Props = {
   supabase: SupabaseClient;
   bbox: Bbox | null;
   scan: CoverageScan | null;
   onScan: (s: CoverageScan | null) => void;
+  tiles: TileCoverage | null;
+  onTiles: (t: TileCoverage | null) => void;
 };
 
 function stateOf(c: CoverageCell): 'named' | 'unnamed' | 'none' {
@@ -33,7 +43,7 @@ function stateOf(c: CoverageCell): 'named' | 'unnamed' | 'none' {
   return labelFor({ name: c.poi_name, tier: c.tier, dist_m: c.dist_m }) ? 'named' : 'unnamed';
 }
 
-export default function CoveragePanel({ supabase, bbox, scan, onScan }: Props) {
+export default function CoveragePanel({ supabase, bbox, scan, onScan, tiles, onTiles }: Props) {
   const [n, setN] = useState(12);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -66,11 +76,19 @@ export default function CoveragePanel({ supabase, bbox, scan, onScan }: Props) {
 
   return (
     <div className="flex-1 overflow-y-auto p-4 space-y-4">
-      <p className="text-xs text-dark-muted leading-snug">
-        Samples a grid across the current view and asks the live{' '}
-        <code className="text-primary">nearest_poi</code> what each point resolves to. Shows
-        where the directory would leave a stop with no name.
-      </p>
+      <TileSetPanel supabase={supabase} bbox={bbox} tiles={tiles} onTiles={onTiles} />
+
+      <div>
+        <h3 className="text-sm font-semibold text-dark-text">Name preview scan (directory)</h3>
+        <p className="text-xs text-dark-muted leading-snug mt-1">
+          Samples a grid across the current view and asks the live{' '}
+          <code className="text-primary">nearest_poi</code> what each point resolves to — the exact
+          per-point answer, but over <code className="text-primary">poi_directory</code> only. It
+          cannot see the global snapshot, so outside India it reports{' '}
+          <b className="text-dark-text">no match</b> for places the tile layer above shows as
+          covered.
+        </p>
+      </div>
 
       <div>
         <label className="block text-xs font-medium text-dark-muted mb-1.5">
