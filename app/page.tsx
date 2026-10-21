@@ -587,6 +587,7 @@ export default function Home() {
             <a href="/business/" className="hover:text-dark-text transition-colors">For businesses</a>
             <a href="mailto:support@loxymity.com" className="hover:text-dark-text transition-colors">Contact</a>
             <a href="/privacy/#contact" className="hover:text-dark-text transition-colors">Grievance Officer</a>
+            <a href="/delete-account/" className="hover:text-dark-text transition-colors">Delete your account</a>
             <a href="/admin"   className="transition-colors" style={{ color: '#14171D' }}>Admin</a>
           </div>
         </div>

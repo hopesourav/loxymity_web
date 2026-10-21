@@ -370,6 +370,11 @@ export default function TermsOfService() {
             paid annual subscription at the price shown when you started. Adding a circle during the
             trial ends the trial and starts paid billing that day; the app warns you before you do.
           </p>
+          <p>
+            Any free trial or promotional period we grant ourselves, rather than through the store, is
+            once per person: a new account with the same email address or verified phone number as an
+            account deleted in the last 12 months does not get another.
+          </p>
         </Sub>
         <Sub title="8.5 Billing, renewal, cancellation and refunds">
           <List>
@@ -411,7 +416,9 @@ export default function TermsOfService() {
           <p>
             Referral rewards (such as a free week of Platinum) and other promotions have no cash value,
             cannot be transferred, may be changed or ended at any time, and may be withdrawn if they are
-            obtained in breach of these Terms.
+            obtained in breach of these Terms. A referral reward is for a new person: a new account with
+            the same email address or verified phone number as an account deleted in the last 12 months
+            cannot be referred again.
           </p>
         </Sub>
         <Sub title="8.8 Web dashboard">
@@ -471,9 +478,13 @@ export default function TermsOfService() {
         <List>
           <li>
             You can stop using the Service at any time and delete your account in the app (You → Delete
-            account). You are signed out at once and your account is then deleted as the Privacy Policy
-            describes. Circles you own pass to another adult member, or are deleted if no other adult
-            remains; direct-message threads you are part of are deleted for both people.
+            account) or at <a href="/delete-account/">loxymity.com/delete-account</a>. You are signed out
+            at once. An adult&rsquo;s account is deleted 7 days later — sign in before then and tap Restore
+            to keep it, or choose to delete it immediately; an account of anyone under 18 is deleted
+            straight away. The account is then deleted as the Privacy Policy describes, which also lists
+            the few records we must keep afterwards. Circles you own pass to another adult member, or are
+            deleted if no other adult remains; direct-message threads you are part of are deleted for both
+            people.
           </li>
           <li>
             We may suspend or close your account, with or without notice, if you break these Terms,

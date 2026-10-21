@@ -38,7 +38,11 @@ export default function PrivacyPolicy() {
                 they are <strong>not end-to-end encrypted</strong>. Only Vault backups are.
               </li>
               <li>In-app voice calls are recorded and kept for 28 days — never when a child is on the call.</li>
-              <li>You can pause sharing, leave circles, turn features off and delete your account in the app.</li>
+              <li>
+                You can pause sharing, leave circles, turn features off and delete your account — in the app
+                or at <a href="/delete-account/">loxymity.com/delete-account</a>. You have 7 days to change
+                your mind, and afterwards we keep only what the law requires, each for a set time.
+              </li>
             </List>
           </Callout>
         </>
@@ -250,6 +254,7 @@ export default function PrivacyPolicy() {
             ['Billing', 'Plans, trials, renewals, referral rewards', 'Contract; legal obligations (tax and accounting)'],
             ['Improving sign-up', 'Optional usage statistics; anonymous sign-up diagnostics', 'Consent; the diagnostics are anonymous'],
             ['Legal compliance', 'Responding to lawful requests, enforcing our Terms, keeping records the law requires', 'Legal obligation; legitimate uses under DPDP Act s.7'],
+            ['After you delete your account', 'The registration record (180 days) and the record of what you agreed to (3 years) the law requires; a one-way fingerprint of your email and verified phone number (12 months) used only so a new account cannot claim a second free trial or referral reward', 'Legal obligation (Information Technology Rules, 2021; DPDP Act s.6(10)); for the fingerprint, the purpose you accept in this policy (DPDP Act) and our legitimate interest in preventing abuse of free offers (GDPR Art. 6(1)(f))'],
           ]}
         />
         <p>
@@ -347,7 +352,8 @@ export default function PrivacyPolicy() {
         <Table
           head={['Provider', 'What it does', 'What it receives']}
           rows={[
-            ['Supabase (Mumbai, India)', 'Database, sign-in, file storage, server functions, sign-in emails', 'All account and service data'],
+            ['Supabase (Mumbai, India)', 'Database, sign-in, file storage, server functions', 'All account and service data'],
+            ['Resend', 'Sending our emails: sign-in codes and account-deletion notices', 'Your email address and the content of the email'],
             ['Cloudflare', 'R2 storage; hosting of loxymity.com', 'Call recordings and encrypted Vault backups; website visitors’ IP addresses'],
             ['Agora', 'Voice and video calls, call recording', 'Call audio and video, call participants'],
             ['Expo, Google Firebase Cloud Messaging, Apple Push Notification service', 'Delivering notifications', 'Push tokens and notification text — which can include names, place names, battery level and SOS messages'],
@@ -361,6 +367,8 @@ export default function PrivacyPolicy() {
             ['Amazon (Alexa)', 'Alexa answers, if you enable the skill', 'Your requests and our spoken and card replies'],
             ['adsb.lol, adsbdb, FlightAware', 'Flight tracking', 'Flight numbers; FlightAware pages you open receive your IP address'],
             ['RevenueCat, Apple App Store, Google Play', 'Purchases and subscription status', 'Your account ID and purchase records — never your location'],
+            ['Razorpay', 'Payments for plans bought on loxymity.com, when we offer them', 'Your name, email address, phone number, the plan and the payment — never your location'],
+            ['Epic Games, Inc. (Kids Web Services)', 'Checking that a parent is an adult before they set up a child’s account', 'The parent’s email address, country and our account ID; Kids Web Services tells us the result'],
             ['Government alert feeds (NDMA SACHET, US National Weather Service)', 'Official hazard alerts', 'Nothing about you; we match alerts to your circle on our own servers'],
           ]}
         />
@@ -388,8 +396,8 @@ export default function PrivacyPolicy() {
             ['Direct messages', 'Until the account of either person is deleted.'],
             ['Assistant conversations in the app', '30 days.'],
             ['WhatsApp messages', 'Content 30 days; the record that a message was handled, 90 days.'],
-            ['Alexa requests and saved WhatsApp questions', 'Until you ask us to delete them.'],
-            ['Call recordings', '28 days. Calls involving anyone under 18 are not recorded.'],
+            ['Alexa requests and saved WhatsApp questions', 'Until you delete your account or ask us to delete them.'],
+            ['Call recordings', '28 days, including after an account is deleted. Calls involving anyone under 18 are not recorded.'],
             ['A child’s history on any phone that keeps a copy (including a parent’s) and in backups', '48 hours.'],
             ['Reports and the copy of a reported message', 'As long as needed to deal with the report and any related safety or legal matter.'],
             ['Call records, SOS alerts and responses, safety and place events, the viewing record, schedules you keep', 'While your account exists. Schedule checks: 30 days. Flights: 30 days.'],
@@ -398,23 +406,47 @@ export default function PrivacyPolicy() {
             ['Diagnostic log', 'Replaced by each new upload; deleted with your account.'],
             ['Crash reports (Crashlytics)', 'Up to 90 days.'],
             ['Usage statistics; anonymous sign-up diagnostics', '90 days. The diagnostics are anonymous, so we cannot find one person’s on request.'],
-            ['Vault backup', 'Until you replace it or ask us to delete it.'],
-            ['Consent and age records', 'While your account exists, and afterwards for as long as we need to show that consent was given.'],
-            ['Purchase and billing records', 'As long as tax and accounting law requires.'],
+            ['Vault backup', 'Until you replace it or delete your account.'],
+            ['Consent and age records', 'While your account exists. After it is deleted, only the record of what you agreed to and when — 3 years, so we can show consent was given.'],
+            ['After an account is deleted: name, email address, phone number, and the dates it was opened and deleted', '180 days, as the Information Technology Rules, 2021 require. Then erased.'],
+            ['After an account is deleted: a one-way fingerprint of its email address and verified phone number', '12 months. Used only to stop a new account claiming a second free trial or referral reward; it cannot be turned back into the email or number.'],
+            ['Purchase and billing records', 'Invoices for plans bought on loxymity.com: as long as tax and accounting law requires. App Store and Google Play purchases are invoiced and kept by Apple or Google, and RevenueCat keeps the purchase record under your account ID — never your name or location.'],
             ['Contacts', 'Never collected.'],
           ]}
         />
         <Sub title="When you delete your account">
           <p>
-            Delete it in the app (You → Delete account). You are signed out and your account is blocked
-            at once, and deletion normally completes within a day: your profile, photo, location data,
-            drives, places, messages, diagnostic logs and the Apple sign-in link are removed. Circles you
-            own pass to another adult member, or are deleted if no other adult is left; direct-message threads are
-            removed for both people. Call recordings expire within 28 days. We keep only what the law
-            requires us to keep, and copies in our providers&rsquo; backups are overwritten in their normal
-            cycle. If you used Vault, Alexa or WhatsApp, email{' '}
-            <a href="mailto:privacy@loxymity.com">privacy@loxymity.com</a> and we will delete those copies
-            too, as they are not yet removed automatically. Deleting your account does not cancel a store
+            Delete it in the app (You → Delete account) or at{' '}
+            <a href="/delete-account/">loxymity.com/delete-account</a>. We first make sure it is you: your
+            phone&rsquo;s Face ID, fingerprint or PIN in the app, or a code we email you on the website.
+          </p>
+          <p>
+            <strong>Adults have 7 days to change their mind.</strong> Straight away you are signed out on
+            every device, your circles stop seeing your location, your share links stop working and your
+            notifications stop; anything your phones still send is discarded. Your circles still see your
+            name, shown as paused, and what was already shared with them — messages and past place
+            alerts — until the deletion runs. To keep your account, sign in within the 7 days and tap
+            Restore. You can also choose to delete it immediately. We email you when the deletion is
+            scheduled and again when it is done. <strong>Accounts of anyone under 18 are deleted
+            straight away.</strong>
+          </p>
+          <p>
+            When the deletion runs — normally within a day of the date we gave you — we remove your
+            profile, photo, location data, drives, places, messages, diagnostic logs, Vault backup,
+            WhatsApp and Alexa records and the Apple sign-in link. Circles you own pass to another adult
+            member, or are deleted if no other adult is left; direct-message threads are removed for both
+            people.
+          </p>
+          <p>
+            We keep only what the table above lists for deleted accounts: the registration record for 180
+            days, the record of what you agreed to for 3 years, the one-way fingerprint for 12 months,
+            invoices for plans bought on loxymity.com as long as tax law requires, and reports as long as
+            a safety or legal matter needs them. If a court or the police lawfully ask us to preserve an
+            account, we keep what they ask for as long as they require. Call recordings expire within 28
+            days, and copies in our providers&rsquo; backups are overwritten in their normal cycle.
+          </p>
+          <p>
+            You can create a new account at any time. Deleting your account does not cancel a store
             subscription — cancel it in the App Store or Google Play.
           </p>
         </Sub>
@@ -473,6 +505,14 @@ export default function PrivacyPolicy() {
           <li>a child cannot block the parent or guardian who consented for them, but can report anything to us.</li>
         </List>
         <p>
+          <strong>Deleting a child&rsquo;s account.</strong> A child aged 13 to 17 can delete their own
+          account in the app; it is deleted straight away and their parent or guardian is told. A parent
+          or guardian can delete the account of a child they set up from the app (Settings → Family →
+          Stop and delete), which stops sharing at once and deletes the account. If the parent who set up
+          a child deletes their own account and the child is left in no family circle, the child is told
+          and their account is deleted 7 days later.
+        </p>
+        <p>
           Parents in countries with other rules for children&rsquo;s data (for example the EU, UK or US)
           must give any consent those rules require before inviting a child. If you believe a child is
           using Loxymity without a parent&rsquo;s consent, write to{' '}
@@ -483,7 +523,10 @@ export default function PrivacyPolicy() {
       <Section title="11. Your choices and rights">
         <Sub title="In the app, at any time">
           <List>
-            <li>Pause sharing (Settings → Share my location), leave a circle, or delete your account.</li>
+            <li>
+              Pause sharing (Settings → Share my location), leave a circle, or delete your account (also at{' '}
+              <a href="/delete-account/">loxymity.com/delete-account</a>) — with 7 days to restore it.
+            </li>
             <li>
               Block someone: it stops direct messages and calls between you in both directions and hides
               their circle chat on your phone. It does not change who can see your location — for that,

@@ -170,6 +170,7 @@ export default function BusinessPage() {
           <div className="flex gap-6 text-sm text-dark-muted">
             <Link href="/privacy/" className="hover:text-dark-text transition-colors">Privacy Policy</Link>
             <Link href="/terms/" className="hover:text-dark-text transition-colors">Terms of Service</Link>
+            <Link href="/delete-account/" className="hover:text-dark-text transition-colors">Delete your account</Link>
             <Link href="/" className="hover:text-dark-text transition-colors">Home</Link>
           </div>
         </div>

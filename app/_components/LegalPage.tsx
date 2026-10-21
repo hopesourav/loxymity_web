@@ -55,6 +55,7 @@ export function LegalPage({ title, version, effective, intro, children }: {
             <Link href="/privacy/" className="hover:text-dark-text transition-colors">Privacy Policy</Link>
             <Link href="/terms/" className="hover:text-dark-text transition-colors">Terms of Service</Link>
             <Link href="/business/" className="hover:text-dark-text transition-colors">For businesses</Link>
+            <Link href="/delete-account/" className="hover:text-dark-text transition-colors">Delete your account</Link>
             <Link href="/" className="hover:text-dark-text transition-colors">Home</Link>
           </div>
         </div>
@@ -117,9 +118,22 @@ export function Table({ head, rows }: { head: string[]; rows: React.ReactNode[][
  * Version of the published Terms + Privacy Policy. MUST equal TERMS_VERSION and PRIVACY_VERSION in
  * the app (src/lib/legal.ts): the app asks every user to accept the version it was built with.
  *
- * 2026-10-17.1 = the child-safety Phase 0 release (migrations 0271–0273 + app 0.8.900). App users
- * began accepting it on 17 October 2026 (user_consents, 0.8.900/0.8.901), so that is its effective
- * date; the site published it on 19 October.
+ * 2026-10-17.1 = the child-safety Phase 0 release (migrations 0271–0273 + app 0.8.900).
+ * 2026-10-17.2 = account deletion v2 (migrations 0301–0303 + the app build carrying them): the
+ * 7-day restore window, what is kept after deletion and for how long, the one-way fingerprint,
+ * loxymity.com/delete-account, Resend / Razorpay / Epic Games KWS as providers. Deliberately still
+ * below the app's WEB_TERMS_MIN_VERSION ('2026-10-18', supabase/functions/_shared/webPlan.ts):
+ * these Terms still say we do not sell plans on the website, so that interlock must stay closed.
+ *
+ * Publish it the day that app release ships, not before. Set LEGAL_EFFECTIVE to that day when
+ * merging — a Cloudflare Pages build refuses to run while it is unset, so this version cannot reach
+ * loxymity.com by accident. Preview locally with LEGAL_PREVIEW=1 npm run build.
  */
-export const LEGAL_VERSION = '2026-10-17.1';
-export const LEGAL_EFFECTIVE = '17 October 2026';
+export const LEGAL_VERSION = '2026-10-17.2';
+export const LEGAL_EFFECTIVE: string = 'SET-ON-RELEASE';
+
+if (LEGAL_EFFECTIVE === 'SET-ON-RELEASE' && process.env.LEGAL_PREVIEW !== '1') {
+  throw new Error(
+    'LEGAL_EFFECTIVE is unset: set it (app/_components/LegalPage.tsx) to the day the account-deletion release ships.',
+  );
+}
