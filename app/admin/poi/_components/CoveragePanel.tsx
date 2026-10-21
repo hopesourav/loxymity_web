@@ -4,28 +4,28 @@
  * Coverage-hole scan.
  *
  * The probe answers "what is this ONE point called?". This answers "what would
- * this whole area be called?", by sampling a grid and running every sample
- * through the real nearest_poi() server-side (admin_poi_coverage_grid, 0213).
+ * this whole area be called?", by sampling a grid and resolving every sample
+ * through the published tiles (poi-tiles `resolve`, 0298 — it replaced
+ * admin_poi_coverage_grid, which could only see poi_directory).
  *
  * The result has three states, and the middle one is the point of the feature:
  * a tier-4 pincode match beyond labelFor()'s 1 km cut-off produces NO label and
  * stops the fall-through, so the stop is nameless. A map of pins cannot show
  * that — the pin is right there.
  *
- * Not automatic on pan. A 20×20 scan is 400 nearest_poi calls (~1.2 s of
- * database time), so it is an explicit button.
+ * Not automatic on pan. A 20×20 scan is 400 points, resolved in ONE call: the
+ * edge function opens each point's tile once and answers every point in it.
  *
- * Since publish #6 this is no longer the whole picture: nearest_poi reads
- * poi_directory, and about half of what ships now comes from the global
- * snapshot, which lives only in R2. TileSetPanel sits above this one and
- * answers the covered/not-covered question for the set that actually ships;
- * this scan stays as the exact per-point check wherever the directory IS the
- * source — India.
+ * It resolves against the TILES, not nearest_poi — the shipped set includes
+ * the global snapshot, which has no Postgres row, and excludes the hidden rows,
+ * which have one. TileSetPanel above answers "is there a tile here" per cell;
+ * this answers "what would a stop here be called" per point.
  */
 
 import { useState } from 'react';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import TileSetPanel from './TileSetPanel';
+import { ShippedError, resolveShipped, shippedErrorText } from '../_lib/shipped';
 import { labelFor } from '../_lib/poiTiers';
 import type { Bbox, CoverageCell, CoverageScan, TileCoverage } from '../_lib/types';
 
@@ -52,16 +52,41 @@ export default function CoveragePanel({ supabase, bbox, scan, onScan, tiles, onT
     if (!bbox) return;
     setBusy(true);
     setError('');
-    const { data, error: err } = await supabase.rpc('admin_poi_coverage_grid', {
-      p_min_lat: bbox.minLat,
-      p_min_lng: bbox.minLng,
-      p_max_lat: bbox.maxLat,
-      p_max_lng: bbox.maxLng,
-      p_n: n,
-    });
-    setBusy(false);
-    if (err) { setError(err.message); return; }
-    onScan({ bbox, n, cells: (data ?? []) as CoverageCell[] });
+
+    // The sample points, in the order the grid is read.
+    const pts: Array<[number, number]> = [];
+    const meta: Array<{ row_i: number; col_i: number }> = [];
+    for (let r = 0; r < n; r++) {
+      for (let c = 0; c < n; c++) {
+        const lat = bbox.minLat + ((bbox.maxLat - bbox.minLat) * (r + 0.5)) / n;
+        const lng = bbox.minLng + ((bbox.maxLng - bbox.minLng) * (c + 0.5)) / n;
+        pts.push([lat, lng]);
+        meta.push({ row_i: r, col_i: c });
+      }
+    }
+
+    try {
+      const hits = await resolveShipped(supabase, pts);
+      setBusy(false);
+      const cells: CoverageCell[] = pts.map(([lat, lng], i) => {
+        const h = hits[i] ?? null;
+        return {
+          row_i: meta[i].row_i,
+          col_i: meta[i].col_i,
+          lat,
+          lng,
+          poi_id: h ? h.id : null,
+          poi_name: h ? h.name : null,
+          poi_type: h ? h.poi_type : null,
+          tier: h ? h.tier : null,
+          dist_m: h ? h.dist_m : null,
+        };
+      });
+      onScan({ bbox, n, cells });
+    } catch (e) {
+      setBusy(false);
+      setError(e instanceof ShippedError ? shippedErrorText(e.kind) : 'Could not read the tiles.');
+    }
   }
 
   const counts = scan
@@ -79,14 +104,12 @@ export default function CoveragePanel({ supabase, bbox, scan, onScan, tiles, onT
       <TileSetPanel supabase={supabase} bbox={bbox} tiles={tiles} onTiles={onTiles} />
 
       <div>
-        <h3 className="text-sm font-semibold text-dark-text">Name preview scan (directory)</h3>
+        <h3 className="text-sm font-semibold text-dark-text">Name preview scan</h3>
         <p className="text-xs text-dark-muted leading-snug mt-1">
-          Samples a grid across the current view and asks the live{' '}
-          <code className="text-primary">nearest_poi</code> what each point resolves to — the exact
-          per-point answer, but over <code className="text-primary">poi_directory</code> only. It
-          cannot see the global snapshot, so outside India it reports{' '}
-          <b className="text-dark-text">no match</b> for places the tile layer above shows as
-          covered.
+          Samples a grid across the current view and resolves every point through the tiles, using
+          the same <code className="text-primary">resolveNearest</code> the phone runs. This is the
+          per-point answer the layer above can only give per cell — a painted cell can still hold
+          points that resolve to nothing.
         </p>
       </div>
 

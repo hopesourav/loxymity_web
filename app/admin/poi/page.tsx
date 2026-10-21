@@ -1,23 +1,36 @@
 'use client';
 
 /**
- * POI Directory console.
+ * POI console — a view of the SHIPPED set.
  *
- * poi_directory is the name source behind every stop label in the history
- * timeline, both endpoints of every drive report, and the "where is X" answer
- * that Loxy / Alexa / WhatsApp give. Until now it was seed-only: a wrong pin
- * could only be fixed with hand-written SQL, and nobody could see what the
- * coverage actually looked like.
+ * Every POI shown here comes from the published tiles, read through the
+ * `poi-tiles` edge function (0298), which decrypts them in the function and
+ * returns plain rows. It does NOT read poi_directory, deliberately: since
+ * publish #6 that table is not what ships. It lacks the 96,584 global POIs
+ * (EU + US, built from OSM/Wikidata into the snapshot) and still holds ~25k
+ * hidden rows that no tile carries, so a directory-backed console was wrong in
+ * both directions at once.
  *
  * Three things this page does that a plain CRUD table could not:
  *
  *   1. Draws each POI at its TIER'S NAMING RADIUS, not as a dot. A POI's reach
  *      is a property of its tier (500 m / 200 m / 2 km / 1 km), so coverage —
  *      and the holes in it — is the thing worth looking at.
- *   2. "Name preview" calls the real nearest_poi RPC at a clicked point and
- *      runs the real labelFor() over the answer. That is the whole pipeline,
- *      end to end, so it can show a tier-4 match that produces NO label.
- *   3. Loads by viewport. The table is 129k rows; selecting it is not an option.
+ *   2. "Name preview" resolves a clicked point through the tiles with the
+ *      SHARED resolveNearest, then runs the real labelFor() over the answer.
+ *      That is the whole pipeline, end to end, so it can still show a tier-4
+ *      match that produces NO label.
+ *   3. Loads by viewport, because a viewport is a set of tiles.
+ *
+ * What reading tiles costs, and why each is accepted:
+ *   * A tile carries no `source`, no timestamps and no `hidden`. `source` is
+ *     reconstructed from the id range (global vs directory); the rest is gone.
+ *   * Find searches the rows in view, not the directory — tiles are indexed by
+ *     cell, not by name.
+ *   * The duplicates finder is gone: it was a self-join over poi_directory.
+ *   * Editing still writes to poi_directory (that is the only writable source),
+ *     so a saved change does not appear in these pins until the next publish.
+ *     Rows touched this session are flagged rather than quietly diverging.
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -26,22 +39,23 @@ import PoiMap, { COVERAGE_MAX, COVERAGE_MIN_ZOOM } from './_components/PoiMap';
 import PoiEditor from './_components/PoiEditor';
 import BulkPanel from './_components/BulkPanel';
 import CoveragePanel from './_components/CoveragePanel';
-import DupesPanel from './_components/DupesPanel';
 import { TIERS, TIER_IDS, formatDistance, labelFor, tierSpec } from './_lib/poiTiers';
+import {
+  ShippedError, fetchShippedPois, isGlobalId, resolveShipped, shippedErrorText,
+} from './_lib/shipped';
 import type {
-  Bbox, CoverageMode, CoverageScan, DupePair, NearestPoiHit, PoiFacet, PoiRow, TileCoverage,
+  Bbox, CoverageMode, CoverageScan, NearestPoiHit, PoiFacet, PoiRow, TileCoverage,
 } from './_lib/types';
 
 const MAX_ROWS = 2000;
 
-type Tab = 'list' | 'probe' | 'find' | 'scan' | 'dupes' | 'bulk';
+type Tab = 'list' | 'probe' | 'find' | 'scan' | 'bulk';
 
 const TAB_LABEL: Record<Tab, string> = {
   list: 'In view',
   probe: 'Name preview',
   find: 'Find',
   scan: 'Coverage',
-  dupes: 'Duplicates',
   bulk: 'Import / export',
 };
 
@@ -58,9 +72,9 @@ type Draft = {
 export default function PoiPage() {
   const { supabase } = useAdmin();
 
-  const [facets, setFacets] = useState<PoiFacet[]>([]);
   const [rows, setRows] = useState<PoiRow[]>([]);
   const [totalInView, setTotalInView] = useState(0);
+  const [tilesRead, setTilesRead] = useState(0);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
 
@@ -81,8 +95,12 @@ export default function PoiPage() {
   // The published tile set. Held here, not in the panel, because the map draws
   // it and it must survive a tab change — it is the backdrop, not a tab's state.
   const [tiles, setTiles] = useState<TileCoverage | null>(null);
-  const [dupes, setDupes] = useState<DupePair[] | null>(null);
-  const [focusedDupe, setFocusedDupe] = useState<DupePair | null>(null);
+  /**
+   * Rows written this session. The map shows the SHIPPED set, so an edit is
+   * invisible until the next publish — these ids are flagged rather than
+   * silently diverging from what the pins claim.
+   */
+  const [unpublished, setUnpublished] = useState<Set<number>>(new Set());
 
   const [probe, setProbe] = useState<{ lat: number; lng: number } | null>(null);
   const [probeHit, setProbeHit] = useState<NearestPoiHit | null>(null);
@@ -102,12 +120,21 @@ export default function PoiPage() {
   const mode = draft ? 'place' : tab === 'probe' ? 'probe' : 'browse';
 
   // ── Facets ─────────────────────────────────────────────────────────────────
-  useEffect(() => {
-    (async () => {
-      const { data } = await supabase.rpc('admin_poi_facets');
-      setFacets((data ?? []) as PoiFacet[]);
-    })();
-  }, [supabase]);
+  //
+  // Derived from the rows in view, not from admin_poi_facets. A tile knows
+  // nothing about the directory as a whole, so a global count is not available
+  // any more — and a count of what is actually on screen is the more useful
+  // number when the filters below it also act on what is on screen.
+  const facets = useMemo<PoiFacet[]>(() => {
+    const m = new Map<string, PoiFacet>();
+    for (const r of rows) {
+      const k = `${r.tier}\u0000${r.poi_type}\u0000${r.source}`;
+      const f = m.get(k);
+      if (f) f.n += 1;
+      else m.set(k, { tier: r.tier, poi_type: r.poi_type, source: r.source, n: 1 });
+    }
+    return [...m.values()];
+  }, [rows]);
 
   const allTypes = useMemo(
     () => Array.from(new Set(facets.map((f) => f.poi_type))).sort(),
@@ -141,34 +168,37 @@ export default function PoiPage() {
     const seq = ++reqSeq.current;
     setLoading(true);
     setLoadError('');
-    const { data, error } = await supabase.rpc('admin_pois_in_bbox', {
-      p_min_lat: b.minLat,
-      p_min_lng: b.minLng,
-      p_max_lat: b.maxLat,
-      p_max_lng: b.maxLng,
-      p_tiers: tierFilter.size === TIER_IDS.length ? null : Array.from(tierFilter),
-      p_types: typeFilter.size === 0 ? null : Array.from(typeFilter),
-      p_sources: sourceFilter.size === 0 ? null : Array.from(sourceFilter),
-      p_q: nameFilter.trim() || null,
-      p_limit: MAX_ROWS,
-    });
-    if (seq !== reqSeq.current) return;   // superseded — drop it
-    setLoading(false);
-    if (error) {
-      // 57014 is the 8 s statement timeout on the `authenticated` role. It
-      // should not happen any more (0219 made the RPC SECURITY DEFINER so the
-      // GiST index is usable), but if it comes back the useful advice is to
-      // narrow the view rather than to read the raw Postgres string.
-      setLoadError(
-        error.code === '57014'
-          ? 'Query timed out — zoom in or narrow the filters.'
-          : `${error.message}${error.code ? ` (${error.code})` : ''}`,
-      );
-      return;
+    try {
+      const res = await fetchShippedPois(supabase, b);
+      if (seq !== reqSeq.current) return;   // superseded — drop it
+      setLoading(false);
+      if (res.truncated) {
+        setRows([]);
+        setTotalInView(0);
+        setLoadError('This view spans too many tiles to open. Zoom in.');
+        return;
+      }
+      // The filters run here rather than on the server: the edge function
+      // returns the cells' contents and a tile carries no `source`, so there is
+      // nothing left for a server-side WHERE to do.
+      const q = nameFilter.trim().toLowerCase();
+      const filtered = res.rows.filter((r) =>
+        (tierFilter.size === TIER_IDS.length || tierFilter.has(r.tier))
+        && (typeFilter.size === 0 || typeFilter.has(r.poi_type))
+        && (sourceFilter.size === 0 || sourceFilter.has(r.source))
+        && (q === '' || r.name.toLowerCase().includes(q)));
+      setRows(filtered.slice(0, MAX_ROWS));
+      setTotalInView(filtered.length);
+      setTilesRead(res.tiles);
+    } catch (e) {
+      if (seq !== reqSeq.current) return;
+      setLoading(false);
+      setRows([]);
+      setTotalInView(0);
+      setLoadError(e instanceof ShippedError
+        ? shippedErrorText(e.kind)
+        : 'Could not read the tiles.');
     }
-    const list = (data ?? []) as (PoiRow & { total_in_view: number })[];
-    setRows(list.map(({ total_in_view: _t, ...r }) => r));
-    setTotalInView(list.length ? Number(list[0].total_in_view) : 0);
   }, [supabase, tierFilter, typeFilter, sourceFilter, nameFilter]);
 
   useEffect(() => {
@@ -185,9 +215,13 @@ export default function PoiPage() {
     setProbe({ lat, lng });
     setProbeHit(null);
     setProbeBusy(true);
-    const { data } = await supabase.rpc('nearest_poi', { p_lat: lat, p_lng: lng });
+    try {
+      const [hit] = await resolveShipped(supabase, [[lat, lng]]);
+      setProbeHit((hit ?? null) as NearestPoiHit | null);
+    } catch {
+      setProbeHit(null);
+    }
     setProbeBusy(false);
-    setProbeHit(Array.isArray(data) ? ((data[0] ?? null) as NearestPoiHit | null) : null);
   }, [supabase]);
 
   const onMapClick = useCallback((lat: number, lng: number) => {
@@ -195,21 +229,23 @@ export default function PoiPage() {
     if (tab === 'probe') runProbe(lat, lng);
   }, [draft, tab, runProbe]);
 
-  // ── Global name search ─────────────────────────────────────────────────────
+  // ── Name search ────────────────────────────────────────────────────────────
+  //
+  // Over the rows in view, not the whole directory: tiles are indexed by cell,
+  // not by name, so there is no set to search until it has been opened. The
+  // panel says so rather than looking like a global search that found nothing.
   useEffect(() => {
-    if (findQ.trim().length < 2) { setFindRows([]); return; }
-    const t = setTimeout(async () => {
-      setFindBusy(true);
-      const { data } = await supabase.rpc('admin_poi_search', {
-        p_q: findQ.trim(),
-        p_tiers: tierFilter.size === TIER_IDS.length ? null : Array.from(tierFilter),
-        p_limit: 50,
-      });
+    const q = findQ.trim().toLowerCase();
+    if (q.length < 2) { setFindRows([]); return; }
+    setFindBusy(true);
+    const t = setTimeout(() => {
+      setFindRows(
+        rows.filter((r) => tierFilter.has(r.tier) && r.name.toLowerCase().includes(q)).slice(0, 50),
+      );
       setFindBusy(false);
-      setFindRows((data ?? []) as PoiRow[]);
-    }, 350);
+    }, 200);
     return () => clearTimeout(t);
-  }, [findQ, tierFilter, supabase]);
+  }, [findQ, tierFilter, rows]);
 
   // ── CRUD plumbing ──────────────────────────────────────────────────────────
   function openCreate() {
@@ -221,6 +257,14 @@ export default function PoiPage() {
   }
 
   function openEdit(p: PoiRow) {
+    // A global row (id >= 2^52) is built from OSM/Wikidata into the snapshot
+    // and has no poi_directory row to edit. Changing it means changing the
+    // source and republishing, not typing here.
+    if (isGlobalId(p.id)) {
+      setSelectedId(p.id);
+      fly(p.lat, p.lng);
+      return;
+    }
     setDraft({
       id: p.id, name: p.name, poi_type: p.poi_type, tier: p.tier,
       source: p.source, lat: p.lat, lng: p.lng,
@@ -229,11 +273,16 @@ export default function PoiPage() {
     fly(p.lat, p.lng);
   }
 
-  /** Re-read the viewport and the facet counts after a write from any panel. */
+  /**
+   * Re-read the viewport after a write. The facet counts follow the rows, so
+   * nothing else needs refreshing — but note a saved edit does NOT appear here
+   * until the tiles are republished: this view is the shipped set, and a write
+   * lands in poi_directory. afterSave() paints the new row locally so the edit
+   * is visible, with the list marking it as not yet published.
+   */
   const refreshAll = useCallback(() => {
     if (bbox) loadViewport(bbox);
-    supabase.rpc('admin_poi_facets').then(({ data }) => setFacets((data ?? []) as PoiFacet[]));
-  }, [bbox, loadViewport, supabase]);
+  }, [bbox, loadViewport]);
 
   function afterSave(row: PoiRow) {
     setDraft(null);
@@ -245,8 +294,7 @@ export default function PoiPage() {
       next[i] = row;
       return next;
     });
-    // Counts moved; the facet menu is now stale.
-    supabase.rpc('admin_poi_facets').then(({ data }) => setFacets((data ?? []) as PoiFacet[]));
+    setUnpublished((prev) => new Set(prev).add(row.id));
     if (probe) runProbe(probe.lat, probe.lng);
   }
 
@@ -254,7 +302,7 @@ export default function PoiPage() {
     setDraft(null);
     setSelectedId(null);
     setRows((prev) => prev.filter((r) => r.id !== id));
-    supabase.rpc('admin_poi_facets').then(({ data }) => setFacets((data ?? []) as PoiFacet[]));
+    setUnpublished((prev) => new Set(prev).add(id));
     if (probe) runProbe(probe.lat, probe.lng);
   }
 
@@ -393,8 +441,6 @@ export default function PoiPage() {
             probeHit={probeHit}
             scan={scan}
             tiles={tiles}
-            dupes={tab === 'dupes' ? dupes : null}
-            focusedDupe={focusedDupe}
             flyTo={flyTo}
             onViewportChange={onViewportChange}
             onSelect={(id) => {
@@ -424,6 +470,13 @@ export default function PoiPage() {
                   : `${rows.length.toLocaleString()} POIs in view — coverage circles are hidden above ${COVERAGE_MAX}. Zoom in or narrow the filters.`}
               </Banner>
             )}
+            {tilesRead > 0 && !loadError && (
+              <p className="text-[11px] text-dark-muted">
+                {rows.length.toLocaleString()} POIs from {tilesRead} published{' '}
+                {tilesRead === 1 ? 'tile' : 'tiles'}.
+              </p>
+            )}
+
             {totalInView > rows.length && (
               <Banner tone="warn">
                 Showing {rows.length.toLocaleString()} of {totalInView.toLocaleString()} —
@@ -495,7 +548,13 @@ export default function PoiPage() {
               </div>
 
               {tab === 'list' && (
-                <ListPanel rows={rows} selectedId={selectedId} onPick={(p) => { setSelectedId(p.id); fly(p.lat, p.lng); }} onEdit={openEdit} />
+                <ListPanel
+                  rows={rows}
+                  selectedId={selectedId}
+                  unpublished={unpublished}
+                  onPick={(p) => { setSelectedId(p.id); fly(p.lat, p.lng); }}
+                  onEdit={openEdit}
+                />
               )}
 
               {tab === 'probe' && (
@@ -538,19 +597,6 @@ export default function PoiPage() {
                   onScan={setScan}
                   tiles={tiles}
                   onTiles={setTiles}
-                />
-              )}
-
-              {tab === 'dupes' && (
-                <DupesPanel
-                  supabase={supabase}
-                  bbox={bbox}
-                  pairs={dupes}
-                  onPairs={setDupes}
-                  focused={focusedDupe}
-                  onFocus={setFocusedDupe}
-                  onFly={(lat, lng) => fly(lat, lng, 17)}
-                  onResolved={refreshAll}
                 />
               )}
 
@@ -634,10 +680,11 @@ function MultiSelect({
 }
 
 function ListPanel({
-  rows, selectedId, onPick, onEdit,
+  rows, selectedId, unpublished, onPick, onEdit,
 }: {
   rows: PoiRow[];
   selectedId: number | null;
+  unpublished: Set<number>;
   onPick: (p: PoiRow) => void;
   onEdit: (p: PoiRow) => void;
 }) {
@@ -660,16 +707,27 @@ function ListPanel({
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full shrink-0" style={{ background: s.color }} />
               <span className="text-sm text-dark-text truncate">{p.name}</span>
-              <button
-                onClick={(e) => { e.stopPropagation(); onEdit(p); }}
-                className="ml-auto text-[11px] text-dark-muted hover:text-primary shrink-0"
-              >
-                Edit
-              </button>
+              {isGlobalId(p.id) ? (
+                <span
+                  className="ml-auto text-[11px] text-dark-muted shrink-0"
+                  title="From the global snapshot (OSM / Wikidata). It has no poi_directory row, so it can only change at the next build."
+                >
+                  global
+                </span>
+              ) : (
+                <button
+                  onClick={(e) => { e.stopPropagation(); onEdit(p); }}
+                  className="ml-auto text-[11px] text-dark-muted hover:text-primary shrink-0"
+                >
+                  Edit
+                </button>
+              )}
             </div>
             <p className="text-[11px] text-dark-muted mt-0.5 pl-4">
-              T{p.tier} · {p.poi_type} · {p.source}
-              {p.updated_at && ' · edited'}
+              T{p.tier} · {p.poi_type || '—'} · {p.source}
+              {unpublished.has(p.id) && (
+                <span className="text-brand-warning"> · edited, not published</span>
+              )}
             </p>
           </div>
         );
@@ -697,7 +755,8 @@ function ProbePanel({
   return (
     <div className="flex-1 overflow-y-auto p-4 space-y-3">
       <p className="text-xs text-dark-muted leading-snug">
-        Calls the live <code className="text-primary">nearest_poi</code> RPC at a point and runs
+        Resolves a point through the published tiles with the shared{' '}
+        <code className="text-primary">resolveNearest</code>, then runs
         the app&apos;s own <code className="text-primary">labelFor()</code> over the result — the
         exact pipeline a stop goes through.
       </p>
@@ -802,11 +861,12 @@ function FindPanel({
         <input
           value={q}
           onChange={(e) => onQ(e.target.value)}
-          placeholder="Search all 129k POIs by name…"
+          placeholder="Search the POIs in this view…"
           className="w-full bg-dark-bg border border-dark-border rounded-xl px-3 py-2 text-sm text-dark-text placeholder-dark-muted focus:outline-none focus:ring-2 focus:ring-primary"
         />
         <p className="text-[11px] text-dark-muted mt-1.5">
-          Whole-table search, not limited to the viewport. Respects the tier filter.
+          Searches what is loaded, not the whole set — tiles are indexed by cell, not by name, so
+          there is nothing to search until a view is open. Respects the tier filter.
         </p>
       </div>
       <div className="flex-1 overflow-y-auto px-2 pb-2 space-y-1">
@@ -823,12 +883,16 @@ function FindPanel({
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full shrink-0" style={{ background: tierSpec(p.tier).color }} />
               <span className="text-sm text-dark-text truncate">{p.name}</span>
-              <button
-                onClick={(e) => { e.stopPropagation(); onEdit(p); }}
-                className="ml-auto text-[11px] text-dark-muted hover:text-primary shrink-0"
-              >
-                Edit
-              </button>
+              {isGlobalId(p.id) ? (
+                <span className="ml-auto text-[11px] text-dark-muted shrink-0">global</span>
+              ) : (
+                <button
+                  onClick={(e) => { e.stopPropagation(); onEdit(p); }}
+                  className="ml-auto text-[11px] text-dark-muted hover:text-primary shrink-0"
+                >
+                  Edit
+                </button>
+              )}
             </div>
             <p className="text-[11px] text-dark-muted mt-0.5 pl-4">
               T{p.tier} · {p.poi_type} · {p.lat.toFixed(4)}, {p.lng.toFixed(4)}

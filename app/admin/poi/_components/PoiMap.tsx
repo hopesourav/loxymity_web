@@ -23,7 +23,7 @@ import { labelFor } from '../_lib/poiTiers';
 import { MAP_TILE_URL, mapTileOptions } from '../../../_lib/mapTiles';
 import { TILE_HUE, densityOpacity, formatBytes, tileBounds } from '../_lib/tiles';
 import type {
-  Bbox, CoverageMode, CoverageScan, DupePair, MapMode, NearestPoiHit, PoiRow, TileCoverage,
+  Bbox, CoverageMode, CoverageScan, MapMode, NearestPoiHit, PoiRow, TileCoverage,
 } from '../_lib/types';
 
 /** Above this many rows in view, coverage circles are replaced by dots. */
@@ -48,8 +48,6 @@ type Props = {
   probeHit: NearestPoiHit | null;
   scan: CoverageScan | null;
   tiles: TileCoverage | null;
-  dupes: DupePair[] | null;
-  focusedDupe: DupePair | null;
   flyTo: { lat: number; lng: number; zoom?: number; nonce: number } | null;
   onViewportChange: (bbox: Bbox, zoom: number) => void;
   onSelect: (id: number) => void;
@@ -60,7 +58,7 @@ type Props = {
 type L = typeof import('leaflet');
 
 export default function PoiMap({
-  rows, selectedId, coverage, mode, draft, probe, probeHit, scan, tiles, dupes, focusedDupe, flyTo,
+  rows, selectedId, coverage, mode, draft, probe, probeHit, scan, tiles, flyTo,
   onViewportChange, onSelect, onMapClick, onDraftDrag,
 }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
@@ -72,7 +70,6 @@ export default function PoiMap({
   const probeLayerRef = useRef<any>(null);
   const scanLayerRef = useRef<any>(null);
   const tileLayerRef = useRef<any>(null);
-  const dupeLayerRef = useRef<any>(null);
   const readyRef = useRef(false);
 
   // Callbacks are read through a ref so the init effect can stay mount-only.
@@ -110,7 +107,6 @@ export default function PoiMap({
       tileLayerRef.current = Lmod.layerGroup().addTo(map);
       scanLayerRef.current = Lmod.layerGroup().addTo(map);
       poiLayerRef.current = Lmod.layerGroup().addTo(map);
-      dupeLayerRef.current = Lmod.layerGroup().addTo(map);
       highlightRef.current = Lmod.layerGroup().addTo(map);
       probeLayerRef.current = Lmod.layerGroup().addTo(map);
       draftLayerRef.current = Lmod.layerGroup().addTo(map);
@@ -391,39 +387,6 @@ export default function PoiMap({
         );
     }
   }, [scan]);
-
-  // ── Near-duplicate pairs ───────────────────────────────────────────────────
-  useEffect(() => {
-    const Lmod = LRef.current;
-    const layer = dupeLayerRef.current;
-    if (!Lmod || !layer) return;
-    layer.clearLayers();
-    if (!dupes?.length) return;
-
-    for (const d of dupes) {
-      const focused = focusedDupe
-        ? focusedDupe.a_id === d.a_id && focusedDupe.b_id === d.b_id
-        : false;
-      // A 0 m pair is two pins on the same point: a line between them is
-      // invisible, so the ring around the pair is what actually shows it.
-      Lmod.polyline([[d.a_lat, d.a_lng], [d.b_lat, d.b_lng]], {
-        color: focused ? '#F5F3EE' : '#B5453F',
-        weight: focused ? 3 : 2,
-        opacity: focused ? 1 : 0.7,
-        interactive: false,
-      }).addTo(layer);
-
-      for (const [lat, lng] of [[d.a_lat, d.a_lng], [d.b_lat, d.b_lng]] as const) {
-        Lmod.circleMarker([lat, lng], {
-          radius: focused ? 9 : 6,
-          color: focused ? '#F5F3EE' : '#B5453F',
-          fill: false,
-          weight: 2,
-          interactive: false,
-        }).addTo(layer);
-      }
-    }
-  }, [dupes, focusedDupe]);
 
   // ── Imperative fly-to ──────────────────────────────────────────────────────
   useEffect(() => {
