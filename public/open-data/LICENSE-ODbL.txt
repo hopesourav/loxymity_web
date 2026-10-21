@@ -1,39 +1,84 @@
-Loxymity place names — OpenStreetMap-derived database
-=====================================================
+Loxymity place names — OpenStreetMap-derived databases
 
-File      loxymity-places-osm-2026-10-20.ndjson.gz
-          gzip; one JSON object per line
-Rows      87,608 places in the United States and 39 European countries
-Size      3,551,348 bytes
-SHA-256   a486d8a6bd2ed0c014335ad2159635fcec97424e3c18284a9868a2ee1e32ee30
-Built     2026-10-20, from Geofabrik's OpenStreetMap extracts of 2026-10-18 and 2026-10-19
-
-Licence
--------
 This database contains information from OpenStreetMap (https://www.openstreetmap.org),
-© OpenStreetMap contributors, which is made available under the Open Database License
-(ODbL) 1.0: https://opendatacommons.org/licenses/odbl/1-0/
-
-This derived database is likewise made available under the ODbL 1.0. You may copy,
-distribute and adapt it under that licence's terms, including attribution to
-"© OpenStreetMap contributors" and share-alike for derived databases.
+© OpenStreetMap contributors, made available under the Open Database License (ODbL) 1.0:
+https://opendatacommons.org/licenses/odbl/1-0/ — and is likewise made available under the ODbL 1.0.
 Copyright notice for the source data: https://www.openstreetmap.org/copyright
 
-These are the OpenStreetMap-derived places Loxymity uses to name locations in its app.
-Places taken from Wikidata (CC0) or from the US CMS nursing-home register (public
-domain) are not part of this file.
+Built 2026-10-21. One gzip file per country, one JSON object per line:
+  loxymity-places-osm-ad-2026-10-21.ndjson.gz         138 rows  sha256 9daae0b9e957f8bea595272322f0f0df94cc134ebc74696608f0413696680936
+  loxymity-places-osm-ae-2026-10-21.ndjson.gz        1936 rows  sha256 47aff543ad78625d604ad866e1690c16518b8b33baf4f62b623f13c26fcc8e49
+  loxymity-places-osm-al-2026-10-21.ndjson.gz        3613 rows  sha256 adf8b39848e9b00c25fc3deeb545fad9f5709be3d56980d7f326bffa132479a3
+  loxymity-places-osm-at-2026-10-21.ndjson.gz       12321 rows  sha256 72c511e18960f16e74120140216358cf4604ad1526a5826814e4ef05ce9d038c
+  loxymity-places-osm-au-2026-10-21.ndjson.gz       17615 rows  sha256 dfbc5d322d86a174861029d07f7b09500575bee937eb5aa6691ff94ff4daa3ab
+  loxymity-places-osm-ba-2026-10-21.ndjson.gz        6197 rows  sha256 2886c7abf72ab18164c240d64f3c6efe18038ae12c92837dae78b85ff31189c2
+  loxymity-places-osm-be-2026-10-21.ndjson.gz        7370 rows  sha256 05fce57310ea552804c35b59e6159eccc888b39a0970234f341a2f0a92a31753
+  loxymity-places-osm-bg-2026-10-21.ndjson.gz        6861 rows  sha256 fc7655a9154d21e0e5f6b3d53f3d3e8c4de49d3081b0ce19a121c5d1964f8c44
+  loxymity-places-osm-br-2026-10-21.ndjson.gz       71065 rows  sha256 3f8c6fe24046c854b2698cada06f6032d47101d854efda9e752e0c96e57edf0c
+  loxymity-places-osm-ch-2026-10-21.ndjson.gz       10539 rows  sha256 063219a1d5422e2953f8452ffedf46477c06a0ba3af288d52e2c7f70d069af59
+  loxymity-places-osm-cl-2026-10-21.ndjson.gz        5005 rows  sha256 a536a80d736786e80b16a19f89d9b7dfd9ba7150ee4fe4b510dabc9f54f0c9b2
+  loxymity-places-osm-cy-2026-10-21.ndjson.gz        1015 rows  sha256 79c79cbe997d6b5ec12c6a86037c7b7d89ba8dcf63da51d70acebace7178ec3d
+  loxymity-places-osm-cz-2026-10-21.ndjson.gz       18532 rows  sha256 5ef428a007b420fdce713d7e683fedfd8f3f576ecb1ca99839ef66e64ecf52ee
+  loxymity-places-osm-de-2026-10-21.ndjson.gz       78359 rows  sha256 864d883af9234af8ed5e05097e06eeb6a890eb3846baac9107166cd6222d1869
+  loxymity-places-osm-dk-2026-10-21.ndjson.gz        5780 rows  sha256 bae4b05f01e896f8c8d9851f232ae6d474caccaf273d71e51049ce4204b5ee0a
+  loxymity-places-osm-ee-2026-10-21.ndjson.gz        1155 rows  sha256 aedd568ab46d470e354d724fdb23e0627d04c9d1e5f92fab1767b694483b0877
+  loxymity-places-osm-es-2026-10-21.ndjson.gz       25786 rows  sha256 361ed46a770e7671137f73ad320f86502f8dc8ed74790de99ea07e35f37e477f
+  loxymity-places-osm-fi-2026-10-21.ndjson.gz       12166 rows  sha256 a0c5cf258846ddea0412cd8a9f384466c58e2a637538d32beb6a8233a1fd6ed4
+  loxymity-places-osm-fo-2026-10-21.ndjson.gz         257 rows  sha256 6b8d1e48bf05f9325e45c958ab117135db92c9f1a3175d310e7dd569b87f08e4
+  loxymity-places-osm-fr-2026-10-21.ndjson.gz       65743 rows  sha256 7b044f276a0c5225e0a80e68f0b631e50a15459ab8cd367214b7d1065e696c94
+  loxymity-places-osm-gb-2026-10-21.ndjson.gz       43961 rows  sha256 86a3cd06aaefd64b33dc58f49122e316f5c8324313d3dcd899d581a0ab60c819
+  loxymity-places-osm-gg-2026-10-21.ndjson.gz          57 rows  sha256 6e7464c7cd0b3de362ff416e820bf3090452a9ff096030ad2c0b1c93873b8432
+  loxymity-places-osm-gi-2026-10-21.ndjson.gz          57 rows  sha256 d72c18bfdff4cb902b837e38c304b8d34a27f7a8e30d21413986b81e5af126eb
+  loxymity-places-osm-gr-2026-10-21.ndjson.gz       10876 rows  sha256 89ab0f9553c52c741c3bf8ace672fdaa0492415f74d02c405af8fd1ee9b793b9
+  loxymity-places-osm-hr-2026-10-21.ndjson.gz        8626 rows  sha256 bb0f02b6750467f4342476c9b4293b6c3df0aedcd356d0a752cd81fcf8e03578
+  loxymity-places-osm-hu-2026-10-21.ndjson.gz        9074 rows  sha256 4e7d851e2c68b9a2b9fd7f79277e8b876a97bf77057ebb57886de5f840fb6555
+  loxymity-places-osm-ie-2026-10-21.ndjson.gz        3972 rows  sha256 ef5b6abe967bfb8639bfd41f60d4cb1a10baf147cdbbc6ec20f4951267001601
+  loxymity-places-osm-im-2026-10-21.ndjson.gz         178 rows  sha256 8c72ac4424c14eca0a20cc49c0bd49af0525048672044e5a0e48891bb7c31adf
+  loxymity-places-osm-in-2026-10-21.ndjson.gz      266784 rows  sha256 86e421237bdeb45868b6e8bb65c81aa3a4fc87959a2b08907533a5c53ba7eb43
+  loxymity-places-osm-is-2026-10-21.ndjson.gz         537 rows  sha256 1948623bba5aff736630162d57b4632d974cc359c1b37428bbf34f4b1783e8dd
+  loxymity-places-osm-it-2026-10-21.ndjson.gz       36243 rows  sha256 0530f70f49e8797c58a09355bfff6e0cf91af41e920429b00376ba9f1c34c613
+  loxymity-places-osm-je-2026-10-21.ndjson.gz          73 rows  sha256 a032a10ca890cf828b83aa2d218178e22c574a600711378cbd3e80e2bcb7a3a7
+  loxymity-places-osm-jp-2026-10-21.ndjson.gz       23704 rows  sha256 f88c83f0aa3d4bdc63084a07a524c9cfc97522f4d2da65b03c87afc082a5b1e5
+  loxymity-places-osm-kr-2026-10-21.ndjson.gz       23253 rows  sha256 163177b6ae68f8b144cb2facd6f4d840aa48607003e7cb96217d05cffc59f4eb
+  loxymity-places-osm-li-2026-10-21.ndjson.gz          83 rows  sha256 8a0468d6008adddb80520725604f605010e8e7ba67092ebd6d6d9026fee08caf
+  loxymity-places-osm-lt-2026-10-21.ndjson.gz       20673 rows  sha256 d65ec838f61e85818869513cf9fdab176291f6704ca26f7f4a238500a0029b7e
+  loxymity-places-osm-lu-2026-10-21.ndjson.gz         824 rows  sha256 e17d56048ed75837e3ddcd69fbab2965ae1c1f1a4273abf83eaecb301704fb33
+  loxymity-places-osm-lv-2026-10-21.ndjson.gz        2622 rows  sha256 bf2858b045e89f431afdfb5b60830f774330c160d037f8910d4168969123937e
+  loxymity-places-osm-mc-2026-10-21.ndjson.gz          43 rows  sha256 d2f8910b5fd171572c1849d454b7b80761d9eeca625d698b709427165bc205c1
+  loxymity-places-osm-md-2026-10-21.ndjson.gz        2662 rows  sha256 8c43177dcb5a420cfc7156fb283caf974cef0dc0ca9afb6bc8d5d5a4118c966c
+  loxymity-places-osm-me-2026-10-21.ndjson.gz        1342 rows  sha256 f98e0e930a1867e3e907001104a1e4a96f59879e5195b24faf650507739147d4
+  loxymity-places-osm-mk-2026-10-21.ndjson.gz        2311 rows  sha256 e2822565c4e84d7a1d16d5e58bce21cb6168710e0f5ffdd8159ffef596d452df
+  loxymity-places-osm-mt-2026-10-21.ndjson.gz         351 rows  sha256 cbd234b43b86c9e83743281b7c5dc4a15b5d47cf360ca290ad5303c49b5357b7
+  loxymity-places-osm-mx-2026-10-21.ndjson.gz       31249 rows  sha256 f4aee5733c6a6624dfd892c73713bc586343e19c4f7301954489489b9e49b5bb
+  loxymity-places-osm-ng-2026-10-21.ndjson.gz       20605 rows  sha256 52cf11eba0e33cd743cf59d8b26bfba372ee55a2c292d83ea2f92ed47412c646
+  loxymity-places-osm-nl-2026-10-21.ndjson.gz        7817 rows  sha256 87380e19d941c75bf8dd94059dd7f3fa66f453e884f9bbdd9c6aba73caf9cb40
+  loxymity-places-osm-no-2026-10-21.ndjson.gz        7861 rows  sha256 d77c9924825cffd0b0192a7f85b023bbe5132a789a40853503f66b7c4053bdbe
+  loxymity-places-osm-nz-2026-10-21.ndjson.gz        3575 rows  sha256 f2e506181c3ee66b2afbfb1c8ea8566af26d14349cefa40dd3ba19658ae49607
+  loxymity-places-osm-pl-2026-10-21.ndjson.gz       62841 rows  sha256 ac19ece66ee7e49c69f4389f21955b246291b045618d0e87f58ffc7ec3c5a2f5
+  loxymity-places-osm-pt-2026-10-21.ndjson.gz        8656 rows  sha256 a235d67c1475b6d37feaa3cd3f871d743ed43e09eef1eec2befcb85a160dea3e
+  loxymity-places-osm-qa-2026-10-21.ndjson.gz         349 rows  sha256 56db2d01a0d9780e8c4a927673799c59c07582dde7d4a3206375fb5cdd73560c
+  loxymity-places-osm-ro-2026-10-21.ndjson.gz       18849 rows  sha256 e3c278511d9845191b9ac6ada89bb208da299b697de3496d7222e96758975881
+  loxymity-places-osm-rs-2026-10-21.ndjson.gz        6280 rows  sha256 03b2e9dc62a7c26a73a2ceb9734e94769529bebdcadf41e95465582b729f62d9
+  loxymity-places-osm-sa-2026-10-21.ndjson.gz        3138 rows  sha256 c54e29e0ae9cb1adf4742e325dcc3758152cdc3c313ed16534cea38419434f0e
+  loxymity-places-osm-se-2026-10-21.ndjson.gz        9347 rows  sha256 5818e686f89e53819f5432096e81b3bdd5911c2846d88b4a4f455138629fda8c
+  loxymity-places-osm-sg-2026-10-21.ndjson.gz        1085 rows  sha256 98e22af7333bebc731711a9614afc42164abdd262f49b9c21b054066b770d11d
+  loxymity-places-osm-si-2026-10-21.ndjson.gz        6025 rows  sha256 c2e89151956014c108823211f26bd956db661d568a171e104141bef9818a4ac4
+  loxymity-places-osm-sk-2026-10-21.ndjson.gz        6357 rows  sha256 169b2d5e4e4e9a78164783482e76ae3be135ad862cb5b18c5423aa543ebe07b9
+  loxymity-places-osm-sm-2026-10-21.ndjson.gz          39 rows  sha256 c900c615ce6869ae5b1b47ae2a76ee94dd7a5dca15a6355190bfe4329c4a28d4
+  loxymity-places-osm-th-2026-10-21.ndjson.gz       22814 rows  sha256 cbfc05c8dba01102b6e70241205114573522e9eab0e9ad06ff9d8145e9194419
+  loxymity-places-osm-tr-2026-10-21.ndjson.gz       57453 rows  sha256 e18144001daf30dcf7e8d3fe6792ad6922ffc61d6a863d614246abf9e2dfc506
+  loxymity-places-osm-ua-2026-10-21.ndjson.gz       34161 rows  sha256 eea065c53f18e319d3eb74ec54de27a56b31505d269332ad55cdaee99a39419a
+  loxymity-places-osm-us-2026-10-21.ndjson.gz       89037 rows  sha256 3be99080153abe2b2885007469e9c51e4465c36fe14c02c2cda75e0434622468
+  loxymity-places-osm-va-2026-10-21.ndjson.gz          38 rows  sha256 1606889a0d9af0a934b789783f08fcaf2394342a1d895851510456b7148072d1
+  loxymity-places-osm-vn-2026-10-21.ndjson.gz       17364 rows  sha256 a65e51abe6e61ce4e7ee43ca10c527ae92f9aa893fdb02bc2551c8b76ad8377c
+  loxymity-places-osm-xk-2026-10-21.ndjson.gz        1996 rows  sha256 2ec749e998126a5236083771c4fbb41b504270861bb8146159bfac1a1b8b9924
+  loxymity-places-osm-za-2026-10-21.ndjson.gz       12031 rows  sha256 a16841cc49f4756ca28b94afe4d1826bc780431be635ebc7cfbd23697d453749
 
-Columns
--------
-id         Loxymity's id for the place (stable across rebuilds)
-lat, lng   WGS84 coordinates
-tier       1  station, airport or well-known landmark
-           2  hospital, college, senior living, boarding school or mall
-           3  neighbourhood, suburb, town or village
-poi_type   the kind of place, e.g. "Train Station", "Hospital", "Locality"
-name       the name shown
-context    the municipality and the US state or country, e.g. "Brooklyn, NY"
-ref        the OpenStreetMap element it comes from: n / w / r + its id
-           (https://www.openstreetmap.org/node/<id>, /way/<id>, /relation/<id>)
-lic        ODbL
-cc         ISO 3166-1 country code
+Columns: id, lat, lng, tier (1 station/airport/famous landmark · 2 hospital/college/senior living/
+boarding school/mall · 3 neighbourhood, suburb, town or village · 5 a town named from up to 40 km
+in remote places), poi_type, name, context ("Municipality, State/Country"), ref (OSM n/w/r + id),
+lic, cc (ISO country). Places from Wikidata (CC0) and the US CMS register (public domain) are not included.
+
+Previous release, kept until the next one: loxymity-places-osm-2026-10-20.ndjson.gz
+(87,608 places in the United States and 39 European countries, SHA-256
+a486d8a6bd2ed0c014335ad2159635fcec97424e3c18284a9868a2ee1e32ee30).
