@@ -46,7 +46,7 @@ export default function DeleteAccountPage() {
 
       <Section title="What happens">
         <List>
-          <li>Straight away you are signed out on every device, your circles stop seeing your location, your share links stop working and notifications stop.</li>
+          <li>Straight away you are signed out on every device, you disappear from your circles, your share links stop working and notifications stop.</li>
           <li>Your account is deleted 7 days later. To keep it, sign in before then and tap <strong>Restore</strong>. You can also choose to delete it immediately.</li>
           <li>Accounts of anyone under 18 are deleted straight away.</li>
           <li>When the deletion runs we remove your profile, photo, location history, places, drives, messages and chats (for everyone in them), diagnostic logs, Vault backup, and WhatsApp and Alexa records.</li>
