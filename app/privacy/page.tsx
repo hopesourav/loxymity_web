@@ -425,8 +425,7 @@ export default function PrivacyPolicy() {
             every device and you disappear from your circles — from their map and member lists — your
             share links stop working and your notifications stop; anything your phones still send is
             discarded. Messages and past place alerts you already shared stay visible to them until the
-            deletion runs. To keep your account, sign in within the 7 days and tap Restore. You can also choose to delete it immediately. We email you when the deletion is
-            scheduled and again when it is done. <strong>Accounts of anyone under 18 are deleted
+            deletion runs. To keep your account, sign in within the 7 days and tap Restore. You can also choose to delete it immediately. <strong>Accounts of anyone under 18 are deleted
             straight away.</strong>
           </p>
           <p>

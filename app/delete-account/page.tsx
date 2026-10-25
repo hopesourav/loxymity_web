@@ -51,7 +51,6 @@ export default function DeleteAccountPage() {
           <li>Accounts of anyone under 18 are deleted straight away.</li>
           <li>When the deletion runs we remove your profile, photo, location history, places, drives, messages and chats (for everyone in them), diagnostic logs, Vault backup, and WhatsApp and Alexa records.</li>
           <li>Circles you own pass to another adult member, or are deleted if no other adult is left.</li>
-          <li>We email you when the deletion is scheduled and when it is done.</li>
         </List>
       </Section>
 

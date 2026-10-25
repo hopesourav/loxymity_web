@@ -130,7 +130,7 @@ export function Table({ head, rows }: { head: string[]; rows: React.ReactNode[][
  * loxymity.com by accident. Preview locally with LEGAL_PREVIEW=1 npm run build.
  */
 export const LEGAL_VERSION = '2026-10-17.2';
-export const LEGAL_EFFECTIVE: string = 'SET-ON-RELEASE';
+export const LEGAL_EFFECTIVE: string = '25 October 2026';
 
 if (LEGAL_EFFECTIVE === 'SET-ON-RELEASE' && process.env.LEGAL_PREVIEW !== '1') {
   throw new Error(
