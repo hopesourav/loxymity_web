@@ -30,7 +30,7 @@ function SceneMap() {
           <p className="text-dark-muted text-[10px] leading-tight">4 members · all active</p>
         </div>
         <div className="flex -space-x-2">
-          {[['S', '#C9A227'], ['A', '#5C8F6B'], ['R', '#C08B3E'], ['M', '#B5453F']].map(([init, col]) => (
+          {[['S', '#7C88FF'], ['A', '#5C8F6B'], ['R', '#C08B3E'], ['M', '#B5453F']].map(([init, col]) => (
             <div key={init} className="w-6 h-6 rounded-full border border-[#070d19] flex items-center justify-center text-white text-[9px] font-bold" style={{ backgroundColor: col }}>{init}</div>
           ))}
         </div>
@@ -38,8 +38,8 @@ function SceneMap() {
       <div className="h-[150px] relative overflow-hidden" style={{ backgroundColor: '#0d0f13' }}>
         <MapBackdrop />
         <div className="absolute" style={{ top: '30%', left: '34%' }}>
-          <div className="absolute rounded-full" style={{ width: 28, height: 28, top: -11, left: -11, backgroundColor: 'rgba(201,162,39,0.18)', animation: 'beacon-ring 2.4s ease-out infinite' }} />
-          <div className="w-3.5 h-3.5 rounded-full border-2 border-white/25" style={{ backgroundColor: '#C9A227' }} />
+          <div className="absolute rounded-full" style={{ width: 28, height: 28, top: -11, left: -11, backgroundColor: 'rgba(124,136,255,0.18)', animation: 'beacon-ring 2.4s ease-out infinite' }} />
+          <div className="w-3.5 h-3.5 rounded-full border-2 border-white/25" style={{ backgroundColor: '#7C88FF' }} />
         </div>
         <div className="absolute w-3 h-3 rounded-full" style={{ top: '58%', left: '61%', backgroundColor: '#5C8F6B' }} />
         <div className="absolute w-3 h-3 rounded-full" style={{ top: '39%', left: '15%', backgroundColor: '#C08B3E' }} />
@@ -47,7 +47,7 @@ function SceneMap() {
       </div>
       <div className="flex flex-col gap-1.5 px-3 py-3 flex-1">
         {[
-          { name: 'Sourav', place: 'Home', time: 'Just now', color: '#C9A227', bat: 82 },
+          { name: 'Sourav', place: 'Home', time: 'Just now', color: '#7C88FF', bat: 82 },
           { name: 'Ananya', place: 'Office', time: '3 min ago', color: '#5C8F6B', bat: 61 },
           { name: 'Rohan', place: 'School', time: '7 min ago', color: '#C08B3E', bat: 34 },
         ].map((m) => {
@@ -128,8 +128,8 @@ function SceneGeofence() {
           </div>
         </div>
         <div className="rounded-xl px-3 py-2.5 flex items-center gap-2.5 bg-dark-surface border border-dark-border opacity-70">
-          <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(201,162,39,0.14)' }}>
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="#C9A227" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 6.75V15m6-6v8.25" /></svg>
+          <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(124,136,255,0.14)' }}>
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="#7C88FF" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 6.75V15m6-6v8.25" /></svg>
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-dark-text text-[11px] font-semibold leading-tight">Ananya left Office</p>
@@ -146,7 +146,7 @@ function SceneActivity() {
   const rows = [
     { c: '#5C8F6B', t: 'Ananya checked in safe', s: 'Just now', p: 'M9 12.75L11.25 15 15 9.75' },
     { c: '#5F82A5', t: 'Rohan arrived at School', s: '3:24 PM', p: 'M15 10.5a3 3 0 11-6 0 3 3 0 016 0z' },
-    { c: '#C9A227', t: 'Sourav asked Alexa “where’s Rohan?”', s: '2:10 PM', p: 'M12 18.75a6 6 0 006-6v-1.5' },
+    { c: '#7C88FF', t: 'Sourav asked Alexa “where’s Rohan?”', s: '2:10 PM', p: 'M12 18.75a6 6 0 006-6v-1.5' },
     { c: '#C08B3E', t: 'Rohan’s battery low (34%)', s: '1:48 PM', p: 'M21 10.5h.375c.621 0 1.125.504 1.125 1.125v2.25' },
   ];
   return (

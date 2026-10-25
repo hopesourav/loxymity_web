@@ -79,7 +79,7 @@ export default function FencesPage() {
 
     fences.forEach(f => {
       const c = L.circle([f.lat, f.lng], {
-        radius: f.radius_m, color: '#C9A227', fillColor: '#C9A227', fillOpacity: 0.1, weight: 2,
+        radius: f.radius_m, color: '#7C88FF', fillColor: '#7C88FF', fillOpacity: 0.1, weight: 2,
       }).addTo(map).bindTooltip(f.name);
       circlesRef.current.set(f.id, c);
     });

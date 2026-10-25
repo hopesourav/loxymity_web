@@ -124,7 +124,7 @@ export default function CoveragePanel({ supabase, bbox, scan, onScan, tiles, onT
           step={2}
           value={n}
           onChange={(e) => setN(Number(e.target.value))}
-          className="w-full accent-[#C9A227]"
+          className="w-full accent-[#7C88FF]"
         />
       </div>
 

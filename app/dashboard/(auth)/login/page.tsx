@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { LogoFull } from '../../../_components/Logo';
 import { supabase } from '../../_lib/client';
 import { IconEye, IconEyeOff } from '../../_components/Icons';
 
@@ -55,7 +56,7 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Image src="/icon.png" alt="Loxymity" width={96} height={96} className="rounded-2xl mx-auto mb-4" />
-          <p className="font-display text-3xl font-bold text-dark-text">Loxymity</p>
+          <p className="text-3xl"><LogoFull /></p>
           <p className="text-dark-muted text-sm mt-1">Sign in to your account</p>
         </div>
 

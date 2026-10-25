@@ -112,7 +112,7 @@ export default function PricingCards() {
                   ? 'card-premium border-2 border-primary/50 lg:scale-[1.04] z-10 isolate'
                   : 'card-premium gradient-border'
               }`}
-              style={plan.highlight ? { boxShadow: '0 30px 80px -20px rgba(201,162,39,0.38), 0 0 0 1px rgba(201,162,39,0.28)' } : undefined}
+              style={plan.highlight ? { boxShadow: '0 30px 80px -20px rgba(124,136,255,0.38), 0 0 0 1px rgba(124,136,255,0.28)' } : undefined}
             >
               {plan.badge && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-dark-bg text-[10px] font-bold uppercase tracking-wide px-3 py-1 rounded-full shadow-lg">

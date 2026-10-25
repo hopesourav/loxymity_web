@@ -46,7 +46,7 @@ export default function Home() {
         {/* Radial glow */}
         <div
           className="absolute inset-x-0 top-0 h-[560px] pointer-events-none animate-glow-breathe"
-          style={{ background: 'radial-gradient(ellipse 80% 55% at 50% -5%, rgba(201,162,39,0.14), transparent 70%)' }}
+          style={{ background: 'radial-gradient(ellipse 80% 55% at 50% -5%, rgba(124,136,255,0.14), transparent 70%)' }}
         />
         {/* Dot grid texture */}
         <div
@@ -326,7 +326,7 @@ export default function Home() {
               { t: 'One-tap SOS', c: '#B5453F' },
               { t: '“Arrived safely” in one tap', c: '#5C8F6B' },
               { t: 'Live activity feed', c: '#5F82A5' },
-              { t: 'Crash check', c: '#C9A227' },
+              { t: 'Crash check', c: '#7C88FF' },
               { t: 'Official hazard alerts', c: '#B5453F' },
               { t: 'Works with no signal', c: '#5F82A5' },
             ].map((chip) => (
@@ -555,7 +555,7 @@ export default function Home() {
       >
         <div
           className="absolute inset-x-0 top-0 h-72 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 60% 100% at 50% 0%, rgba(201,162,39,0.12), transparent 70%)' }}
+          style={{ background: 'radial-gradient(ellipse 60% 100% at 50% 0%, rgba(124,136,255,0.12), transparent 70%)' }}
         />
         <div className="absolute top-0 left-0 right-0 hairline" />
         <div className="aurora" aria-hidden="true"><span className="a1" /><span className="a3" /></div>

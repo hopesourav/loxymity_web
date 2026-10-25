@@ -71,13 +71,13 @@ export default function HistoryPage() {
     if (points.length === 0) return;
 
     const latlngs = points.map(p => [p.lat, p.lng] as [number, number]);
-    const poly = L.polyline(latlngs, { color: '#C9A227', weight: 2, opacity: 0.8 }).addTo(map);
+    const poly = L.polyline(latlngs, { color: '#7C88FF', weight: 2, opacity: 0.8 }).addTo(map);
     polyRef.current = poly;
     map.fitBounds(poly.getBounds(), { padding: [32, 32] });
 
     const icon = L.divIcon({
       className: '',
-      html: '<div style="width:12px;height:12px;border-radius:50%;background:#C9A227;border:2px solid #0A0C10;box-shadow:0 0 0 2px #C9A227"></div>',
+      html: '<div style="width:12px;height:12px;border-radius:50%;background:#7C88FF;border:2px solid #080A1C;box-shadow:0 0 0 2px #7C88FF"></div>',
       iconSize: [12, 12], iconAnchor: [6, 6],
     });
     markerRef.current = L.marker(latlngs[cursor] ?? latlngs[0], { icon }).addTo(map);

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { LogoFull } from '../../_components/Logo';
 import { usePathname } from 'next/navigation';
 import { useAdmin } from '../_lib/adminContext';
 
@@ -112,7 +113,7 @@ export default function AdminSidebar({ open, onClose }: Props) {
     >
       {/* Logo */}
       <div className="px-5 py-5 border-b border-dark-border">
-        <p className="font-display text-lg font-bold text-dark-text tracking-tight">Loxymity</p>
+        <p className="text-xl"><LogoFull /></p>
         <p className="text-xs text-primary font-semibold mt-0.5">Admin Console</p>
       </div>
 

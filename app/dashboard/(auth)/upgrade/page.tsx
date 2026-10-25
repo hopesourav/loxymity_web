@@ -168,7 +168,7 @@ export default function UpgradePage() {
         name: 'Loxymity',
         description: `Loxymity ${plan[0].toUpperCase()}${plan.slice(1)}`,
         prefill: { email: session.user.email ?? '' },
-        theme: { color: '#C9A227' },
+        theme: { color: '#5C6BF8' },
         handler: () => { setStage('processing'); },
         modal: { ondismiss: () => setBusy(null) },
       });

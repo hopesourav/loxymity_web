@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LogoMark } from '../../_components/Logo';
+import { LogoFull, LogoMark } from '../../_components/Logo';
 import { useDashboard } from '../_lib/context';
 import { effectiveTier, tierLabel } from '../../_lib/tiers';
 import {
@@ -43,8 +43,8 @@ export default function Sidebar({ open, onClose }: Props) {
       <div className="px-4 py-4 border-b border-dark-border flex items-center gap-3">
         <LogoMark />
         <div className="flex-1 min-w-0">
-          <span className="font-display text-2xl font-bold text-dark-text tracking-tight block leading-tight">
-            Loxymity
+          <span className="text-2xl block leading-tight">
+            <LogoFull />
           </span>
           {/* Was a hardcoded "Pro" badge, which mislabelled every Gold,
               Platinum and Infinite subscriber. Reads the real tier now. */}
