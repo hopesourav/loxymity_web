@@ -69,6 +69,16 @@ export default function DeleteAccountPage() {
         </p>
       </Section>
 
+      <Section id="some-data" title="Delete some of your data and keep your account">
+        <List>
+          <li><strong>In the app:</strong> change your name, photo or phone number, and shorten or delete the history kept on your phone. Infinite members can also have their location history deleted automatically after 1, 3 or 7 days.</li>
+          <li><strong>Anything else</strong> — for example your location history on our servers, a drive, your messages, call recordings or your Vault backup: write to <a href="mailto:privacy@loxymity.com">privacy@loxymity.com</a> from the email address on your account and say what you want deleted. We may ask you to confirm it is you, and we reply within 30 days.</li>
+        </List>
+        <p>
+          Section 11 of our <a href="/privacy/">Privacy Policy</a> lists all your choices and rights.
+        </p>
+      </Section>
+
       <Section title="Subscriptions">
         <Callout>
           <p>
