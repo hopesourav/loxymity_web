@@ -21,15 +21,28 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { TIER_IDS, TIERS, formatDistance } from '../_lib/poiTiers';
 import type { PoiAuditRow, PoiRow } from '../_lib/types';
 
-type Draft = {
+/**
+ * An edit is opened from the REAL poi_directory row (page.tsx `openEdit`), never from a pin:
+ * a pin is the shipped copy, whose name is coalesce(label, name) and whose source is only
+ * 'directory' | 'global'. Saving those would overwrite the row's real name and source — and
+ * the curation undo files select rows by source.
+ */
+export type PoiDraft = {
   id: number | null;
   name: string;
+  /** '' = no label: phones show `name`. */
+  label: string;
+  hidden: boolean;
   poi_type: string;
   tier: number;
   source: string;
   lat: number | null;
   lng: number | null;
+  /** Read-only: the curation batch that owns the row. */
+  seedBatch: string | null;
 };
+
+type Draft = PoiDraft;
 
 type Props = {
   supabase: SupabaseClient;
@@ -92,7 +105,9 @@ export default function PoiEditor({
 
   function validate(): string | null {
     if (!draft.name.trim()) return 'Name is required.';
-    if (!draft.poi_type.trim()) return 'Type is required.';
+    // Only a NEW row must have a type: some seeded rows have none, and refusing
+    // them made those rows impossible to save at all.
+    if (!isEdit && !draft.poi_type.trim()) return 'Type is required.';
     if (draft.lat === null || draft.lng === null) return 'Pick a location — click the map, or search.';
     if (draft.lat < -90 || draft.lat > 90) return 'Latitude must be between -90 and 90.';
     if (draft.lng < -180 || draft.lng > 180) return 'Longitude must be between -180 and 180.';
@@ -107,6 +122,8 @@ export default function PoiEditor({
 
     const payload = {
       name: draft.name.trim(),
+      label: draft.label.trim() || null,
+      hidden: draft.hidden,
       poi_type: draft.poi_type.trim(),
       tier: draft.tier,
       source: draft.source.trim() || 'manual',
@@ -129,7 +146,9 @@ export default function PoiEditor({
       );
       return;
     }
-    onSaved(data as PoiRow);
+    // The list and map show the shipped set, where a row's name is coalesce(label, name).
+    const row = data as PoiRow;
+    onSaved({ ...row, name: row.label ?? row.name });
   }
 
   async function doDelete() {
@@ -159,7 +178,51 @@ export default function PoiEditor({
             onChange={(e) => onChange({ name: e.target.value })}
             placeholder="Ruby General Hospital"
           />
+          {isEdit && (
+            <p className="text-dark-muted text-[11px] mt-1">
+              The directory&apos;s own name, unique with the coordinate. To change what phones
+              show, set &ldquo;Shown as&rdquo; instead.
+            </p>
+          )}
         </Field>
+
+        <Field label="Shown as">
+          <input
+            className={INPUT}
+            value={draft.label}
+            onChange={(e) => onChange({ label: e.target.value })}
+            placeholder={draft.name.trim() || 'Same as the name'}
+          />
+          <p className="text-dark-muted text-[11px] mt-1">
+            What phones show instead of the name. Leave empty to show the name.
+          </p>
+        </Field>
+
+        {isEdit && (
+          <label className="flex items-start gap-2 text-sm text-dark-text cursor-pointer">
+            <input
+              type="checkbox"
+              className="mt-1"
+              checked={draft.hidden}
+              onChange={(e) => onChange({ hidden: e.target.checked })}
+            />
+            <span>
+              Hidden
+              <span className="block text-dark-muted text-[11px]">
+                Never used to name a place, and not published. The row is kept.
+              </span>
+            </span>
+          </label>
+        )}
+
+        {isEdit && draft.seedBatch && (
+          <div className="bg-dark-bg border border-dark-border rounded-xl px-3 py-2">
+            <p className="text-[11px] text-dark-muted leading-snug">
+              Owned by curation batch <span className="font-semibold text-dark-text">{draft.seedBatch}</span>.
+              Undoing or re-seeding that batch resets &ldquo;Shown as&rdquo; and &ldquo;Hidden&rdquo;.
+            </p>
+          </div>
+        )}
 
         <Field label="Type">
           <input
@@ -331,9 +394,9 @@ export default function PoiEditor({
           )
         )}
         <p className="text-dark-muted text-[11px] leading-snug">
-          Edits are live immediately for new lookups. Devices cache resolved names locally
-          (placeNameCache), so an already-named stop keeps its old label until that cache entry
-          is pruned.
+          Phones read names from the published tiles, so an edit reaches them after the daily
+          publish (21:38 UTC) and the phone&apos;s own daily check — usually 1–2 days. Until then
+          the map here still shows the published name, and this row is flagged.
         </p>
       </div>
     </div>
@@ -353,7 +416,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 }
 
 function diffLine(oldRow: Record<string, unknown>, newRow: Record<string, unknown>): string {
-  const keys = ['name', 'poi_type', 'tier', 'source', 'lat', 'lng'];
+  const keys = ['name', 'label', 'hidden', 'poi_type', 'tier', 'source', 'lat', 'lng'];
   const parts = keys
     .filter((k) => String(oldRow[k]) !== String(newRow[k]))
     .map((k) => `${k}: ${String(oldRow[k])} → ${String(newRow[k])}`);

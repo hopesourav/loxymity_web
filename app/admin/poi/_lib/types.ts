@@ -6,6 +6,12 @@ export type PoiRow = {
   source: string;
   lat: number;
   lng: number;
+  /** Shown instead of `name` when set (0257). Only on rows read from poi_directory. */
+  label?: string | null;
+  /** Skipped by nearest_poi and never published (0257). */
+  hidden?: boolean;
+  /** The curation batch that owns the row, if any (0257). */
+  seed_batch?: string | null;
   created_at?: string | null;
   updated_at?: string | null;
 };

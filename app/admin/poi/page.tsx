@@ -36,7 +36,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAdmin } from '../_lib/adminContext';
 import PoiMap, { COVERAGE_MAX, COVERAGE_MIN_ZOOM } from './_components/PoiMap';
-import PoiEditor from './_components/PoiEditor';
+import PoiEditor, { type PoiDraft } from './_components/PoiEditor';
 import BulkPanel from './_components/BulkPanel';
 import CoveragePanel from './_components/CoveragePanel';
 import { TIERS, TIER_IDS, formatDistance, labelFor, tierSpec } from './_lib/poiTiers';
@@ -59,15 +59,7 @@ const TAB_LABEL: Record<Tab, string> = {
   bulk: 'Import / export',
 };
 
-type Draft = {
-  id: number | null;
-  name: string;
-  poi_type: string;
-  tier: number;
-  source: string;
-  lat: number | null;
-  lng: number | null;
-};
+type Draft = PoiDraft;
 
 export default function PoiPage() {
   const { supabase } = useAdmin();
@@ -77,6 +69,10 @@ export default function PoiPage() {
   const [tilesRead, setTilesRead] = useState(0);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
+  /** openEdit could not read the row it was asked to open. */
+  const [openError, setOpenError] = useState('');
+  /** Only the newest openEdit may open the editor (clicks can overtake reads). */
+  const editSeq = useRef(0);
 
   const [bbox, setBbox] = useState<Bbox | null>(null);
   const [zoom, setZoom] = useState(13);
@@ -250,13 +246,17 @@ export default function PoiPage() {
   // ── CRUD plumbing ──────────────────────────────────────────────────────────
   function openCreate() {
     const centre = probe ?? (rows[0] ? { lat: rows[0].lat, lng: rows[0].lng } : null);
+    editSeq.current += 1;
+    setOpenError('');
     setDraft({
-      id: null, name: '', poi_type: '', tier: 1, source: 'manual',
-      lat: centre?.lat ?? null, lng: centre?.lng ?? null,
+      id: null, name: '', label: '', hidden: false, poi_type: '', tier: 1, source: 'manual',
+      lat: centre?.lat ?? null, lng: centre?.lng ?? null, seedBatch: null,
     });
   }
 
-  function openEdit(p: PoiRow) {
+  async function openEdit(p: PoiRow) {
+    const seq = ++editSeq.current;
+    setOpenError('');
     // A global row (id >= 2^52) is built from OSM/Wikidata into the snapshot
     // and has no poi_directory row to edit. Changing it means changing the
     // source and republishing, not typing here.
@@ -265,12 +265,29 @@ export default function PoiPage() {
       fly(p.lat, p.lng);
       return;
     }
-    setDraft({
-      id: p.id, name: p.name, poi_type: p.poi_type, tier: p.tier,
-      source: p.source, lat: p.lat, lng: p.lng,
-    });
     setSelectedId(p.id);
     fly(p.lat, p.lng);
+    // Edit the ROW, not the pin. A pin is the shipped copy: its name is
+    // coalesce(label, name) and its source is only 'directory' — saving those
+    // would overwrite the row's real name and source.
+    const { data, error } = await supabase
+      .from('poi_directory')
+      .select('id, name, label, hidden, poi_type, tier, source, lat, lng, seed_batch')
+      .eq('id', p.id)
+      .maybeSingle();
+    if (seq !== editSeq.current) return;   // another row was opened meanwhile
+    if (error || !data) {
+      setOpenError(error
+        ? `Could not open POI ${p.id}: ${error.message}`
+        : `POI ${p.id} is no longer in the directory — it was deleted after the last publish.`);
+      return;
+    }
+    const r = data as PoiRow;
+    setDraft({
+      id: r.id, name: r.name, label: r.label ?? '', hidden: r.hidden ?? false,
+      poi_type: r.poi_type ?? '', tier: r.tier, source: r.source,
+      lat: r.lat, lng: r.lng, seedBatch: r.seed_batch ?? null,
+    });
   }
 
   /**
@@ -484,6 +501,7 @@ export default function PoiPage() {
               </Banner>
             )}
             {loadError && <Banner tone="error">{loadError}</Banner>}
+            {openError && <Banner tone="error">{openError}</Banner>}
           </div>
 
           {/* Legend */}
@@ -570,9 +588,11 @@ export default function PoiPage() {
                   hitInView={!!probeHit && rows.some((r) => r.id === probeHit.id)}
                   onCreateHere={() => {
                     if (!probe) return;
+                    editSeq.current += 1;
+                    setOpenError('');
                     setDraft({
-                      id: null, name: '', poi_type: '', tier: 1,
-                      source: 'manual', lat: probe.lat, lng: probe.lng,
+                      id: null, name: '', label: '', hidden: false, poi_type: '', tier: 1,
+                      source: 'manual', lat: probe.lat, lng: probe.lng, seedBatch: null,
                     });
                   }}
                 />

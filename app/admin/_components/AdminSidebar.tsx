@@ -80,6 +80,15 @@ const NAV = [
     ),
   },
   {
+    href: '/admin/poi/feedback',
+    label: 'Place feedback',
+    icon: (
+      <svg viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+        <path fillRule="evenodd" d="M3 3a1 1 0 0 1 1-1h9.38a1 1 0 0 1 .9 1.45L13.12 6l1.16 2.55A1 1 0 0 1 13.38 10H5v7a1 1 0 1 1-2 0V3z" clipRule="evenodd" />
+      </svg>
+    ),
+  },
+  {
     href: '/admin/config',
     label: 'Control Plane',
     icon: (
@@ -96,10 +105,12 @@ export default function AdminSidebar({ open, onClose }: Props) {
   const pathname = usePathname();
   const { signOut } = useAdmin();
 
+  // The most specific entry wins: /admin/poi/feedback lights "Place feedback", not "POI Directory".
   const isActive = (href: string) =>
     href === '/admin'
       ? pathname === '/admin' || pathname === '/admin/'
-      : pathname.startsWith(href);
+      : pathname.startsWith(href)
+        && !NAV.some((o) => o.href.length > href.length && o.href.startsWith(href) && pathname.startsWith(o.href));
 
   return (
     <aside
