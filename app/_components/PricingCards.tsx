@@ -182,8 +182,8 @@ export default function PricingCards() {
         <ul className="space-y-2 list-disc pl-5">
           <li>
             <span className="text-dark-text">A plan covers circles, not people.</span> Everyone in a covered circle
-            gets the plan&apos;s history, places, driving reports and minutes on their own free account. You are
-            never charged per person.
+            gets the plan&apos;s history, driving reports, calls and minutes on their own free account. More
+            places and Vault backup come with the plan for the person who pays. You are never charged per person.
           </li>
           <li>
             Everyone gets {FREE_CIRCLES} free circles. One plan covers 1, 2 or 3 circles at the same tier;
@@ -204,7 +204,7 @@ export default function PricingCards() {
             Temporary circles can&apos;t be put on a plan and are free for everyone. Only adults can buy a plan.
           </li>
           <li>
-            Monthly allowances (Street View, assistant questions, flights, video minutes) reset each month and
+            Monthly allowances (Street View, assistant questions, video minutes) reset each month and
             never bill you extra — the feature simply pauses until the next month.
           </li>
         </ul>

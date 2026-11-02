@@ -94,10 +94,16 @@ export type PlanCard = {
 /**
  * What each plan adds over the one below it. Mirrors the app's paywall (`app/(main)/circle-plan.tsx`
  * PLAN_CARDS), Plans & billing (`membership.tsx`) and the live `tier_limits` values (members
- * 5/10/15/15, history 2/30/90/180 days, places 2/10/50/100, temporary circles 1/2/2/2 — free ones
- * last up to 24 hours, a plan allows one of up to 30 days (app migration 0296) — Street View
- * 5/10/30/60 a month, assistant questions 10/100/300/300 a month, flights 20/40/unlimited/unlimited
- * a month, voice calls none/unlimited/unlimited/unlimited, video minutes 0/0/60/100 a month).
+ * 5/10/15/15, history 2/30/90/180 days, places 2/10/50/100, temporary circles 1/5/5/5 at a time —
+ * free ones last up to 24 hours, a plan allows one of up to 30 days (live 2026-11-02:
+ * temp_circle_rules_enabled is off, so the count is 5; if scripts/temp_circles/rules-on.sql runs it
+ * becomes 2 — change this copy with it) — Street View 5/10/30/60 a month, assistant questions
+ * 10/100/300/300 a month, voice calls none/unlimited/unlimited/unlimited, video minutes 0/0/60/100).
+ *
+ * Flights: NOT advertised as capped (E2E 2026-11-02, D-10) — the server counts them but never
+ * refuses (no metering_enforced.flightsTracked), so the 20/40 figures promised a limit nobody hit.
+ * Places and Vault are the PAYER's own — never "everyone in a covered circle gets places" (D-2/D-6).
+ * Data export is free for everyone (export_my_data) — never an Infinite feature (D-3).
  *
  * Voice calls are paid from 2026-10-19 (migration 0290): placing one needs Gold or a covered
  * circle. Answering is free, and anyone may call during the hour after an SOS.
@@ -121,7 +127,7 @@ export const PLAN_CARDS: PlanCard[] = [
       '2 places with arrival & leave alerts',
       `1 temporary circle of up to ${EVENT_CIRCLE_MEMBERS} people, for up to 24 hours`,
       'Battery level & live share links for people without the app',
-      'Street View 5 · assistant 10 · flights 20 a month',
+      'Street View 5 · assistant 10 a month',
     ],
   },
   {
@@ -133,8 +139,8 @@ export const PLAN_CARDS: PlanCard[] = [
       'Up to 10 members in each covered circle',
       '30 days of location history',
       '10 places with arrival & leave alerts',
-      '2 temporary circles, one lasting up to 30 days',
-      'Street View 10 · assistant 100 · flights 40 a month',
+      'Up to 5 temporary circles, one lasting up to 30 days',
+      'Street View 10 · assistant 100 a month',
       'Web dashboard for the person who pays',
     ],
   },
@@ -150,7 +156,7 @@ export const PLAN_CARDS: PlanCard[] = [
       'Driving reports & road smoothness',
       '50 places with arrival & leave alerts',
       'Video calls — 60 minutes a month',
-      'Street View 30 · assistant 300 · unlimited flights',
+      'Street View 30 · assistant 300 a month',
     ],
   },
   {
@@ -162,7 +168,6 @@ export const PLAN_CARDS: PlanCard[] = [
       '100 places with arrival & leave alerts',
       'Privacy Shield — see who viewed your location',
       'Ghost mode and automatic history clean-up',
-      'Instant export of your data',
       'Video calls — 100 minutes a month',
       'Street View 60 a month',
     ],

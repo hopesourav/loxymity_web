@@ -160,7 +160,7 @@ export default function Home() {
                 iconPath: 'M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z',
                 iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
                 title: 'In-app voice & video',
-                desc: 'Call any member by name, right from the map — no phone number needed. Voice calls come with every paid plan (anyone in a circle can answer, and during the hour after an SOS anyone can call); video comes with Platinum and Infinite. Voice calls between adults are recorded.',
+                desc: 'Call any member by name, right from the map — no phone number needed. Voice calls come with every paid plan (anyone in a circle can answer, and during the hour after an SOS anyone can call); video comes with Platinum and Infinite. Calls are not recorded.',
               },
               {
                 iconPath: 'M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z',
@@ -378,7 +378,7 @@ export default function Home() {
           <p className="text-center text-dark-muted text-sm mb-12">Prices are what you pay each year or month. Choose annual or monthly, and how many circles the plan covers.</p>
           <div className="max-w-2xl mx-auto mb-12 card-premium gradient-border rounded-2xl p-6 text-center">
             <p className="text-dark-text font-semibold mb-1">One person pays. The whole circle is covered.</p>
-            <p className="text-dark-muted text-sm leading-relaxed">When one member puts a circle on a plan, everyone in it gets the longer history, more places, driving reports, video minutes and Street View — on their own free account, at no extra cost. Nobody else has to buy anything.</p>
+            <p className="text-dark-muted text-sm leading-relaxed">When one member puts a circle on a plan, everyone in it gets the longer history, driving reports, calls, video minutes and Street View — on their own free account, at no extra cost. Nobody else has to buy anything.</p>
           </div>
           <PricingCards />
           {/* Risk reversal */}
@@ -407,10 +407,10 @@ export default function Home() {
                 'Pause sharing at any time. Your circle then sees only your last shared location and when it was.',
                 'Only the people in circles you join can see you — plus anyone you choose to send a share link to.',
                 'Encrypted in transit and protected on our servers. What the app keeps on your phone is encrypted too, and App Lock adds Face ID or fingerprint.',
-                'Privacy Shield (Infinite): see who viewed your location, go into ghost mode, auto-delete history, export your data.',
+                'Privacy Shield (Infinite): see who viewed your location, go into ghost mode, auto-delete history. A copy of your data is free on every plan.',
                 'Your circle can open 2 days of history on Free, then 30, 90 or 180 days by plan. Your own phone keeps its copy for as long as you want, on every plan.',
                 'A phone that relays someone else\u2019s location offline cannot read what it carries.',
-                'In-app voice calls are recorded and kept 28 days (never when a child is on the call), and a Recording notice shows on every call. Messages and calls are not end-to-end encrypted.',
+                'In-app calls are not recorded. Messages and calls are not end-to-end encrypted.',
                 'Block anyone, and report any message — we keep a copy and review every report.',
               ].map((point) => (
                 <div key={point} className="flex items-start gap-3">
@@ -485,11 +485,11 @@ export default function Home() {
               },
               {
                 q: 'What happens to my history if I lose my phone?',
-                a: 'Whatever is within your plan’s window is on our servers and syncs to your new phone. Older history lives only on your old phone — unless you use Vault, a backup encrypted with a password only you know, available on paid plans. We cannot read it, and we cannot recover it if you forget the password.',
+                a: 'Whatever is within your plan’s window is on our servers and syncs to your new phone. Older history lives only on your old phone — unless you use Vault, a backup encrypted with a password only you know, which comes with a plan for the person who pays. We cannot read it, and we cannot recover it if you forget the password.',
               },
               {
                 q: 'Are in-app calls recorded?',
-                a: 'Yes. In-app voice calls are recorded automatically from when the call starts ringing, and a “Recording” notice shows on the call screen. Recordings are encrypted, kept for 28 days and then deleted, and are not available in the app. Calls involving anyone under 18 are never recorded, and video calls are not recorded at present. Recording laws vary and some places require everyone’s consent, so tell the people you call — and use your ordinary phone dialler for anything you would rather not have recorded.',
+                a: 'No. Call recording is switched off, so in-app voice and video calls are not recorded.',
               },
               {
                 q: 'How can it work when my phone has no internet?',
