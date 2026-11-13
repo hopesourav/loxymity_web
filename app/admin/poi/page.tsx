@@ -38,6 +38,16 @@ import { useAdmin } from '../_lib/adminContext';
 import PoiMap, { COVERAGE_MAX, COVERAGE_MIN_ZOOM } from './_components/PoiMap';
 import PoiEditor, { type PoiDraft } from './_components/PoiEditor';
 import BulkPanel from './_components/BulkPanel';
+
+/**
+ * Place editing is paused while India's place data moves off Postgres (2026-11, Loxymity repo plan
+ * show-all-this-in-vectorized-hopcroft.md). The migration that removes the table's write policies
+ * (0396) must not go live before this does: without a policy an update or delete through PostgREST
+ * matches no row and still reports success. Viewing, the probe, the tile panels and CSV export stay.
+ * Editing comes back through the edits ledger (admin_poi_edit) at the cutover.
+ */
+const EDITING_PAUSED = true;
+const PAUSED_NOTE = 'Place editing is paused while the place data moves to its new home. Viewing and export still work.';
 import CoveragePanel from './_components/CoveragePanel';
 import { TIERS, TIER_IDS, formatDistance, labelFor, tierSpec } from './_lib/poiTiers';
 import {
@@ -245,6 +255,7 @@ export default function PoiPage() {
 
   // ── CRUD plumbing ──────────────────────────────────────────────────────────
   function openCreate() {
+    if (EDITING_PAUSED) return;
     const centre = probe ?? (rows[0] ? { lat: rows[0].lat, lng: rows[0].lng } : null);
     editSeq.current += 1;
     setOpenError('');
@@ -267,6 +278,7 @@ export default function PoiPage() {
     }
     setSelectedId(p.id);
     fly(p.lat, p.lng);
+    if (EDITING_PAUSED) return;
     // Edit the ROW, not the pin. A pin is the shipped copy: its name is
     // coalesce(label, name) and its source is only 'directory' — saving those
     // would overwrite the row's real name and source.
@@ -339,12 +351,16 @@ export default function PoiPage() {
               Place names behind stop labels, drive endpoints and assistant answers
             </p>
           </div>
-          <button
-            onClick={openCreate}
-            className="bg-primary hover:bg-primary-dark text-dark-bg font-bold px-4 py-2 rounded-xl text-sm transition-colors"
-          >
-            + New POI
-          </button>
+          {EDITING_PAUSED ? (
+            <p className="text-dark-muted text-xs max-w-xs text-right">{PAUSED_NOTE}</p>
+          ) : (
+            <button
+              onClick={openCreate}
+              className="bg-primary hover:bg-primary-dark text-dark-bg font-bold px-4 py-2 rounded-xl text-sm transition-colors"
+            >
+              + New POI
+            </button>
+          )}
         </div>
 
         {/* Tier totals double as the tier filter. */}
@@ -587,7 +603,7 @@ export default function PoiPage() {
                   }}
                   hitInView={!!probeHit && rows.some((r) => r.id === probeHit.id)}
                   onCreateHere={() => {
-                    if (!probe) return;
+                    if (!probe || EDITING_PAUSED) return;
                     editSeq.current += 1;
                     setOpenError('');
                     setDraft({
@@ -621,7 +637,8 @@ export default function PoiPage() {
               )}
 
               {tab === 'bulk' && (
-                <BulkPanel supabase={supabase} viewportRows={rows} onImported={refreshAll} />
+                <BulkPanel supabase={supabase} viewportRows={rows} onImported={refreshAll}
+                  importPaused={EDITING_PAUSED ? PAUSED_NOTE : null} />
               )}
             </>
           )}

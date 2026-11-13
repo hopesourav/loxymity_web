@@ -34,9 +34,11 @@ type Props = {
   supabase: SupabaseClient;
   viewportRows: PoiRow[];
   onImported: () => void;
+  /** Shown instead of the import when importing is paused (page.tsx EDITING_PAUSED); export stays. */
+  importPaused?: string | null;
 };
 
-export default function BulkPanel({ supabase, viewportRows, onImported }: Props) {
+export default function BulkPanel({ supabase, viewportRows, onImported, importPaused = null }: Props) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [fileName, setFileName] = useState('');
   const [parsed, setParsed] = useState<ParsedRow[] | null>(null);
@@ -174,6 +176,12 @@ export default function BulkPanel({ supabase, viewportRows, onImported }: Props)
         </p>
       </div>
 
+      {importPaused ? (
+        <div className="border-t border-dark-border pt-4">
+          <p className="text-xs font-semibold text-dark-text mb-2">Import</p>
+          <p className="text-[11px] text-dark-muted leading-snug">{importPaused}</p>
+        </div>
+      ) : (
       <div className="border-t border-dark-border pt-4">
         <p className="text-xs font-semibold text-dark-text mb-2">Import</p>
         <input
@@ -187,6 +195,7 @@ export default function BulkPanel({ supabase, viewportRows, onImported }: Props)
           Columns: {HEADERS.join(', ')}. Order does not matter; extra columns are ignored.
         </p>
       </div>
+      )}
 
       {error && (
         <div className="bg-brand-danger/10 border border-brand-danger/40 rounded-xl px-3 py-2">
