@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { LogoFull } from '../../../_components/Logo';
 import { supabase } from '../../_lib/client';
+import { captureNext, takeNext } from '../../_lib/nextPath';
 import { IconEye, IconEyeOff } from '../../_components/Icons';
 
 export default function LoginPage() {
@@ -13,11 +14,14 @@ export default function LoginPage() {
   const [error, setError]       = useState('');
   const [loading, setLoading]   = useState(false);
   const [checking, setChecking] = useState(true);
+  const [signupHref, setSignupHref] = useState('/dashboard/signup/');
 
-  // Restore existing session
+  // Restore existing session; ?next= (dashboard paths only) survives the Google round trip.
   useEffect(() => {
+    const next = captureNext();
+    if (next) setSignupHref(`/dashboard/signup/?next=${encodeURIComponent(next)}`);
     supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) window.location.href = '/dashboard/';
+      if (session) window.location.href = takeNext();
       else setChecking(false);
     });
   }, []);
@@ -29,7 +33,7 @@ export default function LoginPage() {
     const { error: err } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
     if (err) { setError(err.message); return; }
-    window.location.href = '/dashboard/';
+    window.location.href = takeNext();
   }
 
   async function handleGoogleSignIn() {
@@ -146,24 +150,14 @@ export default function LoginPage() {
         </button>
 
         {/* New user CTA */}
-        <div className="mt-6 text-center space-y-3">
+        <div className="mt-6 text-center space-y-2">
           <p className="text-sm text-dark-muted">
-            New to Loxymity? Get the app first.
+            New to Loxymity?{' '}
+            <a href={signupHref} className="text-primary font-semibold hover:underline">Create an account</a>
           </p>
-          <div className="flex justify-center gap-3">
-            <a
-              href="https://apps.apple.com"
-              className="px-4 py-2 bg-dark-surface border border-dark-border rounded-xl text-xs font-semibold text-dark-text hover:border-primary transition-colors"
-            >
-              App Store
-            </a>
-            <a
-              href="https://play.google.com"
-              className="px-4 py-2 bg-dark-surface border border-dark-border rounded-xl text-xs font-semibold text-dark-text hover:border-primary transition-colors"
-            >
-              Google Play
-            </a>
-          </div>
+          <p className="text-xs text-dark-muted">
+            Signed up in the app with Apple? Apple sign-in isn’t available on the web yet.
+          </p>
         </div>
       </div>
     </div>

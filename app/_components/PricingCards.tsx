@@ -22,7 +22,7 @@
  */
 import { useEffect, useState } from 'react';
 import {
-  PLAN_CARDS, MAX_CIRCLES, FREE_CIRCLES, EXTRA_CIRCLE_PRICE, TRIAL, CURRENCY_OPTIONS,
+  PLAN_CARDS, MAX_CIRCLES, FREE_CIRCLES, EXTRA_CIRCLE_PRICE, TRIAL, CURRENCY_OPTIONS, WEB_DISCOUNT_PCT,
   annualSaving, detectCurrency, formatPrice, perMonthOfAnnual, planPrice,
   type Currency, type Period,
 } from '../_lib/pricing';
@@ -199,9 +199,14 @@ export default function PricingCards() {
             Cancel in the App Store or Google Play at least 24 hours before it ends and you are not charged.
           </li>
           <li>
-            Plans are bought in the Loxymity app and billed by the App Store or Google Play. They renew
+            Plans bought in the Loxymity app are billed by the App Store or Google Play. They renew
             automatically until you cancel, at least 24 hours before the period ends, in your store account.
             Temporary circles can&apos;t be put on a plan and are free for everyone. Only adults can buy a plan.
+          </li>
+          <li>
+            You can also buy on loxymity.com, in rupees, for {WEB_DISCOUNT_PCT}% less. A web plan is prepaid for a
+            month or a year through a Razorpay invoice and never renews by itself — we email a renewal invoice
+            before it ends. One plan per person: if you already pay in a store, manage that plan in the app.
           </li>
           <li>
             Monthly allowances (Street View, assistant questions, video minutes) reset each month and

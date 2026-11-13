@@ -3,6 +3,7 @@ import { DifferentiatorCarousel } from './_components/DifferentiatorCarousel';
 import { HeroPhoneCarousel } from './_components/HeroPhoneCarousel';
 import PricingCards from './_components/PricingCards';
 import { APP_STORE_URL, PLAY_URL } from './_lib/appLinks';
+import { WEB_DISCOUNT_PCT } from './_lib/pricing';
 
 export default function Home() {
   return (
@@ -21,6 +22,12 @@ export default function Home() {
             <a href="/business/"   className="hover:text-dark-text transition-colors">Business</a>
           </div>
           <div className="flex items-center gap-3">
+            <a
+              href="/dashboard/plan/"
+              className="hidden sm:inline text-sm font-semibold text-dark-muted hover:text-dark-text transition-colors"
+            >
+              Buy a plan
+            </a>
             <a
               href="/dashboard/login/"
               className="text-sm font-semibold text-dark-muted hover:text-dark-text transition-colors"
@@ -381,9 +388,21 @@ export default function Home() {
             <p className="text-dark-muted text-sm leading-relaxed">When one member puts a circle on a plan, everyone in it gets the longer history, driving reports, calls, video minutes and Street View — on their own free account, at no extra cost. Nobody else has to buy anything.</p>
           </div>
           <PricingCards />
+          {/* Buying on the web (Razorpay, INR, prepaid) */}
+          <div className="mt-10 max-w-2xl mx-auto rounded-2xl border border-primary/30 bg-primary/5 p-6 text-center">
+            <p className="text-dark-text font-semibold">Buy on loxymity.com — {WEB_DISCOUNT_PCT}% less than in the app</p>
+            <p className="text-dark-muted text-sm mt-1">
+              In rupees, paid by UPI, card or net banking through a Razorpay invoice. Prepaid for a month or a year,
+              and it never renews by itself — we email a renewal invoice before it ends.
+            </p>
+            <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center">
+              <a href="/dashboard/plan/" className="bg-primary hover:bg-primary-dark text-dark-bg font-semibold px-6 py-3 rounded-xl transition-colors">Buy a plan</a>
+              <a href="/dashboard/signup/?next=%2Fdashboard%2Fplan%2F" className="bg-dark-surface hover:bg-dark-border border border-dark-border text-dark-text font-semibold px-6 py-3 rounded-xl transition-colors">Create an account</a>
+            </div>
+          </div>
           {/* Risk reversal */}
           <div className="mt-10 flex flex-wrap justify-center gap-x-8 gap-y-3">
-            {['7-day free Platinum trial', 'Cancel anytime in your store account', 'No ads, ever', 'Your data is never sold'].map((r) => (
+            {['7-day free Platinum trial', 'Cancel anytime in your store account', 'Web plans never renew by themselves', 'No ads, ever', 'Your data is never sold'].map((r) => (
               <div key={r} className="flex items-center gap-2 text-dark-muted text-sm font-medium">
                 <svg className="w-4 h-4 text-brand-success flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 13l4 4L19 7" />
@@ -422,6 +441,15 @@ export default function Home() {
                   <p className="text-dark-muted text-base">{point}</p>
                 </div>
               ))}
+            </div>
+            <div id="background-location" className="mt-8 rounded-xl border border-dark-border bg-dark-bg p-5">
+              <h3 className="text-dark-text font-semibold mb-2">Location in the background</h3>
+              <p className="text-dark-muted text-sm leading-relaxed">
+                Loxymity collects location data to let the people in your circle see where you are, even when the app
+                is closed or not in use. The same location powers place alerts, SOS, crash check and drive reports.
+                Sharing is opt-in, you choose who is in your circle, and you can pause it at any time. Your location is
+                never sold and never used for ads.
+              </p>
             </div>
           </div>
           <div className="flex-1 flex justify-center">
@@ -501,7 +529,7 @@ export default function Home() {
               },
               {
                 q: 'Do I have to buy a plan for every family member?',
-                a: 'No. A plan covers circles, not people. Everyone gets 2 free circles; one plan covers 1, 2 or 3 circles, and everyone in a covered circle gets the plan’s features on their own free account. Plans are bought in the app through the App Store or Google Play.',
+                a: 'No. A plan covers circles, not people. Everyone gets 2 free circles; one plan covers 1, 2 or 3 circles, and everyone in a covered circle gets the plan’s features on their own free account. Plans are bought in the app through the App Store or Google Play, or here on loxymity.com for 5% less — prepaid, and never renewed automatically.',
               },
               {
                 q: 'Can I use Loxymity to track employees or a team?',

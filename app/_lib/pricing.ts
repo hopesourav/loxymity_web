@@ -19,7 +19,7 @@
  * per-month figure is rounded DOWN (it ends in .99), so "≈" stays on it.
  *
  * Shared by the marketing pricing grid (`_components/PricingCards.tsx`) and the dashboard plan
- * page (`dashboard/(auth)/upgrade/page.tsx`), so the two can never quote different figures.
+ * page (`dashboard/(auth)/plan/page.tsx`), so the two can never quote different figures.
  */
 import { CATALOG } from './catalog.generated';
 
@@ -56,6 +56,15 @@ function row(tier: PlanId, circles: number): Row {
 /** What the store charges for this plan, in this currency. */
 export function planPrice(tier: PlanId, circles: number, period: Period, currency: Currency): number {
   return row(tier, circles)[period][currency];
+}
+
+/** Plans bought on loxymity.com (Razorpay, INR only, prepaid) cost this much less than in the app.
+ *  Same formula as planCatalog.webPriceInr in the app repo; the server's quote is what is charged,
+ *  this is for display. */
+export const WEB_DISCOUNT_PCT = 5;
+
+export function webPriceInr(tier: PlanId, circles: number, period: Period): number {
+  return Math.round((planPrice(tier, circles, period, 'INR') * (100 - WEB_DISCOUNT_PCT)) / 100);
 }
 
 /** The per-month figure of the ANNUAL plan, already rounded down ("$11.99"). Show it only under the

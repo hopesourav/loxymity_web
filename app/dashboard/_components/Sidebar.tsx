@@ -7,7 +7,7 @@ import { useDashboard } from '../_lib/context';
 import { effectiveTier, tierLabel } from '../../_lib/tiers';
 import {
   IconMap, IconActivity, IconHistory, IconFence,
-  IconCircle, IconShare, IconChevronDown, IconLogout, IconX,
+  IconCircle, IconShare, IconChevronDown, IconLogout, IconX, IconCard,
 } from './Icons';
 
 const NAV = [
@@ -17,6 +17,7 @@ const NAV = [
   { href: '/dashboard/fences/',   label: 'Fences',    Icon: IconFence },
   { href: '/dashboard/circle/',   label: 'Circle',    Icon: IconCircle },
   { href: '/dashboard/share/',    label: 'Share',     Icon: IconShare },
+  { href: '/dashboard/plan/',     label: 'Plan & billing', Icon: IconCard },
 ];
 
 type Props = { open: boolean; onClose: () => void };

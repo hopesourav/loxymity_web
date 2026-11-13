@@ -47,8 +47,10 @@ export default function AdminOverviewPage() {
           .lt('reported_at', staleThreshold),
         supabase.from('sos_alerts').select('id', { count: 'exact', head: true })
           .eq('resolved', false),
+        // Devices being woken right now. There is no 'resolved' status (0023/0032), so the old
+        // filter also counted every recovered cycle ever.
         supabase.from('location_refresh_attempts').select('id', { count: 'exact', head: true })
-          .not('status', 'in', '(resolved,exhausted)'),
+          .eq('status', 'pending'),
         supabase.from('sos_alerts')
           .select('id,sender_id,circle_id,message,resolved,created_at,profiles!sender_id(display_name),circles(name)')
           .order('created_at', { ascending: false })

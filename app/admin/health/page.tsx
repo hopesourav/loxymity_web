@@ -17,17 +17,20 @@ export default function HealthPage() {
     async function load() {
       const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
       const [{ data: evtData }, { data: retryData }] = await Promise.all([
+        // The table's columns are `model` and `occurred_at` (0051); aliased to the names the page uses.
         supabase
           .from('device_health_events')
-          .select('id,user_id,event_type,manufacturer,device_model,platform,created_at')
-          .gte('created_at', sevenDaysAgo)
-          .order('created_at', { ascending: false })
+          .select('id,user_id,event_type,manufacturer,device_model:model,platform,created_at:occurred_at')
+          .gte('occurred_at', sevenDaysAgo)
+          .order('occurred_at', { ascending: false })
           .limit(2000),
+        // There is no `updated_at` and no 'resolved' status (0023/0032): the open queue is every
+        // status but 'recovered'. Finished cycles are pruned after 7 days (0281).
         supabase
           .from('location_refresh_attempts')
-          .select('id,user_id,status,created_at,updated_at,profiles!user_id(display_name)')
-          .not('status', 'eq', 'resolved')
-          .order('updated_at', { ascending: false })
+          .select('id,user_id,status,created_at,updated_at:last_attempt_at,profiles!user_id(display_name)')
+          .in('status', ['pending', 'exhausted', 'failed_dead_token'])
+          .order('created_at', { ascending: false })
           .limit(200),
       ]);
       setEvents((evtData ?? []) as DeviceHealthEvent[]);

@@ -1,11 +1,17 @@
 [
   {
-    "relation": ["delegate_permission/common.handle_all_urls"],
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
     "target": {
       "namespace": "android_app",
       "package_name": "com.amsekresearch.loxymity",
       "sha256_cert_fingerprints": [
-        "6C:42:66:81:9C:21:F9:DC:21:46:6D:B7:3F:7C:04:6F:31:C4:F3:C2:03:B7:38:C7:1E:79:2F:C9:B0:E6:A3:98"
+        "6C:42:66:81:9C:21:F9:DC:21:46:6D:B7:3F:7C:04:6F:31:C4:F3:C2:03:B7:38:C7:1E:79:2F:C9:B0:E6:A3:98",
+        "B8:B3:14:04:AF:F5:04:41:5E:8E:2B:DA:FB:EA:78:1F:B4:B1:A8:BD:59:19:3B:34:EF:97:82:E4:8B:01:A3:F3",
+        "FF:85:9E:85:22:2B:24:E7:7C:68:88:2E:DD:AE:17:D0:B4:40:BD:74:00:51:7B:04:7B:72:43:6C:89:14:CF:57",
+        "91:9A:E3:85:DC:3C:BE:A9:E9:C0:00:AC:1A:E9:4F:A7:BA:94:0B:7B:A6:35:C6:50:09:73:F1:13:05:75:AE:39"
       ]
     }
   }

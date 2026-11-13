@@ -126,3 +126,6 @@ export const IconLink = (p: IconProps) =>
 
 export const IconMenu = (p: IconProps) =>
   base('M3 12h18M3 6h18M3 18h18', p);
+
+export const IconCard = (p: IconProps) =>
+  base('M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7zM3 10h18M7 15h4', p);

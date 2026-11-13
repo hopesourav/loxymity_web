@@ -47,7 +47,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
     if (profileErr || !profile) { router.replace('/dashboard/login/'); return; }
 
-    if (!hasDashboardAccess(profile as UserProfile)) { router.replace('/dashboard/upgrade/'); return; }
+    // Plan & billing sits outside this gate, so neither redirect can bounce back here.
+    if (!hasDashboardAccess(profile as UserProfile)) { router.replace('/dashboard/plan/'); return; }
 
     // Load circles where user is an active member
     const { data: memberships } = await supabase
@@ -63,7 +64,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       role: m.role,
     }));
 
-    if (circles.length === 0) { router.replace('/dashboard/upgrade/'); return; }
+    if (circles.length === 0) { router.replace('/dashboard/plan/'); return; }
 
     const defaultCircleId = circles[0].id;
 
