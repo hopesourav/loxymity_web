@@ -108,15 +108,33 @@ export function Table({ head, rows }: { head: string[]; rows: React.ReactNode[][
  * below the app's WEB_TERMS_MIN_VERSION ('2026-10-18', supabase/functions/_shared/webPlan.ts):
  * these Terms still say we do not sell plans on the website, so that interlock must stay closed.
  *
- * Publish it the day that app release ships, not before. Set LEGAL_EFFECTIVE to that day when
+ * 2026-11-16 = the website audit of 2026-11-16: call recording described as switched off (since
+ * 2026-10-30) with the terms for switching it back on; server-side approximate location and its SOS
+ * exception (0349–0351); assistants honour ghost mode / pause / blocks / blur (0325); time zone (0369);
+ * place-name reports (0342); business enquiries (0292) + Cloudflare Turnstile; the daily / on-request
+ * diagnostic log (0356); nightly history pruning (0279/0389); schedule results kept with the plan's
+ * history (0370); providers Groq (place reports), OpenStreetMap/Wikidata, GitHub (backups), Neon (database
+ * copy), on-device translation; and in the Terms: "coming soon" and marketing summaries, the offline
+ * relay using your connection, lock screens, the limits of pausing / ghost / approximate location, the
+ * IT Rules 2021 content list, data loss, place-data licence, individual claims + a one-year limit, and
+ * section 8.9 — plans bought on loxymity.com.
+ *   2026-11-16 is ABOVE the app's WEB_TERMS_MIN_VERSION ('2026-10-18', _shared/webPlan.ts) ON PURPOSE:
+ * these Terms now carry section 8.9, so a person who accepts them passes the web-checkout terms
+ * interlock. The server switch system_flags.web_checkout_enabled still decides whether anything is sold.
+ *
+ * Published 16 November 2026, AHEAD of the app build that bumps legal.ts (owner decision that day: the
+ * old text said calls are recorded and missed the SOS exception to approximate location). Until that
+ * build ships, the app still asks people to accept 2026-10-17.2.
+ *
+ * For the next version: publish it the day that app release ships, not before. Set LEGAL_EFFECTIVE to that day when
  * merging — a Cloudflare Pages build refuses to run while it is unset, so this version cannot reach
  * loxymity.com by accident. Preview locally with LEGAL_PREVIEW=1 npm run build.
  */
-export const LEGAL_VERSION = '2026-10-17.2';
-export const LEGAL_EFFECTIVE: string = '25 October 2026';
+export const LEGAL_VERSION = '2026-11-16';
+export const LEGAL_EFFECTIVE: string = '16 November 2026';
 
 if (LEGAL_EFFECTIVE === 'SET-ON-RELEASE' && process.env.LEGAL_PREVIEW !== '1') {
   throw new Error(
-    'LEGAL_EFFECTIVE is unset: set it (app/_components/LegalPage.tsx) to the day the account-deletion release ships.',
+    'LEGAL_EFFECTIVE is unset: set it (app/_components/LegalPage.tsx) to the day the app release carrying TERMS_VERSION / PRIVACY_VERSION 2026-11-16 ships.',
   );
 }

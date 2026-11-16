@@ -22,10 +22,12 @@ export default function TermsOfService() {
             integrations with WhatsApp and Alexa (together, the &ldquo;Service&rdquo;).
           </p>
           <p>
-            <strong className="text-dark-text">Please read sections 4, 6, 7, 15 and 16 carefully.</strong>{' '}
+            <strong className="text-dark-text">Please read sections 4, 6, 15, 16 and 17 carefully.</strong>{' '}
             They explain that you are responsible for the consent of the people you share with, that
-            Loxymity is not an emergency service, that in-app voice calls are recorded, and how our
-            liability is limited and when you must indemnify us.
+            Loxymity is not an emergency service and its safety features have limits, how our liability is
+            limited, when you must indemnify us, and how disputes are handled. These Terms are an electronic
+            record under India&rsquo;s Information Technology Act, 2000 and its rules; they do not need a
+            signature.
           </p>
         </>
       }
@@ -97,6 +99,15 @@ export default function TermsOfService() {
             replace the supervision of children or vulnerable people.
           </p>
         </Callout>
+        <p>
+          Some features are available only on some platforms, plans, countries or languages, or only with
+          another service (for example WhatsApp). Features we describe as &ldquo;coming soon&rdquo; — on our
+          website, in the app or anywhere else — are not part of the Service or of any plan until we release
+          them, and we may change, delay or never release them; do not buy a plan for a feature that is not
+          available yet. Descriptions of Loxymity on our website, in store listings and in marketing are
+          summaries: what the Service does, and on what terms, is set out in these Terms, the Privacy Policy
+          and the app.
+        </p>
       </Section>
 
       <Section id="your-responsibilities" title="4. Your responsibilities for the people you share with">
@@ -172,11 +183,12 @@ export default function TermsOfService() {
         </Sub>
         <Sub title="4.7 Call recording laws">
           <p>
-            In-app voice calls are recorded (see section 7). Laws on recording calls differ between
-            countries and states, and some require every party to agree. You are responsible for
-            complying with the law where you and the person you call are, for telling the people you
-            call that in-app calls are recorded, and for using an ordinary phone call instead whenever
-            a recorded call would not be lawful or appropriate.
+            In-app calls are not recorded at present (see section 7). If we switch recording on, laws on
+            recording calls differ between countries and states and some require every party to agree: you
+            will be responsible for complying with the law where you and the person you call are, for telling
+            the people you call that in-app calls are recorded, and for using an ordinary phone call instead
+            whenever a recorded call would not be lawful or appropriate. You must not record, or let anyone
+            record, an in-app call by any other means without the consent the law requires.
           </p>
         </Sub>
         <Sub title="4.8 Your duties under the DPDP Act">
@@ -185,6 +197,30 @@ export default function TermsOfService() {
             comply with the law, not impersonate anyone, not suppress material information, not file a
             false or frivolous grievance or complaint, and give only verifiably authentic information
             when you ask us to correct or erase data.
+          </p>
+        </Sub>
+        <Sub title="4.9 Your phone helps others when they have no signal">
+          <p>
+            While &ldquo;Findable when offline&rdquo; is on (it is on by default), your phone may pick up small
+            encrypted packets from nearby Loxymity phones and pass them to our servers over your own Bluetooth
+            and internet connection. Your phone cannot read them. The extra battery and data this uses is small
+            but not zero, and your network operator&rsquo;s charges apply. You can turn it off in Settings.
+          </p>
+        </Sub>
+        <Sub title="4.10 Lock screens and shared devices">
+          <p>
+            Notifications and Lock Screen cards can show names, places, battery and SOS messages on a locked
+            phone. If other people can see or use your phone, tablet, WhatsApp account or Alexa device, they may
+            see information about the people in your circles. You are responsible for choosing the settings that
+            suit you (Settings → Notifications) and for keeping those devices and accounts secure.
+          </p>
+        </Sub>
+        <Sub title="4.11 Pausing, ghost mode and approximate location">
+          <p>
+            These limit what others can see from the moment you turn them on. They do not take back what people
+            have already seen, saved or screenshotted, and they are not a way to hide from someone who has your
+            phone or your account. While an SOS you raised is open, the circle you raised it in sees your exact
+            location even if approximate location is on.
           </p>
         </Sub>
       </Section>
@@ -200,7 +236,10 @@ export default function TermsOfService() {
           </li>
           <li>keep tracking anyone after they have left a circle or asked you to stop;</li>
           <li>attach a Bluetooth tag or tracking device to a person, or to property that is not yours, without permission;</li>
-          <li>send a false SOS, hoax or misleading safety alert, or interfere with emergency services;</li>
+          <li>
+            send a false SOS, hoax or misleading safety alert, test the safety features on people who have not
+            agreed to the test, or interfere with emergency services;
+          </li>
           <li>send spam, unlawful, defamatory, obscene or infringing content, or content that harms children;</li>
           <li>
             get around plan limits, allowances, free trials or referral rules (for example with
@@ -218,6 +257,22 @@ export default function TermsOfService() {
           authorities when we reasonably believe these rules have been broken or someone is at risk.
           We may keep and disclose information where the law requires or allows it.
         </p>
+        <Sub title="Content you must not share">
+          <p>
+            You must not host, display, upload, publish, send, store or share through the Service anything that:
+            belongs to someone else and that you have no right to share; is obscene, pornographic, paedophilic,
+            invasive of anyone&rsquo;s privacy (including bodily privacy), insulting or harassing on the basis of
+            gender, racially or ethnically objectionable, relates to or encourages money laundering or gambling,
+            or is otherwise unlawful; is harmful to children; infringes a patent, trademark, copyright or other
+            right; deceives or misleads anyone about where a message came from, or knowingly communicates
+            information that is false or misleading; impersonates another person; threatens the unity,
+            integrity, defence, security or sovereignty of India, its friendly relations with other countries or
+            public order, incites any offence, prevents the investigation of any offence or insults another
+            country; contains a virus or other code designed to damage or limit any computer resource; or breaks
+            any law in force. We may remove it, suspend or close your account, and keep and report information
+            where the law requires.
+          </p>
+        </Sub>
         <Sub title="Blocking and reporting">
           <p>
             You can block anyone. A block stops direct messages and calls between the two of you in both
@@ -248,7 +303,9 @@ export default function TermsOfService() {
             system — on iPhone, the ring/silent switch silences it. To prevent misuse, only the first
             five loud SOS alerts a sender raises in an hour are loud; later ones are delivered normally.
             If no one responds within three minutes we alert the circle once more. We cannot guarantee
-            that anyone sees an alert or acts on it.
+            that anyone sees an alert or acts on it. Check with the people in your circle that Loxymity is
+            allowed to send them notifications, and that an alert reaches them (for example with a test they
+            have agreed to).
           </p>
         </Sub>
         <Sub title="6.2 Crash and fall detection">
@@ -257,7 +314,8 @@ export default function TermsOfService() {
             Settings. They rely on your phone&rsquo;s motion sensors and can miss real events (for example
             when the app is not running, the phone is mounted, off or in a bag) and can trigger on drops
             or bumps. When a possible crash is detected you have 30 seconds to tap &ldquo;I&rsquo;m OK&rdquo;;
-            if you do not, an SOS is sent to your circle. They are not medical devices and are not
+            if you do not, an SOS is sent to your circle. If notifications are off for Loxymity the question
+            cannot be shown, so the alert is sent straight away. They are not medical devices and are not
             certified for any safety purpose.
           </p>
         </Sub>
@@ -269,6 +327,13 @@ export default function TermsOfService() {
             &ldquo;left&rdquo; alert waits for two readings outside a place, so it can arrive later than
             the person left. Place alerts, live ETAs, schedule verdicts (on time, late, missed), traffic
             and stop labels, place names and road-smoothness figures are estimates.
+          </p>
+          <p>
+            Place names come from our own place data, OpenStreetMap, Wikidata and other sources, and can be
+            wrong, out of date, or worded in a way we did not intend; you can report one in the app or at{' '}
+            <a href="/places/suggest/">loxymity.com/places/suggest</a>. Loxymity is designed not to say that
+            anyone is at a sensitive place (such as a hospital, a place of worship or a school) unless their
+            circle saved that place, but no such rule is perfect.
           </p>
         </Sub>
         <Sub title="6.4 Driving">
@@ -294,23 +359,31 @@ export default function TermsOfService() {
             it.
           </p>
         </Sub>
+        <Sub title="6.7 Your data can be lost">
+          <p>
+            Loxymity is not a backup or record-keeping service. History, messages and other data can be lost —
+            for example when a retention period ends, when you change, reset or lose a phone, or because of a
+            fault. Keep your own copies of anything you need, and do not rely on Loxymity as evidence of, or the
+            only record of, where anyone was.
+          </p>
+        </Sub>
       </Section>
 
       <Section id="calls" title="7. Calls and recording">
         <List>
           <li>
-            You can call people you share a circle with.{' '}
-            <strong>In-app voice calls are recorded automatically</strong>, from the moment a call starts
-            ringing until it ends — so a call that is not answered is recorded on the caller&rsquo;s side.
-            A &ldquo;Recording&rdquo; notice is shown on the call screen. There is no per-call choice: by
-            placing or answering an in-app voice call you agree to it being recorded, and you confirm you
-            can agree for yourself. Calls in which either person is under 18 are never recorded, and video
-            calls are not recorded at present.
+            You can call people you share a circle with. <strong>In-app calls are not recorded at
+            present.</strong> If we switch recording of voice calls on (for example to help investigate abuse
+            and safety reports), we will update these Terms and the Privacy Policy first and a notice will show
+            on every call before it is recorded; calls in which either person is under 18 will never be
+            recorded; and by placing or answering a call after that notice you agree to it being recorded and
+            confirm you can agree for yourself.
           </li>
           <li>
-            Recordings are stored encrypted by our storage provider, kept for 28 days and then deleted
-            automatically. They are not available to you in the app. We access a recording only to
-            investigate a safety, abuse or legal matter reported to us, or when the law requires it.
+            Recordings, including those made before recording was switched off on 30 October 2026, are stored
+            encrypted by our storage provider, kept for 28 days and then deleted automatically. They are not
+            available to you in the app. We access a recording only to investigate a safety, abuse or legal
+            matter reported to us, or when the law requires it.
           </li>
           <li>
             Calls depend on both phones having a working connection and may drop. During the hour
@@ -379,11 +452,11 @@ export default function TermsOfService() {
         <Sub title="8.5 Billing, renewal, cancellation and refunds">
           <List>
             <li>
-              Plans are bought in the app and billed by Apple (App Store) or Google (Google Play), whose
-              terms also apply. We do not currently sell plans on our website.
+              Plans bought in the app are billed by Apple (App Store) or Google (Google Play), whose terms
+              also apply. Plans bought on loxymity.com, when we offer them, are covered by section 8.9 instead.
             </li>
             <li>
-              Subscriptions renew automatically at the end of each period unless you cancel at least 24
+              Store subscriptions renew automatically at the end of each period unless you cancel at least 24
               hours before it ends, in your App Store or Google Play account settings. After cancelling
               you keep the plan until the end of the period you paid for.
             </li>
@@ -424,6 +497,58 @@ export default function TermsOfService() {
         <Sub title="8.8 Web dashboard">
           <p>The web dashboard at loxymity.com is available to people who pay for a plan themselves.</p>
         </Sub>
+        <Sub title="8.9 Plans bought on loxymity.com">
+          <p>
+            We may offer plans on loxymity.com, and may stop offering them. Until we do, nothing here obliges
+            us to sell one. When we offer them:
+          </p>
+          <List>
+            <li>
+              They are sold in Indian rupees and paid through a Razorpay invoice by the methods Razorpay offers.
+              Only an adult with a Loxymity account who has accepted these Terms can buy one, and not while they
+              pay for a plan through the App Store or Google Play. The price on the invoice is what you pay; any
+              taxes that apply are included in it or shown on it.
+            </li>
+            <li>
+              A web plan is prepaid for one month or one year and <strong>never renews by itself</strong>.
+              Before it ends we may email you an invoice for the next period. If you pay it before the plan ends,
+              or within 3 days after, the new period starts when the old one ends; otherwise it starts when you
+              pay. Covered circles keep their plan features during those 3 days.
+            </li>
+            <li>
+              An invoice can be paid for 24 hours. If, when your payment arrives, it no longer fits — for example
+              another plan is already active, the invoice is out of date, or the amount is different — it is not
+              applied and we refund it in full.
+            </li>
+            <li>
+              Adding circles or moving to a higher tier starts on the day you pay, and the unused value of your
+              current web plan is taken off the price. Fewer circles, a lower tier or a different period start
+              with your next paid period.
+            </li>
+            <li>
+              If you start paying for a plan through the App Store or Google Play while a web plan is active, the
+              store plan takes over and we refund the unused days of the web plan.
+            </li>
+            <li>
+              <strong>Ending early and refunds.</strong> A monthly plan can be ended within 7 days of paying, and
+              the days not yet used are refunded; after that it is not refunded and simply runs to its end. A
+              yearly plan can be ended at any time: we keep the price of the months started so far — at least 3
+              — at the monthly web price of the same plan, and refund the rest. After an upgrade these rules
+              apply to the whole plan, including what you paid before the upgrade, and a period paid in advance
+              follows them with nothing used. Ending a plan early stops its features straight away.
+            </li>
+            <li>
+              Refunds go back to the way you paid, through Razorpay, on Razorpay&rsquo;s and your bank&rsquo;s
+              timelines. If a refund cannot be made that way (for example because the payment is more than six
+              months old), we will contact you to arrange another way. Nothing in this section takes away a right
+              to a refund you have under consumer law.
+            </li>
+            <li>
+              Section 8.2 applies to web plans too: a circle covered by a web plan stays covered for the period
+              paid for.
+            </li>
+          </List>
+        </Sub>
       </Section>
 
       <Section title="9. Third-party services">
@@ -451,7 +576,10 @@ export default function TermsOfService() {
           host, store, copy, process, transmit and display it only as needed to run, secure and improve
           the Service for you and the people you share with, and as the Privacy Policy describes. You
           confirm you have the rights to everything you share, and that it is lawful. If you send us
-          feedback, we may use it without any obligation to you.
+          feedback, we may use it without any obligation to you. If you send us a place name or a correction,
+          you give us a perpetual, irrevocable, worldwide, royalty-free licence to use, change and publish it
+          as part of our place data — including in data we publish under an open-data licence — without
+          naming you.
         </p>
       </Section>
 
@@ -470,7 +598,9 @@ export default function TermsOfService() {
           switching a feature off quickly for safety or reliability), and may require you to install an
           update to keep using the Service. Changes to your phone&rsquo;s operating system or settings
           can stop background features from working. We will tell you about changes that materially
-          reduce a plan you have paid for, and you may cancel as described in section 8.
+          reduce a plan you have paid for, and you may cancel as described in section 8. Allowances, limits and
+          the features in each plan may change for future billing periods; we will show the change in the app
+          before it applies to you.
         </p>
       </Section>
 
@@ -583,6 +713,12 @@ export default function TermsOfService() {
           nothing here removes the protection of mandatory consumer law, including the Consumer
           Protection Act, 2019.
         </p>
+        <p>
+          To the extent the law allows: you may bring claims against us only on your own behalf, not as a
+          plaintiff or member of a class, collective or representative action; and a claim relating to the
+          Service or these Terms must be started within one year after it arose, or it is barred. Where the law
+          of your country does not allow either of these, it does not apply to you.
+        </p>
       </Section>
 
       <Section title="18. Changes to these Terms">
@@ -602,6 +738,8 @@ export default function TermsOfService() {
           <li>You may not transfer these Terms. We may transfer them to an affiliate or to a successor to the Service, and will tell you if we do.</li>
           <li>We are not responsible for delays or failures caused by events beyond our reasonable control, including network, power, platform or provider outages.</li>
           <li>We may send you notices in the app, by push notification or by email. The English version of these Terms prevails over any translation.</li>
+          <li>Nothing in these Terms creates a partnership, agency, employment or fiduciary relationship between you and us. Apart from Apple, as described below, no one else has any right to enforce them.</li>
+          <li>Place data we publish for download (at <a href="/open-data/LICENSE-ODbL.txt">loxymity.com/open-data</a>) is licensed under the Open Database License, not these Terms.</li>
         </List>
         <Sub title="App Store terms">
           <p>

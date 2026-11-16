@@ -37,7 +37,14 @@ export default function PrivacyPolicy() {
                 Locations, messages and calls are encrypted in transit and protected on our servers, but
                 they are <strong>not end-to-end encrypted</strong>. Only Vault backups are.
               </li>
-              <li>In-app voice calls are recorded and kept for 28 days — never when a child is on the call.</li>
+              <li>
+                In-app calls are not recorded. If we ever switch recording on, we will update this policy first and
+                every call will say so before it is recorded.
+              </li>
+              <li>
+                With approximate location on, our servers show your circles only a rounded position — except while an
+                SOS you raised is open, when the circle you raised it in sees exactly where you are.
+              </li>
               <li>
                 You can pause sharing, leave circles, turn features off and delete your account — in the app
                 or at <a href="/delete-account/">loxymity.com/delete-account</a>. You have 7 days to change
@@ -118,12 +125,18 @@ export default function PrivacyPolicy() {
               the phone is idle.
             </li>
             <li>
+              <strong>Time zone:</strong> the time zone your phone is set to, so plans show at the right time for
+              everyone. Members of your circles can see it.
+            </li>
+            <li>
               <strong>Device and app:</strong> make, model, operating system and app version, an identifier
               for this installation, and push-notification tokens.
             </li>
             <li>
-              <strong>Diagnostics:</strong> crash reports, and an app diagnostic log uploaded regularly so
-              we can fix background-tracking problems. On Android the log can include coordinates. Reports
+              <strong>Diagnostics:</strong> crash reports, and an app diagnostic log that records how
+              background tracking is behaving, so we can fix problems. The log is uploaded about once a day
+              (usually on Wi-Fi or overnight), when you tap Send diagnostic log in Settings, and when we ask
+              your phone for it to investigate a problem. On Android the log can include coordinates. Reports
               about how well tracking survives on your phone model (for example battery-optimisation
               state).
             </li>
@@ -132,8 +145,9 @@ export default function PrivacyPolicy() {
             How often your phone reports depends on what it is doing. Typically it is at most about once a
             minute while you move and about once every ten minutes while you are still, less often on low
             battery, and phones are also woken periodically so the map stays current. Some features report
-            faster for a short time: Live mode (any member of a circle can start it; every member&rsquo;s
-            phone then reports about every 30 seconds for up to an hour), an active trip, or an SOS.
+            faster for a short time: Live mode (a circle owner or admin can start it; the phone of every member
+            who shares with that circle then reports about every 30 seconds for about 15 minutes, unless that
+            member opts out), an active trip, or an SOS.
           </p>
         </Sub>
 
@@ -153,8 +167,8 @@ export default function PrivacyPolicy() {
             </li>
             <li><strong>Schedule checks:</strong> whether someone arrived on time, late or not at all, and how far away they were.</li>
             <li>
-              <strong>Calls:</strong> who called whom, when and for how long; and <strong>recordings of
-              in-app voice calls</strong> (section 5).
+              <strong>Calls:</strong> who called whom, when and for how long. Call recording is switched off
+              (section 5).
             </li>
             <li>
               <strong>Viewing record:</strong> when you open a member&rsquo;s card on the map we record that
@@ -239,7 +253,29 @@ export default function PrivacyPolicy() {
             in your browser&rsquo;s storage. Maps on the website load tiles from OpenStreetMap, and searching
             for a place on the dashboard sends your search to OpenStreetMap&rsquo;s Nominatim service, so
             your browser shares your IP address with them. Our hosting provider (Cloudflare) processes
-            visitors&rsquo; IP addresses to deliver and protect the site.
+            visitors&rsquo; IP addresses to deliver and protect the site, and some forms use Cloudflare
+            Turnstile, which reads technical information about your browser to stop automated abuse.
+          </p>
+        </Sub>
+
+        <Sub title="2.10 Place-name reports (optional)">
+          <p>
+            If you tell us that a place name is wrong, that a place is not there, or suggest a missing one —
+            in the app or at <a href="/places/suggest/">loxymity.com/places/suggest</a> — we keep your report:
+            the place and where it is, the name you suggest, your reason and any note, with your account. When
+            you suggest a name for one of your own stops, the report carries that stop&rsquo;s location; a
+            report never carries anyone else&rsquo;s location. We check reports against OpenStreetMap and
+            Wikidata and may ask an AI model to compare them; the model receives place names, types and public
+            map information only — never who reported it, your note or your location. A name we accept is shown
+            to everyone who uses Loxymity, without your details.
+          </p>
+        </Sub>
+
+        <Sub title="2.11 Business enquiries">
+          <p>
+            If you send an enquiry from <a href="/business/">loxymity.com/business</a>, we keep what you send —
+            your name, work email, organisation, country, what you need and your message — to reply and to follow
+            it up. It is seen only by our team and never added to a mailing list.
           </p>
         </Sub>
       </Section>
@@ -253,6 +289,8 @@ export default function PrivacyPolicy() {
             ['Keeping it working and secure', 'Diagnostics, crash reports, abuse prevention, fraud and plan-limit checks', 'Consent given when you accept this policy (DPDP Act); legitimate interests (GDPR Art. 6(1)(f))'],
             ['Billing', 'Plans, trials, renewals, referral rewards', 'Contract; legal obligations (tax and accounting)'],
             ['Improving sign-up', 'Optional usage statistics; anonymous sign-up diagnostics', 'Consent; the diagnostics are anonymous'],
+            ['Place names', 'Place-name reports you send, and checking them', 'Consent (DPDP Act); legitimate interests in accurate place names (GDPR Art. 6(1)(f))'],
+            ['Business enquiries', 'Replying to an organisation that contacts us', 'Consent (DPDP Act); legitimate interests and steps before a contract (GDPR Art. 6(1)(b) and (f))'],
             ['Legal compliance', 'Responding to lawful requests, enforcing our Terms, keeping records the law requires', 'Legal obligation; legitimate uses under DPDP Act s.7'],
             ['After you delete your account', 'The registration record (180 days) and the record of what you agreed to (3 years) the law requires; a one-way fingerprint of your email and verified phone number (12 months) used only so a new account cannot claim a second free trial or referral reward', 'Legal obligation (Information Technology Rules, 2021; DPDP Act s.6(10)); for the fingerprint, the purpose you accept in this policy (DPDP Act) and our legitimate interest in preventing abuse of free offers (GDPR Art. 6(1)(f))'],
           ]}
@@ -285,10 +323,21 @@ export default function PrivacyPolicy() {
           </List>
           <p>
             If you pause sharing, your phone stops sending new locations; members still see the last
-            location you shared and when. Ghost mode (Infinite) hides your location from your circle&rsquo;s
-            map and history. Location blur (Infinite) makes your position approximate on other
-            members&rsquo; screens, but your exact position is still sent to their phones, so it is not a
-            way to hide where you are. Circle owners can approve, remove and manage members.
+            location you shared and when. Ghost mode (Infinite) hides your location, history, place arrivals
+            and safety events from your circles, and the assistants will not say where you are.
+          </p>
+          <p>
+            <strong>Approximate location</strong> (location blur, Infinite): while it is on, our servers give the
+            members of your circles only a rounded position, about as precise as the setting you chose. Your trail,
+            and anything recorded while it was on, is not shown to them; the points of your place arrivals and
+            safety events are rounded; and your drives show only the nearest town at each end. Two exceptions:
+            while an SOS you raised is open (at most 24 hours), the members of the circle you raised it in see your
+            exact location — so help can find you — and the app tells you so; and what members saw, saved or
+            screenshotted before you turned it on stays with them.
+          </p>
+          <p>
+            Pausing, ghost mode and approximate location work from the moment you turn them on. Circle owners can
+            approve, remove and manage members.
           </p>
           <p>
             In a temporary circle, members see your location history and drives only from when you joined
@@ -306,7 +355,9 @@ export default function PrivacyPolicy() {
             A circle member who links WhatsApp or Alexa, or asks the in-app assistant, can get your name,
             last known place, how long ago, battery and activity. WhatsApp and Alexa answers are delivered
             by Meta and Amazon. Only members of a permanent circle you are in can ask about you this way —
-            not someone you share only a temporary circle with.
+            not someone you share only a temporary circle with. They get nothing while you are in ghost mode, have
+            paused sharing with them or have blocked them (or they you), and only your approximate area while
+            approximate location is on.
           </p>
         </Sub>
         <Sub title="4.4 Your profile photo">
@@ -327,19 +378,30 @@ export default function PrivacyPolicy() {
             Loxymity is reorganised, merged or sold, data may pass to the successor under this policy.
           </p>
         </Sub>
+        <Sub title="4.7 Anyone who can see your phone">
+          <p>
+            Notifications, and Lock Screen cards for trips, Live mode and SOS, can show names, places, battery
+            and SOS messages on a locked phone, where anyone holding it can read them. You can hide the details
+            or turn them off in Settings → Notifications.
+          </p>
+        </Sub>
       </Section>
 
       <Section title="5. Calls and recordings">
         <p>
-          In-app calls are carried by Agora, and you can call only people you share a circle with.{' '}
-          <strong>Voice calls are recorded automatically</strong>, from when the call starts ringing until
-          it ends, so an unanswered call is recorded on the caller&rsquo;s side. A &ldquo;Recording&rdquo;
-          notice shows on the call screen. Calls in which either person is under 18 are never recorded,
-          and video calls are not recorded at present. Recordings are stored encrypted by Cloudflare R2, kept for 28 days and then
-          deleted automatically. They are not available in the app; we access one only to investigate a
-          safety, abuse or legal matter reported to us, or when the law requires it. Call records (who,
-          when, how long) are kept with your account. Recording laws vary, and our{' '}
-          <a href="/terms/#calls">Terms</a> make you responsible for telling the people you call.
+          In-app calls are carried by Agora, and you can call only people you share a circle with. Calls
+          between up-to-date versions of the app are encrypted in transit with a separate key for each call;
+          a call with an older version of the app may not be. Call records (who, when, how long) are kept
+          with your account.
+        </p>
+        <p>
+          <strong>Call recording is switched off: in-app calls are not recorded.</strong> Voice calls were
+          recorded until 30 October 2026; those recordings are stored encrypted by Cloudflare R2 and deleted 28
+          days after their call. We may switch recording of voice calls back on to help investigate abuse and
+          safety reports. If we do, we will update this policy first, a notice will show on every call before
+          it is recorded, calls in which anyone is under 18 will never be recorded, recordings will be kept for
+          28 days, and we will open one only to investigate a safety, abuse or legal matter reported to us, or
+          when the law requires it. Our <a href="/terms/#calls">Terms</a> explain your part.
         </p>
       </Section>
 
@@ -354,15 +416,19 @@ export default function PrivacyPolicy() {
           rows={[
             ['Supabase (Mumbai, India)', 'Database, sign-in, file storage, server functions', 'All account and service data'],
             ['Resend', 'Sending our emails: sign-in codes and account-deletion notices', 'Your email address and the content of the email'],
-            ['Cloudflare', 'R2 storage; hosting of loxymity.com', 'Call recordings and encrypted Vault backups; website visitors’ IP addresses'],
-            ['Agora', 'Voice and video calls, call recording', 'Call audio and video, call participants'],
+            ['Cloudflare', 'R2 storage; hosting of loxymity.com; Turnstile checks on website forms', 'Encrypted Vault backups and call recordings made before recording was switched off; website visitors’ IP addresses and, for Turnstile, technical information about their browser'],
+            ['Agora', 'Voice and video calls (and call recording, which is switched off)', 'Call audio and video, call participants'],
             ['Expo, Google Firebase Cloud Messaging, Apple Push Notification service', 'Delivering notifications', 'Push tokens and notification text — which can include names, place names, battery level and SOS messages'],
             ['Google Firebase Crashlytics', 'Crash reporting', 'Device and app details, an installation identifier, recent diagnostic messages and, once signed in, your account ID'],
             ['Google Maps Platform', 'Maps on Android, Street View, directions, address and place search, place names', 'Map viewport; through our server, a trip’s start and end points, addresses or places you search for, and the coordinates for Street View'],
             ['Apple (MapKit and iOS) and Google Play services', 'Maps on iPhone; turning coordinates into place names on your phone', 'Map viewport; the coordinates being named'],
             ['BigDataCloud', 'Place names for assistant answers (fallback)', 'Coordinates'],
             ['OpenWeather, WeatherAPI', 'Weather on the map', 'A location'],
-            ['Groq', 'Understanding questions asked to the assistant', 'Only the text of the question'],
+            ['Groq', 'Understanding questions asked to the assistant; comparing place-name reports', 'Only the text of a question; for place reports, place names, types and public map information — never who reported it'],
+            ['OpenStreetMap (Overpass servers) and Wikidata (Wikimedia Foundation)', 'Checking place-name reports against public map data', 'The name and approximate area of the place being checked — nothing about you'],
+            ['GitHub (Microsoft)', 'Running our scheduled maintenance and backup jobs; storing our backups', 'A copy of our database while a backup is made; stored backups are encrypted first, so GitHub cannot read them'],
+            ['Neon (Databricks), Frankfurt, Germany', 'A copy of our database used to analyse how the Service works and to test changes safely', 'Account and service data, with passwords, sign-in tokens and other secrets removed or scrambled'],
+            ['Google (ML Kit) and Apple (Translation)', 'Translating official alerts, on your phone', 'Nothing — the text is translated on your phone; it downloads the language pack from Google or Apple'],
             ['Meta (WhatsApp Business Platform)', 'WhatsApp verification and questions, if you link WhatsApp', 'Your phone number, your messages and our replies'],
             ['Amazon (Alexa)', 'Alexa answers, if you enable the skill', 'Your requests and our spoken and card replies'],
             ['adsb.lol, adsbdb, FlightAware', 'Flight tracking', 'Flight numbers; FlightAware pages you open receive your IP address'],
@@ -377,7 +443,8 @@ export default function PrivacyPolicy() {
       <Section title="7. International transfers">
         <p>
           Our database is in Mumbai, India. Some providers above process data in other countries,
-          including the United States, the European Union and on global networks (Agora, Cloudflare).
+          including the United States, the European Union (among them Germany, where our database copy at Neon is
+          kept) and on global networks (Agora, Cloudflare).
           Transfers out of India are permitted under section 16 of the DPDP Act except to countries the
           Government of India restricts. For people in the EEA, UK and Switzerland, we rely on the
           safeguards our providers offer, such as the European Commission&rsquo;s Standard Contractual
@@ -390,20 +457,24 @@ export default function PrivacyPolicy() {
           head={['Data', 'How long']}
           rows={[
             ['Your latest location', 'One record, replaced with each update. Stays visible to your circle while you are a member, even when paused.'],
-            ['Location history and drives on our servers', 'Up to 7 days on Free (you can open the last 2), 30 days with Gold, 90 with Platinum and 180 with Infinite — the longest window you benefit from, including through a covered circle. Moving to a shorter window does not delete points early. Older points are removed as your phone sends new ones; if a phone stops sending altogether, its stored points remain until the account is deleted. Infinite members can also auto-delete after 1, 3 or 7 days.'],
+            ['Location history and drives on our servers', 'Up to 7 days on Free (you can open the last 2), 30 days with Gold, 90 with Platinum and 180 with Infinite — the longest window you benefit from, including through a covered circle. Moving to a shorter window does not delete points early. Points older than the window are deleted every night, so one can remain for up to a day longer. Infinite members can also auto-delete after 1, 3 or 7 days.'],
             ['History on your phone', 'As long as you choose (Data & Storage).'],
             ['Circle messages', '90 days.'],
             ['Direct messages', 'Until the account of either person is deleted.'],
             ['Assistant conversations in the app', '30 days.'],
             ['WhatsApp messages', 'Content 30 days; the record that a message was handled, 90 days.'],
             ['Alexa requests and saved WhatsApp questions', 'Until you delete your account or ask us to delete them.'],
-            ['Call recordings', '28 days, including after an account is deleted. Calls involving anyone under 18 are not recorded.'],
+            ['Call recordings', 'Recording is switched off. Recordings made before 30 October 2026 are deleted 28 days after their call, including after an account is deleted. Calls involving anyone under 18 were never recorded.'],
             ['A child’s history on any phone that keeps a copy (including a parent’s) and in backups', '48 hours.'],
             ['Reports and the copy of a reported message', 'As long as needed to deal with the report and any related safety or legal matter.'],
-            ['Call records, SOS alerts and responses, safety and place events, the viewing record, schedules you keep', 'While your account exists. Schedule checks: 30 days. Flights: 30 days.'],
+            ['Call records, SOS alerts and responses, safety and place events, the viewing record, schedules you keep', 'While your account exists. Schedule checks: 30 days, or as long as the person’s plan keeps location history (up to 180 days). Flights: 30 days.'],
             ['Offline-relay sightings', '7 days (undelivered relay packets: 1 day).'],
             ['Notification records', '30 days.'],
-            ['Diagnostic log', 'Replaced by each new upload; deleted with your account.'],
+            ['Diagnostic log', 'About two weeks: one file per day of the week, each replaced by the next upload for that day; deleted with your account.'],
+            ['Your time zone', 'While your account exists; replaced when it changes.'],
+            ['Place-name reports', 'Your account and any note: 180 days. The report: 24 months. A name we accepted stays in our place data, without your details.'],
+            ['Business enquiries', '24 months after we last update the enquiry; spam 30 days.'],
+            ['Our own encrypted database backups', '30 days, then deleted.'],
             ['Crash reports (Crashlytics)', 'Up to 90 days.'],
             ['Usage statistics; anonymous sign-up diagnostics', '90 days. The diagnostics are anonymous, so we cannot find one person’s on request.'],
             ['Vault backup', 'Until you replace it or delete your account.'],
@@ -441,7 +512,8 @@ export default function PrivacyPolicy() {
             invoices for plans bought on loxymity.com as long as tax law requires, and reports as long as
             a safety or legal matter needs them. If a court or the police lawfully ask us to preserve an
             account, we keep what they ask for as long as they require. Call recordings expire within 28
-            days, and copies in our providers&rsquo; backups are overwritten in their normal cycle.
+            days, our own encrypted backups within 30 days, and copies in our providers&rsquo; backups and in
+            our database copy at Neon are overwritten or refreshed in their normal cycle.
           </p>
           <p>
             You can create a new account at any time. Deleting your account does not cancel a store
@@ -468,6 +540,9 @@ export default function PrivacyPolicy() {
             <strong>Vault backups</strong> are encrypted on your phone with a key made from your backup
             password, which never leaves your phone; we hold only the encrypted file and cannot read it. If
             you lose the password, we cannot recover the backup.
+          </li>
+          <li>
+            In-app calls between up-to-date apps are encrypted in transit with a separate key for each call.
           </li>
           <li>
             Locations, messages, call audio, recordings and relay packets are not end-to-end encrypted: they
@@ -536,6 +611,7 @@ export default function PrivacyPolicy() {
             </li>
             <li>Change or withdraw phone permissions (location, motion, contacts, calendar, Bluetooth, notifications) in your phone&rsquo;s settings.</li>
             <li>Edit your name, photo and phone number; shorten or delete the history kept on your phone.</li>
+            <li>Turn on approximate location (Infinite), and choose what notifications show on your Lock Screen (Settings → Notifications).</li>
             <li>Infinite: export a copy of your data instantly, and use ghost mode and auto-delete.</li>
           </List>
         </Sub>
@@ -568,8 +644,8 @@ export default function PrivacyPolicy() {
         <Sub title="United States (including California)">
           <p>
             We collect the categories described in section 2: identifiers, contact details, precise
-            geolocation, device and network information, audio (call recordings), communications, and
-            purchase records. We do not sell or share personal information for cross-context behavioural
+            geolocation, device and network information, audio (call recordings, only while recording is
+            switched on), communications, and purchase records. We do not sell or share personal information for cross-context behavioural
             advertising, and we use precise geolocation and other sensitive personal information only to
             provide the Service. You may ask to know, correct or delete your personal information, and we
             will not discriminate against you for doing so. An authorised agent may make a request for you
