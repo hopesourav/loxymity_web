@@ -59,12 +59,13 @@ export default function DeleteAccountPage() {
           <li><strong>Name, email address, phone number and the dates you joined and left</strong> — 180 days, as the Information Technology Rules, 2021 require. Then erased.</li>
           <li><strong>A record of the terms you agreed to</strong> — 3 years, so we can show consent was given.</li>
           <li><strong>A one-way fingerprint of your email address and verified phone number</strong> — 12 months, only so a new account can&rsquo;t claim a second free trial or referral reward. It can&rsquo;t be turned back into your email or number.</li>
-          <li><strong>Call recordings</strong> — deleted within 28 days of the call.</li>
+          <li><strong>Call recordings</strong> — call recording is switched off; any recording made before 30 October 2026 is deleted 28 days after its call.</li>
           <li><strong>Invoices for plans bought on loxymity.com</strong> — as long as tax law requires.</li>
         </List>
         <p>
           If a court or the police lawfully ask us to preserve an account, we keep what they ask for as long
-          as they require. Copies in our providers&rsquo; backups are overwritten in their normal cycle.
+          as they require. Our own encrypted backups expire within 30 days, and copies in our providers&rsquo;
+          backups are overwritten in their normal cycle.
           Section 8 of our <a href="/privacy/">Privacy Policy</a> has the details.
         </p>
       </Section>
@@ -72,7 +73,7 @@ export default function DeleteAccountPage() {
       <Section id="some-data" title="Delete some of your data and keep your account">
         <List>
           <li><strong>In the app:</strong> change your name, photo or phone number, and shorten or delete the history kept on your phone. Infinite members can also have their location history deleted automatically after 1, 3 or 7 days.</li>
-          <li><strong>Anything else</strong> — for example your location history on our servers, a drive, your messages, call recordings or your Vault backup: write to <a href="mailto:privacy@loxymity.com">privacy@loxymity.com</a> from the email address on your account and say what you want deleted. We may ask you to confirm it is you, and we reply within 30 days.</li>
+          <li><strong>Anything else</strong> — for example your location history on our servers, a drive, your messages, a place-name report or your Vault backup: write to <a href="mailto:privacy@loxymity.com">privacy@loxymity.com</a> from the email address on your account and say what you want deleted. We may ask you to confirm it is you, and we reply within 30 days.</li>
         </List>
         <p>
           Section 11 of our <a href="/privacy/">Privacy Policy</a> lists all your choices and rights.
