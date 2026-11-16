@@ -12,6 +12,7 @@
 /share/*
   Referrer-Policy: strict-origin
   Cache-Control: no-store
+  X-Robots-Tag: noindex
 
 # Invite codes are in the path: no Referer, no indexing, no caching.
 /join/*

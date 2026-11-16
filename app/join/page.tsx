@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { APP_STORE_URL, DOWNLOAD_URL, playUrlWithReferrer } from '../_lib/appLinks';
+import { LogoFull } from '../_components/Logo';
+import { StoreButtons } from '../_components/StoreButtons';
+import { APP_STORE_URL, DOWNLOAD_URL, PLAY_URL, playUrlWithReferrer } from '../_lib/appLinks';
 
 // Circle invite landing page — https://loxymity.com/join/<CODE> (or /join?code=<CODE>).
 //
@@ -13,6 +15,9 @@ import { APP_STORE_URL, DOWNLOAD_URL, playUrlWithReferrer } from '../_lib/appLin
 // Copying is a TAP, not automatic — iOS Safari only allows clipboard writes from a gesture.
 // "Open in Loxymity" is a button, not an automatic redirect: a custom-scheme redirect with no
 // app installed shows Safari's "invalid address" error.
+//
+// A link with a missing or broken code still offers the stores (it used to hide the Play button,
+// because the referrer URL needs a code).
 
 const CODE_RE = /^[A-Z0-9]{6}$|^[A-Z0-9]{8}$/;
 
@@ -31,79 +36,74 @@ function pretty(code: string): string {
 export default function JoinPage() {
   const [code, setCode] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [copy, setCopy] = useState<'idle' | 'done' | 'failed'>('idle');
 
   useEffect(() => {
     setCode(readCode());
     setReady(true);
   }, []);
 
-  const play = code ? playUrlWithReferrer('invite', code) : null;
-  const noStore = !play && !APP_STORE_URL;
+  const play = code ? playUrlWithReferrer('invite', code) : PLAY_URL;
+  const noStore = !play && !APP_STORE_URL && !DOWNLOAD_URL;
+
+  const onCopy = () => {
+    if (!code) return;
+    if (!navigator.clipboard) { setCopy('failed'); return; }
+    navigator.clipboard.writeText(code).then(() => setCopy('done')).catch(() => setCopy('failed'));
+  };
 
   return (
-    <main style={page}>
-      <div style={{ fontSize: 44 }} aria-hidden>👋</div>
-      <h1 style={{ fontSize: 24, fontWeight: 800, margin: 0 }}>You&apos;re invited to a Loxymity circle</h1>
-      <p style={muted}>
-        Loxymity lets your family see where each other is — and gets help to you fast in an emergency.
-      </p>
-
-      {ready && code && (
-        <div style={card}>
-          <div style={{ fontSize: 12, color: '#A0AEC0', marginBottom: 4 }}>Your invite code</div>
-          <div style={{ fontSize: 28, fontWeight: 700, letterSpacing: 4, color: '#5C6BF8' }}>{pretty(code)}</div>
-          <button
-            type="button"
-            style={{ ...btn('transparent', '#F1F5F9', '#334155'), marginTop: 12, width: '100%', cursor: 'pointer' }}
-            onClick={() => {
-              navigator.clipboard?.writeText(code).then(() => setCopied(true)).catch(() => {});
-            }}
-          >
-            {copied ? 'Copied ✓' : 'Copy code'}
-          </button>
-          <div style={{ fontSize: 12, color: '#64748B', marginTop: 8 }}>Works once, for one person, for 7 days.</div>
+    <main className="relative flex min-h-screen flex-col items-center justify-center gap-6 overflow-hidden bg-dark-bg px-6 py-16 text-center">
+      <div className="aurora" aria-hidden="true"><span className="a1" /><span className="a2" /></div>
+      <div className="relative z-10 flex w-full max-w-sm flex-col items-center gap-6">
+        <LogoFull className="text-3xl" />
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight text-dark-text">You&apos;re invited to a Loxymity circle</h1>
+          <p className="mt-3 text-[15px] leading-relaxed text-dark-muted">
+            Loxymity lets your family see where each other is — and gets help to you fast in an emergency.
+          </p>
         </div>
-      )}
 
-      {ready && !code && (
-        <p style={muted}>This invite link looks incomplete. Ask the person who invited you to send it again.</p>
-      )}
+        {ready && code && (
+          <div className="card-premium w-full rounded-2xl px-5 py-4">
+            <p className="text-xs text-dark-muted">Your invite code</p>
+            <p className="mt-1 text-3xl font-semibold tracking-[0.2em] text-primary-soft">{pretty(code)}</p>
+            <button
+              type="button"
+              onClick={onCopy}
+              className="mt-3 w-full rounded-xl border border-white/[0.1] py-2.5 text-sm font-semibold text-dark-text transition-colors hover:bg-white/5"
+            >
+              {copy === 'done' ? 'Copied ✓' : copy === 'failed' ? 'Couldn’t copy — type the code instead' : 'Copy code'}
+            </button>
+            <p className="mt-2 text-xs text-dark-muted">Works once, for one person, for 7 days.</p>
+          </div>
+        )}
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, width: '100%', maxWidth: 320 }}>
+        {ready && !code && (
+          <p className="text-sm text-dark-muted">This invite link looks incomplete. Ask the person who invited you to send it again.</p>
+        )}
+
         {code && (
-          <a href={`loxymity://join?code=${encodeURIComponent(code)}`} style={btn('#5C6BF8', '#fff')}>
+          <a
+            href={`loxymity://join?code=${encodeURIComponent(code)}`}
+            className="w-full rounded-full bg-primary py-3.5 text-[15px] font-semibold text-dark-bg transition-colors hover:bg-primary-dark"
+          >
             Open in Loxymity
           </a>
         )}
-        {play && <a href={play} style={btn('transparent', '#F1F5F9', '#334155')}>Get it on Google Play</a>}
-        {APP_STORE_URL && <a href={APP_STORE_URL} style={btn('transparent', '#F1F5F9', '#334155')}>Download on the App Store</a>}
-        {DOWNLOAD_URL && <a href={DOWNLOAD_URL} style={btn('transparent', '#F1F5F9', '#334155')}>Get the app</a>}
-      </div>
 
-      <p style={{ ...muted, fontSize: 13 }}>
-        {noStore && !DOWNLOAD_URL
-          ? 'Loxymity isn’t in the app stores yet — ask the person who invited you how to get it. '
-          : 'After installing, '}
-        open Loxymity, tap <strong>I have an invite</strong> and paste the code.
-      </p>
+        <StoreButtons playHref={play} />
+        {DOWNLOAD_URL && (
+          <a href={DOWNLOAD_URL} className="text-sm font-semibold text-primary-soft hover:underline">Other ways to get the app</a>
+        )}
+
+        <p className="text-[13px] leading-relaxed text-dark-muted">
+          {noStore
+            ? 'Loxymity isn’t in the app stores yet — ask the person who invited you how to get it. Then '
+            : 'After installing, '}
+          open Loxymity, tap <strong className="text-dark-text">I have an invite</strong> and paste the code.
+        </p>
+      </div>
     </main>
   );
-}
-
-const page: React.CSSProperties = {
-  minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-  gap: 20, padding: 24, fontFamily: 'system-ui, -apple-system, Segoe UI, Roboto, sans-serif',
-  background: '#0F172A', color: '#F1F5F9', textAlign: 'center',
-};
-const muted: React.CSSProperties = { fontSize: 15, lineHeight: 1.5, color: '#A0AEC0', maxWidth: 340, margin: 0 };
-const card: React.CSSProperties = {
-  background: '#1E293B', border: '1px solid #334155', borderRadius: 14, padding: '14px 20px', minWidth: 260,
-};
-
-function btn(bg: string, color: string, border?: string): React.CSSProperties {
-  return {
-    display: 'block', background: bg, color, border: border ? `1px solid ${border}` : 'none',
-    borderRadius: 12, padding: '14px 18px', fontSize: 15, fontWeight: 700, textDecoration: 'none',
-  };
 }

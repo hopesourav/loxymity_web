@@ -31,11 +31,23 @@ const config: Config = {
           danger:  '#B5453F',
           warning: '#C08B3E',
         },
+        // The app's own semantic hues (src/lib/palette.ts in the app repo), used by the public
+        // pages so the site and the phone speak the same colour language. Text/icon use only —
+        // white text on these fails 4.5:1; `brand.*` above stays for the dashboard and admin.
+        status: {
+          ok:   '#10B981',
+          sos:  '#EF4444',
+          warn: '#F59E0B',
+        },
+        // The app's brand-coloured text on dark surfaces (palette.primaryOnDark).
+        'primary-soft': '#8C97FF',
       },
       fontFamily: {
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
         display: ['var(--font-fraunces)', 'Georgia', 'serif'],
         hud: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        // The logo's face (Instrument Serif). Public pages use it for ONE accent word per heading.
+        serif: ['var(--font-instrument)', 'Georgia', '"Times New Roman"', 'serif'],
       },
     },
   },

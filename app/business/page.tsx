@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
-import { LogoFull } from '../_components/Logo';
 import BusinessEnquiryForm from '../_components/BusinessEnquiryForm';
+import { SiteFooter } from '../_components/SiteFooter';
+import { SiteNav } from '../_components/SiteNav';
 import { BUSINESS_EMAIL } from '../_lib/business';
 
 /**
@@ -57,7 +57,7 @@ const FAQ = [
   },
   {
     q: 'Where are you available?',
-    a: 'The app is on the App Store and Google Play. We are talking to organisations in India, the UK, the EU and the US — tell us where your people are.',
+    a: 'Loxymity runs on iPhone and Android. We are talking to organisations in India, the UK, the EU and the US — tell us where your people are.',
   },
   {
     q: 'Is our data sold?',
@@ -68,30 +68,20 @@ const FAQ = [
 export default function BusinessPage() {
   return (
     <div className="min-h-screen bg-dark-bg">
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-dark-bg/90 backdrop-blur-lg border-b border-dark-border">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/"><LogoFull className="text-2xl font-bold" /></Link>
-          <div className="flex items-center gap-5">
-            <Link href="/" className="hidden sm:inline text-sm text-dark-muted hover:text-dark-text transition-colors">← Home</Link>
-            <a href="#enquiry" className="bg-primary hover:bg-primary-dark text-dark-bg text-sm font-semibold px-5 py-2.5 rounded-full transition-colors">
-              Talk to us
-            </a>
-          </div>
-        </div>
-      </nav>
+      <SiteNav />
 
       <header className="relative pt-36 pb-16 px-6 overflow-hidden">
         <div className="aurora" aria-hidden="true"><span className="a1" /><span className="a3" /></div>
         <div className="relative z-10 max-w-3xl mx-auto text-center">
-          <p className="font-hud uppercase tracking-wide text-sm font-semibold text-primary mb-4">For organisations</p>
-          <h1 className="font-display text-4xl md:text-6xl font-semibold text-dark-text tracking-tight leading-tight">
+          <p className="eyebrow mb-4">For organisations</p>
+          <h1 className="text-4xl md:text-6xl font-semibold text-dark-text tracking-[-0.03em] leading-tight">
             Safety for the people who work for you — <span className="text-gradient">and the people they go home to.</span>
           </h1>
           <p className="text-dark-muted text-lg mt-6">
             Loxymity is location sharing that people choose and control: shared by the person, for their safety.
             Never sold, no ads.
           </p>
-          <a href="#enquiry" className="inline-block mt-8 bg-primary hover:bg-primary-dark text-dark-bg font-bold px-8 py-3.5 rounded-xl transition-colors">
+          <a href="#enquiry" className="inline-block mt-8 bg-primary hover:bg-primary-dark text-dark-bg font-semibold px-8 py-3.5 rounded-full transition-colors">
             Talk to us
           </a>
         </div>
@@ -99,7 +89,7 @@ export default function BusinessPage() {
 
       <section className="py-16 px-6">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-display text-3xl md:text-4xl font-semibold text-dark-text text-center mb-10">What we offer</h2>
+          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-dark-text text-center mb-10">What we offer</h2>
           <div className="grid md:grid-cols-2 gap-6">
             {OFFERS.map((o) => (
               <div key={o.title} className="card-premium gradient-border rounded-3xl p-7">
@@ -117,11 +107,11 @@ export default function BusinessPage() {
 
       <section className="py-16 px-6 bg-dark-surface/40 border-y border-dark-border">
         <div className="max-w-3xl mx-auto">
-          <h2 className="font-display text-3xl font-semibold text-dark-text text-center mb-8">How we work with organisations</h2>
+          <h2 className="text-3xl font-semibold tracking-tight text-dark-text text-center mb-8">How we work with organisations</h2>
           <ul className="space-y-3">
             {PRINCIPLES.map((p) => (
               <li key={p} className="flex items-start gap-3 text-dark-muted">
-                <svg className="w-5 h-5 text-brand-success flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <svg className="w-5 h-5 text-status-ok flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 13l4 4L19 7" />
                 </svg>
                 <span>{p}</span>
@@ -133,7 +123,7 @@ export default function BusinessPage() {
 
       <section className="py-16 px-6">
         <div className="max-w-3xl mx-auto">
-          <h2 className="font-display text-3xl font-semibold text-dark-text text-center mb-6">Questions</h2>
+          <h2 className="text-3xl font-semibold tracking-tight text-dark-text text-center mb-6">Questions</h2>
           <div className="divide-y divide-dark-border">
             {FAQ.map(({ q, a }) => (
               <details key={q} className="py-5 group">
@@ -152,29 +142,16 @@ export default function BusinessPage() {
 
       <section id="enquiry" className="scroll-mt-20 py-16 px-6">
         <div className="max-w-3xl mx-auto rounded-3xl border border-dark-border bg-dark-surface p-7 md:p-10">
-          <h2 className="font-display text-3xl font-semibold text-dark-text mb-2">Talk to us</h2>
+          <h2 className="text-3xl font-semibold tracking-tight text-dark-text mb-2">Talk to us</h2>
           <p className="text-dark-muted text-sm mb-8">
-            Tell us about your organisation and what you need. We reply within 2 working days. Prefer email?
+            Tell us about your organisation and what you need. We aim to reply within 2 working days. Prefer email?
             Write to <a href={`mailto:${BUSINESS_EMAIL}`} className="text-primary hover:underline">{BUSINESS_EMAIL}</a>.
           </p>
           <BusinessEnquiryForm />
         </div>
       </section>
 
-      <footer className="py-10 px-6 bg-dark-bg border-t border-dark-border">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div>
-            <div className="mb-2"><LogoFull className="text-xl font-bold opacity-80" /></div>
-            <p className="text-dark-muted text-sm">© {new Date().getFullYear()} AMSEK RESEARCH LABS LLP. All rights reserved.</p>
-          </div>
-          <div className="flex gap-6 text-sm text-dark-muted">
-            <Link href="/privacy/" className="hover:text-dark-text transition-colors">Privacy Policy</Link>
-            <Link href="/terms/" className="hover:text-dark-text transition-colors">Terms of Service</Link>
-            <Link href="/delete-account/" className="hover:text-dark-text transition-colors">Delete your account</Link>
-            <Link href="/" className="hover:text-dark-text transition-colors">Home</Link>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

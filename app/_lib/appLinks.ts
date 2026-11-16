@@ -1,17 +1,30 @@
 /**
- * Where people get the app. ONE place, read from env at build time, so a page can never again
- * ship a stale package id (the /refer page linked com.sawsibinfotech.loxymity after the bundle
- * rename) or a placeholder App Store id.
+ * Where people get the app. ONE place, so a page can never again ship a stale package id (the
+ * /refer page linked com.sawsibinfotech.loxymity after the bundle rename) or a placeholder App
+ * Store id.
  *
- *   NEXT_PUBLIC_PLAY_URL       e.g. https://play.google.com/store/apps/details?id=com.amsekresearch.loxymity
- *   NEXT_PUBLIC_APP_STORE_URL  e.g. https://apps.apple.com/app/loxymity/id<real id>
+ * The defaults are the real store listings:
+ *   Google Play  com.amsekresearch.loxymity (the app's PLAY_STORE_URL, src/lib/updateChecker.ts)
+ *   App Store    Apple ID 6818562041 (App Store Connect; the app's APP_STORE_URL)
+ *
+ * Build-time overrides (Cloudflare Pages env):
+ *   NEXT_PUBLIC_PLAY_URL       another Play URL — or `off` to hide every Google Play button
+ *   NEXT_PUBLIC_APP_STORE_URL  another App Store URL — or `off` to hide every App Store button
  *   NEXT_PUBLIC_DOWNLOAD_URL   any other channel while unlisted (APK page, TestFlight invite)
  *
- * Unset = that button is hidden. Until a store listing exists, the pages say "ask the person who
- * invited you for the app" instead of linking to a store page that does not exist.
+ * A hidden store button shows "Coming soon" on the landing page instead of a dead link.
  */
-export const PLAY_URL: string | null = process.env.NEXT_PUBLIC_PLAY_URL || null;
-export const APP_STORE_URL: string | null = process.env.NEXT_PUBLIC_APP_STORE_URL || null;
+const DEFAULT_PLAY_URL = 'https://play.google.com/store/apps/details?id=com.amsekresearch.loxymity';
+const DEFAULT_APP_STORE_URL = 'https://apps.apple.com/app/loxymity/id6818562041';
+
+function pick(env: string | undefined, fallback: string): string | null {
+  const v = (env ?? '').trim();
+  if (v.toLowerCase() === 'off') return null;
+  return v || fallback;
+}
+
+export const PLAY_URL: string | null = pick(process.env.NEXT_PUBLIC_PLAY_URL, DEFAULT_PLAY_URL);
+export const APP_STORE_URL: string | null = pick(process.env.NEXT_PUBLIC_APP_STORE_URL, DEFAULT_APP_STORE_URL);
 export const DOWNLOAD_URL: string | null = process.env.NEXT_PUBLIC_DOWNLOAD_URL || null;
 
 /** Play hands `referrer` back to the app on first launch (Android deferred deep link). */

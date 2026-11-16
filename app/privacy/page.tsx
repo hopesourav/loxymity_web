@@ -343,7 +343,7 @@ export default function PrivacyPolicy() {
         </p>
       </Section>
 
-      <Section title="6. Service providers">
+      <Section id="providers" title="6. Service providers">
         <p>
           We use the providers below to run Loxymity. Each receives only what its job needs and may use it
           only to provide its service. We do not use advertising or analytics SDKs, and we do not collect

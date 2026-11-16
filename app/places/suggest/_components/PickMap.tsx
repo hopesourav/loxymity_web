@@ -9,6 +9,9 @@
  */
 import { useEffect, useRef } from 'react';
 import { MAP_TILE_URL, mapTileOptions } from '../../../_lib/mapTiles';
+// Bundled with the page instead of a <link> to unpkg.com, so no visitor's browser calls a CDN the
+// Privacy Policy does not name.
+import 'leaflet/dist/leaflet.css';
 
 type Props = {
   point: { lat: number; lng: number } | null;
@@ -26,13 +29,6 @@ export default function PickMap({ point, onPick }: Props) {
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      if (!document.getElementById('leaflet-css')) {
-        const link = document.createElement('link');
-        link.id = 'leaflet-css';
-        link.rel = 'stylesheet';
-        link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
-        document.head.appendChild(link);
-      }
       const L = (await import('leaflet')).default;
       if (cancelled || !hostRef.current || mapRef.current) return;
       LRef.current = L;

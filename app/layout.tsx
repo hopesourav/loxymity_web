@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter, Fraunces, Instrument_Serif } from 'next/font/google';
 import './globals.css';
 
@@ -8,10 +8,13 @@ const fraunces = Fraunces({ subsets: ['latin'], style: ['normal', 'italic'], var
 // The logo's face ("Loxymity." — app/_components/Logo.tsx), shared with the app icon and splash.
 const instrument = Instrument_Serif({ subsets: ['latin'], weight: '400', variable: '--font-instrument', display: 'swap' });
 
+const DESCRIPTION =
+  'See where your family is, right now, on a private live map — with an SOS that rings, a crash check, place alerts, driving reports and answers in WhatsApp. Free to start. Your location is never sold.';
+
+// Claims here are what a shipped build does today (Alexa is paused, so it is not named).
 export const metadata: Metadata = {
-  title: 'Loxymity — See where your circle is, right now',
-  description:
-    'Loxymity is a private, real-time location sharing app for families and close friends. Live map, SOS alerts, circle chat, geo-fencing, driving reports, flight tracking, in-app calls, Street View, and AI-powered location queries from WhatsApp & Alexa. It keeps working when a phone has no signal — and your location is never sold.',
+  title: 'Loxymity — Private location sharing for families',
+  description: DESCRIPTION,
   // All four files live in public/ (none existed before 2026-10-25, so every one 404'd).
   icons: {
     icon: [
@@ -21,8 +24,8 @@ export const metadata: Metadata = {
     apple: '/apple-touch-icon.png',
   },
   openGraph: {
-    title: 'Loxymity — Stay connected with your circle',
-    description: 'Real-time location sharing with SOS alerts, circle chat, geo-fencing, driving reports, flight tracking, Street View, and AI location queries from WhatsApp & Alexa. Works with no signal. Privacy-first — never sold.',
+    title: 'Loxymity — Never wonder where they are again',
+    description: DESCRIPTION,
     url: 'https://loxymity.com',
     siteName: 'Loxymity',
     type: 'website',
@@ -30,11 +33,16 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Loxymity',
+    title: 'Loxymity — Never wonder where they are again',
     images: ['/og.png'],
-    description: 'Real-time location sharing with SOS alerts, circle chat, geo-fencing, driving reports, flight tracking, Street View, and AI location queries from WhatsApp & Alexa. Works with no signal. Privacy-first — never sold.',
+    description: DESCRIPTION,
   },
   metadataBase: new URL('https://loxymity.com'),
+};
+
+export const viewport: Viewport = {
+  themeColor: '#080A1C',
+  colorScheme: 'dark',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

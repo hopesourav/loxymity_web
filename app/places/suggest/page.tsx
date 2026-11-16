@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
-import { LogoFull } from '../../_components/Logo';
+import { SiteFooter } from '../../_components/SiteFooter';
+import { SiteNav } from '../../_components/SiteNav';
 import SuggestForm from './_components/SuggestForm';
 
 /**
@@ -21,29 +21,25 @@ export const metadata: Metadata = {
 export default function SuggestPlacePage() {
   return (
     <div className="min-h-screen bg-dark-bg">
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-dark-bg/90 backdrop-blur-lg border-b border-dark-border">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/"><LogoFull className="text-2xl font-bold" /></Link>
-          <Link href="/" className="text-sm text-dark-muted hover:text-dark-text transition-colors">← Home</Link>
-        </div>
-      </nav>
+      <SiteNav back />
 
       <main className="pt-28 pb-20 px-6">
         <div className="max-w-2xl mx-auto">
-          <p className="font-hud uppercase tracking-wide text-sm font-semibold text-primary mb-3">Place names</p>
-          <h1 className="font-display text-3xl md:text-4xl font-semibold text-dark-text tracking-tight">
+          <p className="eyebrow mb-3">Place names</p>
+          <h1 className="text-3xl md:text-4xl font-semibold text-dark-text tracking-[-0.03em]">
             Suggest a place or fix a name
           </h1>
           <p className="text-dark-muted mt-4">
             Loxymity names the places you stop at — &ldquo;Near Victoria Memorial&rdquo;, &ldquo;In Salt Lake&rdquo;.
             Those names are shared by everyone who uses the app, so we check each suggestion before anything
-            changes. If it&apos;s right, the new name usually reaches phones within 2 days.
+            changes. If we accept it, the new name usually reaches phones within a few days.
           </p>
           <div className="mt-8">
             <SuggestForm />
           </div>
         </div>
       </main>
+      <SiteFooter showStores={false} />
     </div>
   );
 }

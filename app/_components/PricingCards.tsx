@@ -29,7 +29,7 @@ import {
 
 function CheckIcon() {
   return (
-    <svg className="w-4 h-4 text-brand-success flex-shrink-0" fill="none" viewBox="0 0 24 24"
+    <svg className="w-4 h-4 text-status-ok flex-shrink-0" fill="none" viewBox="0 0 24 24"
          stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M5 13l4 4L19 7" />
     </svg>
@@ -125,7 +125,7 @@ export default function PricingCards() {
               {plan.id ? (
                 <>
                   <p className="flex items-baseline gap-1 mb-1">
-                    <span className="font-display font-bold text-dark-text text-4xl">{formatPrice(price, currency)}</span>
+                    <span className="font-semibold tracking-tight text-dark-text text-4xl">{formatPrice(price, currency)}</span>
                     <span className="text-dark-muted text-sm">/ {per}</span>
                   </p>
                   {period === 'annual' && (
@@ -138,7 +138,7 @@ export default function PricingCards() {
                     {circles === 1 ? 'Covers 1 circle' : `Covers ${circles} circles`}
                   </p>
                   {period === 'annual' && saving > 0 ? (
-                    <p className="self-start text-brand-success text-xs font-bold bg-brand-success/8 border border-brand-success/20 rounded-lg px-2.5 py-1.5 mb-5">
+                    <p className="self-start text-status-ok text-xs font-semibold bg-status-ok/10 border border-status-ok/20 rounded-lg px-2.5 py-1.5 mb-5">
                       Save {saving}% vs paying monthly
                     </p>
                   ) : (
@@ -148,9 +148,9 @@ export default function PricingCards() {
               ) : (
                 <>
                   <p className="flex items-baseline gap-1 mb-1">
-                    <span className="font-display text-5xl font-black text-dark-text">{formatPrice(0, currency)}</span>
+                    <span className="text-5xl font-semibold tracking-tight text-dark-text">{formatPrice(0, currency)}</span>
                   </p>
-                  <p className="text-dark-muted text-xs mb-8">Free forever — no card needed</p>
+                  <p className="text-dark-muted text-xs mb-8">Free to use — no card needed</p>
                 </>
               )}
 
@@ -167,7 +167,7 @@ export default function PricingCards() {
                 className={`block text-center font-semibold px-6 py-3 rounded-xl transition-colors ${
                   plan.highlight
                     ? 'bg-primary hover:bg-primary-dark text-dark-bg font-bold'
-                    : 'bg-dark-border hover:bg-[#333944] text-dark-text'
+                    : 'bg-white/[0.06] hover:bg-white/[0.12] text-dark-text'
                 }`}
               >
                 {plan.id ? (trial ? `Try ${plan.name} free for ${TRIAL.days} days` : `Get ${plan.name}`) : 'Start free'}
@@ -177,9 +177,14 @@ export default function PricingCards() {
         })}
       </div>
 
-      <div className="mt-12 max-w-3xl mx-auto rounded-2xl border border-dark-border bg-dark-surface p-6 text-sm text-dark-muted leading-relaxed space-y-3">
-        <p className="text-dark-text font-semibold text-center">How plans work</p>
-        <ul className="space-y-2 list-disc pl-5">
+      <details className="group mt-12 max-w-3xl mx-auto rounded-2xl border border-white/[0.07] bg-dark-surface/60 text-sm text-dark-muted leading-relaxed">
+        <summary className="flex cursor-pointer items-center justify-between gap-4 px-6 py-4 text-dark-text font-semibold">
+          How plans work
+          <svg className="faq-plus h-5 w-5 text-dark-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+        </summary>
+        <ul className="space-y-2 list-disc pl-11 pr-6 pb-6">
           <li>
             <span className="text-dark-text">A plan covers circles, not people.</span> Everyone in a covered circle
             gets the plan&apos;s history, driving reports, calls and minutes on their own free account. More
@@ -204,16 +209,16 @@ export default function PricingCards() {
             Temporary circles can&apos;t be put on a plan and are free for everyone. Only adults can buy a plan.
           </li>
           <li>
-            You can also buy on loxymity.com, in rupees, for {WEB_DISCOUNT_PCT}% less. A web plan is prepaid for a
-            month or a year through a Razorpay invoice and never renews by itself — we email a renewal invoice
-            before it ends. One plan per person: if you already pay in a store, manage that plan in the app.
+            <span className="tag-soon mr-1.5 align-middle">Coming soon</span> Buying on loxymity.com, in rupees, for
+            about {WEB_DISCOUNT_PCT}% less than in the app — prepaid for a month or a year and never renewed by itself.
+            Not available yet: today plans are bought in the app.
           </li>
           <li>
             Monthly allowances (Street View, assistant questions, video minutes) reset each month and
             never bill you extra — the feature simply pauses until the next month.
           </li>
         </ul>
-      </div>
+      </details>
     </>
   );
 }

@@ -13,105 +13,59 @@ type Slide = {
   iconBg: string;
 };
 
-// Differentiators — what sets Loxymity apart from a plain dot on a map.
+// "More than a dot on a map": the smart extras. Deliberately NOTHING that the feature bento on the
+// landing page already shows (map, places, SOS, crash check, no-signal relay, driving, calls) — the
+// old 13 slides repeated almost every card above them. Alexa is NOT here: the skill is paused, so it
+// lives in "Coming soon" (page.tsx), never in a list of things you get today.
 const SLIDES: Slide[] = [
   {
     tag: 'Ask in WhatsApp',
-    title: '“Where’s mum?” — right inside WhatsApp',
-    desc: 'Ask in plain language and get an instant, human answer. No app to open, no map to scan — just message and know.',
+    title: '“Where’s mum?” — asked in WhatsApp',
+    desc: 'Link your number once, then ask in plain words. You get the place, how long ago and the battery — without opening the app. Opt-in, and it respects ghost mode, paused sharing and blocks.',
     iconPath: 'M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z',
-    iconColor: 'text-brand-success', iconBg: 'bg-brand-success/10',
+    iconColor: 'text-status-ok', iconBg: 'bg-status-ok/10',
   },
   {
-    tag: 'Ask Alexa',
-    title: 'Ask Alexa where your family is',
-    desc: 'Enable the skill, link your phone number and ask out loud. Alexa answers from your live circle — hands-free.',
-    iconPath: 'M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z',
-    iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
+    tag: 'Trips',
+    title: 'Share the trip, skip the texts',
+    desc: 'Start a trip and your circle sees a live ETA on the map, then gets one “arrived” alert. No more “are you there yet?”.',
+    iconPath: 'M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z',
+    iconColor: 'text-primary-soft', iconBg: 'bg-primary/10',
   },
   {
-    tag: 'AI-powered search',
-    title: 'AI-powered, privacy-first location search',
-    desc: 'Natural-language questions understood by AI — and your family’s location is never sold, ever. Answers, not ad targeting.',
-    iconPath: 'M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z',
-    iconColor: 'text-primary', iconBg: 'bg-primary/10',
-  },
-  {
-    tag: 'Works with no signal',
-    title: 'It still works when the network does not',
-    desc: 'Nearby Loxymity phones carry your encrypted location — or your SOS — over Bluetooth until one of them reaches the internet. The phones carrying it cannot read it.',
-    iconPath: 'M8.288 15.038a5.25 5.25 0 017.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12.53 18.22l-.53.53-.53-.53a.75.75 0 011.06 0z',
-    iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
-  },
-  {
-    tag: 'One price, whole circle',
-    title: 'One person pays. Everyone is covered.',
-    desc: 'A plan covers circles, not seats. Put a circle on a plan and every member gets the longer history, the driving reports, the calls and the minutes on their own free account.',
-    iconPath: 'M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z',
-    iconColor: 'text-primary', iconBg: 'bg-primary/10',
-  },
-  {
-    tag: 'Driving reports',
-    title: 'Traffic separated from driving',
-    desc: 'Every trip scored, with time stuck in a jam kept apart from time actually moving — plus a road-smoothness reading that never counts against the driver.',
-    iconPath: 'M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12',
-    iconColor: 'text-brand-success', iconBg: 'bg-brand-success/10',
-  },
-  {
-    tag: 'Flight tracking',
+    tag: 'Flights',
     title: 'Watch their flight come in',
-    desc: 'Add a flight number and the aircraft appears on the same map as everyone else. The whole circle gets the landing notification.',
+    desc: 'Add a flight number and the plane appears on the same map as everyone else. The whole circle hears when it lands.',
     iconPath: 'M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5',
     iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
   },
   {
     tag: 'Official alerts',
-    title: 'Government hazard warnings, filtered to your people',
-    desc: 'Cyclone, flood, heat and storm warnings from the official feeds in India and the US, matched against where your circle actually is — with the authority’s own instruction, never replaced.',
+    title: 'Government warnings, filtered to your people',
+    desc: 'Cyclone, flood, heat and storm warnings from the official feeds in India and the US, matched to where your circle actually is — with the authority’s own instructions, never rewritten.',
     iconPath: 'M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z',
-    iconColor: 'text-brand-danger', iconBg: 'bg-brand-danger/10',
+    iconColor: 'text-status-warn', iconBg: 'bg-status-warn/10',
   },
   {
-    tag: 'Never sold. Ever.',
-    title: 'Your location is never sold',
-    desc: 'Never handed to advertisers or data brokers, never used for ads, never used to train AI. What the app keeps on your phone is encrypted, and App Lock keeps it behind Face ID or fingerprint.',
-    iconPath: 'M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z',
-    iconColor: 'text-brand-success', iconBg: 'bg-brand-success/10',
-  },
-  {
-    tag: 'Adaptive tracking',
-    title: 'Battery-smart adaptive tracking',
-    desc: 'Speeds up when you’re moving, slows right down when you’re still. No fixed polling — real-time when it matters, gentle on your battery.',
-    iconPath: 'M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z',
-    iconColor: 'text-primary', iconBg: 'bg-primary/10',
-  },
-  {
-    tag: 'Street View',
-    title: 'Street View on any pin',
-    desc: 'Drop into ground-level Street View for any member or place — recognise the actual doorway, corner, or car park at a glance.',
+    tag: 'Place names',
+    title: 'Names you recognise — and some it never guesses',
+    desc: '“Near Victoria Memorial”, not coordinates. And Loxymity is built never to guess that someone is at a hospital, a place of worship or a school — only a place your circle saved itself can say that.',
     iconPath: 'M15 10.5a3 3 0 11-6 0 3 3 0 016 0z M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z',
-    iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
+    iconColor: 'text-primary-soft', iconBg: 'bg-primary/10',
   },
   {
-    tag: 'Voice & video',
-    title: 'In-app voice & video calls',
-    desc: 'Call any circle member by name — no phone number needed. Tap and connect, right where you already see them on the map.',
-    iconPath: 'M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z',
-    iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
+    tag: 'Battery',
+    title: 'Gentle on battery, quick when it matters',
+    desc: 'No fixed polling. About once a minute while you move, about every ten minutes when you are still, slower on low battery — and faster during an SOS, a trip or Live mode.',
+    iconPath: 'M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z',
+    iconColor: 'text-status-ok', iconBg: 'bg-status-ok/10',
   },
   {
-    tag: 'Event circles',
-    title: 'Time-limited event circles',
-    desc: 'Spin up a circle for a trip or a night out — it auto-dissolves when the event ends. Share for the moment, not forever.',
-    iconPath: 'M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5',
-    iconColor: 'text-primary', iconBg: 'bg-primary/10',
-  },
-  {
-    tag: 'No app needed',
-    title: 'Browser share links',
-    desc: 'Send a time-limited link to anyone — a grandparent, a driver, a friend without the app. They open it in any browser and see live location.',
-    iconPath: 'M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244',
-    iconColor: 'text-accent-cyan', iconBg: 'bg-accent-cyan/10',
+    tag: 'One plan, whole circle',
+    title: 'One person pays. Everyone is covered.',
+    desc: 'Plans cover circles, not seats. Put a circle on a plan and every member gets its longer history, calls and — from Platinum — driving reports, on their own free account.',
+    iconPath: 'M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z',
+    iconColor: 'text-primary-soft', iconBg: 'bg-primary/10',
   },
 ];
 
@@ -129,15 +83,19 @@ export function DifferentiatorCarousel() {
   const prev = useCallback(() => go(index - 1), [go, index]);
   const next = useCallback(() => go(index + 1), [go, index]);
 
-  // Gentle autoplay — paused on hover/focus/touch, and disabled entirely for
-  // users who prefer reduced motion. Manual controls always work.
+  const [reduced, setReduced] = useState(false);
   useEffect(() => {
-    if (paused) return;
-    if (typeof window !== 'undefined'
-        && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
-    const id = window.setInterval(() => setIndex((i) => (i + 1) % count), AUTOPLAY_MS);
-    return () => window.clearInterval(id);
-  }, [paused, count]);
+    setReduced(!!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
+  }, []);
+
+  // Gentle autoplay — paused on hover/focus/touch, and disabled entirely for users who prefer
+  // reduced motion. Manual controls always work. Keyed on `index` so a manual move restarts the
+  // timer (and the progress bar) from the slide the visitor chose.
+  useEffect(() => {
+    if (paused || reduced) return;
+    const id = window.setTimeout(() => setIndex((i) => (i + 1) % count), AUTOPLAY_MS);
+    return () => window.clearTimeout(id);
+  }, [paused, reduced, count, index]);
 
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
@@ -155,7 +113,6 @@ export function DifferentiatorCarousel() {
     touchStartX.current = null;
   };
 
-  // No autoplay by design — navigation is user-driven, so reduced-motion needs no special handling.
   return (
     <div
       ref={rootRef}
@@ -194,11 +151,8 @@ export function DifferentiatorCarousel() {
                     <path d={s.iconPath} />
                   </svg>
                 </div>
-                <span className="inline-flex items-center gap-2 border border-accent-cyan/25 bg-accent-cyan/10 text-accent-cyan font-hud uppercase tracking-wide text-xs font-semibold px-3 py-1 rounded-full mb-5">
-                  <span className="w-1.5 h-1.5 bg-accent-cyan rounded-full" />
-                  {s.tag}
-                </span>
-                <h3 className="font-display text-2xl md:text-3xl font-semibold text-dark-text mb-4 text-balance">{s.title}</h3>
+                <span className="eyebrow mb-4">{s.tag}</span>
+                <h3 className="text-2xl md:text-3xl font-semibold tracking-tight text-dark-text mb-4 text-balance">{s.title}</h3>
                 <p className="text-dark-muted text-base md:text-lg leading-relaxed">{s.desc}</p>
               </div>
             </div>
@@ -211,7 +165,7 @@ export function DifferentiatorCarousel() {
         type="button"
         onClick={prev}
         aria-label="Previous"
-        className="absolute left-2 md:-left-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full border border-dark-border bg-dark-bg/90 backdrop-blur flex items-center justify-center text-dark-muted hover:text-accent-cyan hover:border-accent-cyan/40 transition-colors"
+        className="absolute left-2 md:-left-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full border border-dark-border bg-dark-bg/90 backdrop-blur flex items-center justify-center text-dark-muted hover:text-dark-text hover:border-primary/40 transition-colors"
       >
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M15 19l-7-7 7-7" />
@@ -221,15 +175,26 @@ export function DifferentiatorCarousel() {
         type="button"
         onClick={next}
         aria-label="Next"
-        className="absolute right-2 md:-right-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full border border-dark-border bg-dark-bg/90 backdrop-blur flex items-center justify-center text-dark-muted hover:text-accent-cyan hover:border-accent-cyan/40 transition-colors"
+        className="absolute right-2 md:-right-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full border border-dark-border bg-dark-bg/90 backdrop-blur flex items-center justify-center text-dark-muted hover:text-dark-text hover:border-primary/40 transition-colors"
       >
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M9 5l7 7-7 7" />
         </svg>
       </button>
 
+      {/* Autoplay progress: refills for each slide, hidden while paused or for reduced motion. */}
+      <div className="mx-auto mt-6 h-px w-40 overflow-hidden rounded-full bg-dark-border" aria-hidden="true">
+        {!paused && !reduced && (
+          <div
+            key={index}
+            className="h-full origin-left bg-primary"
+            style={{ animation: `progress-fill ${AUTOPLAY_MS}ms linear both` }}
+          />
+        )}
+      </div>
+
       {/* Dots */}
-      <div className="flex justify-center gap-2.5 mt-8">
+      <div className="flex justify-center gap-2.5 mt-5">
         {SLIDES.map((s, i) => (
           <button
             key={s.title}

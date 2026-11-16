@@ -1,12 +1,14 @@
-import Link from 'next/link';
-import { LogoFull } from './Logo';
+import { SiteFooter } from './SiteFooter';
+import { SiteNav } from './SiteNav';
 
 /**
  * Shared frame for /terms and /privacy.
  *
  * The two pages used to set `text-gray-900` headings and `text-gray-600` body copy on the
  * site's near-black background, which rendered the headings invisible (checked by screenshot
- * 2026-10-17). Everything here uses the dark palette from tailwind.config.ts.
+ * 2026-10-17). Everything here uses the dark palette from tailwind.config.ts. The nav and footer are
+ * the site's shared ones (SiteNav / SiteFooter); the old footer here did not wrap, so its five links
+ * ran off the side of a phone screen.
  *
  * The app shows these pages from `TERMS_URL` / `PRIVACY_URL` (src/lib/legal.ts in the app repo)
  * and asks every user to accept them again whenever `TERMS_VERSION` / `PRIVACY_VERSION` changes.
@@ -21,16 +23,11 @@ export function LegalPage({ title, version, effective, intro, children }: {
 }) {
   return (
     <div className="min-h-screen bg-dark-bg">
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-dark-bg/90 backdrop-blur-lg border-b border-dark-border">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/"><LogoFull className="text-2xl font-bold" /></Link>
-          <Link href="/" className="text-sm text-dark-muted hover:text-dark-text transition-colors">← Back to Home</Link>
-        </div>
-      </nav>
+      <SiteNav back />
 
-      <header className="pt-28 pb-10 px-6 border-b border-dark-border">
+      <header className="pt-28 pb-10 px-6 border-b border-white/[0.06]">
         <div className="max-w-3xl mx-auto">
-          <h1 className="font-display text-4xl md:text-5xl font-semibold text-dark-text mb-3">{title}</h1>
+          <h1 className="text-4xl md:text-5xl font-semibold tracking-[-0.03em] text-dark-text mb-3">{title}</h1>
           <p className="text-dark-muted text-sm">
             Version {version} · Effective {effective}
           </p>
@@ -45,21 +42,7 @@ export function LegalPage({ title, version, effective, intro, children }: {
         <div className="space-y-12">{children}</div>
       </main>
 
-      <footer className="py-10 px-6 bg-dark-bg border-t border-dark-border">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div>
-            <div className="mb-2"><LogoFull className="text-xl font-bold opacity-80" /></div>
-            <p className="text-dark-muted text-sm">© {new Date().getFullYear()} AMSEK RESEARCH LABS LLP. All rights reserved.</p>
-          </div>
-          <div className="flex gap-6 text-sm text-dark-muted">
-            <Link href="/privacy/" className="hover:text-dark-text transition-colors">Privacy Policy</Link>
-            <Link href="/terms/" className="hover:text-dark-text transition-colors">Terms of Service</Link>
-            <Link href="/business/" className="hover:text-dark-text transition-colors">For businesses</Link>
-            <Link href="/delete-account/" className="hover:text-dark-text transition-colors">Delete your account</Link>
-            <Link href="/" className="hover:text-dark-text transition-colors">Home</Link>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
@@ -67,7 +50,7 @@ export function LegalPage({ title, version, effective, intro, children }: {
 export function Section({ id, title, children }: { id?: string; title: string; children: React.ReactNode }) {
   return (
     <section id={id} className="scroll-mt-24">
-      <h2 className="text-xl md:text-2xl font-bold text-dark-text mb-4">{title}</h2>
+      <h2 className="text-xl md:text-2xl font-semibold tracking-tight text-dark-text mb-4">{title}</h2>
       <div className="text-[15px] leading-relaxed text-[#D6D3CE] space-y-3 [&_strong]:text-dark-text [&_a]:text-primary [&_a:hover]:underline">
         {children}
       </div>
