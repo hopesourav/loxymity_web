@@ -163,16 +163,29 @@ export default function ConfigPage() {
   /** null for the global row, so it matches the partial unique index in 0127. */
   const scopeUser = () => (target === '' ? null : target);
 
-  const killFlag = (row: KeyRow, reason: string) =>
-    run(row.key, async () =>
-      supabase.from('app_config').insert({
-        key: row.key,
-        value: row.safe_value,
-        user_id: scopeUser(),
-        expires_at: expiresAtFrom(expiryHours),
-        reason: reason || 'admin console',
-        updated_by: userId,
-      }));
+  /** Update-then-insert, like setNumber below. An EXPIRED override is hidden by this page (see
+   *  load) but its row still exists and still holds 0127's partial unique index, so a plain insert
+   *  failed with a duplicate-key error: once a kill had expired, the key could not be killed again
+   *  from here (kill-switch audit 2026-11-16). Updating the existing row re-arms it in place and
+   *  keeps the audit trail honest (old -> new, no spurious delete in between). */
+  const killFlag = (row: KeyRow, reason: string) => {
+    const forUser = scopeUser();
+    const patch = {
+      value: row.safe_value,
+      expires_at: expiresAtFrom(expiryHours),
+      reason: reason || 'admin console',
+      updated_by: userId,
+    };
+    return run(row.key, async () => {
+      const upd = supabase.from('app_config').update(patch).eq('key', row.key);
+      const scoped = forUser === null ? upd.is('user_id', null) : upd.eq('user_id', forUser);
+      const { data, error: updErr } = await scoped.select();
+      if (updErr) return { error: updErr };
+      if (data && data.length > 0) return { error: null };
+
+      return supabase.from('app_config').insert({ key: row.key, user_id: forUser, ...patch });
+    });
+  };
 
   /** Deletes only the row for the selected scope — clearing a canary must not
    *  touch the fleet-wide override, and vice versa. */
@@ -237,14 +250,17 @@ export default function ConfigPage() {
       <div className="bg-brand-danger/10 border border-brand-danger/30 rounded-3xl p-4">
         <p className="text-sm text-brand-danger font-medium">These controls are live</p>
         <p className="text-sm text-dark-muted mt-1">
-          Changes reach devices on their next launch or foreground resume — typically
-          minutes, not immediately. Apps older than <strong>v0.8.865</strong> fetch and log
-          these values but do not apply them, so a change affects only updated installs.
+          A change reaches a phone only when someone opens the app on it while signed in;
+          its background tasks follow from then on. A phone nobody opens keeps its previous
+          value, and an expired change stays in force on phones that have not opened the app
+          since. Apps older than <strong>v0.8.865</strong> fetch and log these values but do
+          not apply them, and a switch only exists on builds that include it.
         </p>
         <p className="text-sm text-dark-muted mt-2">
-          Kill switches can only turn a feature <strong>off</strong>, never on, so the worst
-          outcome of a mistake here is a degraded app rather than a broken one. Every change
-          is reversible from this page and, unless you chose otherwise, expires on its own.
+          Kill switches can only turn a feature <strong>off</strong>, never on. Read the
+          description first: for a few switches, off also turns off safety behaviour.
+          Every change is reversible from this page and, unless you chose otherwise, expires
+          on its own.
         </p>
       </div>
 
