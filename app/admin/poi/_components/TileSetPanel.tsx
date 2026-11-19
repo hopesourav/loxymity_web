@@ -73,9 +73,7 @@ export default function TileSetPanel({ supabase, bbox, tiles, onTiles }: Props) 
         <h3 className="text-sm font-semibold text-dark-text">Published set (R2)</h3>
         <p className="text-xs text-dark-muted leading-snug mt-1">
           The tiles the phones actually download. Painted cells are covered; everything unpainted
-          has no POI within reach of it. Pins on this map come from{' '}
-          <code className="text-primary">poi_directory</code> and include hidden rows and nothing
-          from the global snapshot — this layer does not.
+          has no POI within reach of it. The pins on this map are read from these same tiles.
         </p>
       </div>
 

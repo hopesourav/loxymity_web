@@ -33,21 +33,19 @@
  *     Rows touched this session are flagged rather than quietly diverging.
  */
 
+import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAdmin } from '../_lib/adminContext';
 import PoiMap, { COVERAGE_MAX, COVERAGE_MIN_ZOOM } from './_components/PoiMap';
-import PoiEditor, { type PoiDraft } from './_components/PoiEditor';
 import BulkPanel from './_components/BulkPanel';
 
 /**
- * Place editing is paused while India's place data moves off Postgres (2026-11, Loxymity repo plan
- * show-all-this-in-vectorized-hopcroft.md). The migration that removes the table's write policies
- * (0396) must not go live before this does: without a policy an update or delete through PostgREST
- * matches no row and still reports success. Viewing, the probe, the tile panels and CSV export stay.
- * Editing comes back through the edits ledger (admin_poi_edit) at the cutover.
+ * A viewer of the PUBLISHED place set. Editing here wrote poi_directory, which the Loxymity migration
+ * 0399 dropped on 2026-11-14 (editing had been paused since 2026-11-13); India's places now live in
+ * R2 — a base file plus the edits ledger — and reach phones with the daily tile publish. Names
+ * change through Place feedback (/admin/poi/feedback/), whose approvals write that ledger.
  */
-const EDITING_PAUSED = true;
-const PAUSED_NOTE = 'Place editing is paused while the place data moves to its new home. Viewing and export still work.';
+const EDIT_NOTE = 'Places are not edited here. Changes go through Place feedback and reach phones with the next daily publish.';
 import CoveragePanel from './_components/CoveragePanel';
 import { TIERS, TIER_IDS, formatDistance, labelFor, tierSpec } from './_lib/poiTiers';
 import {
@@ -66,10 +64,8 @@ const TAB_LABEL: Record<Tab, string> = {
   probe: 'Name preview',
   find: 'Find',
   scan: 'Coverage',
-  bulk: 'Import / export',
+  bulk: 'Export',
 };
-
-type Draft = PoiDraft;
 
 export default function PoiPage() {
   const { supabase } = useAdmin();
@@ -79,10 +75,6 @@ export default function PoiPage() {
   const [tilesRead, setTilesRead] = useState(0);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
-  /** openEdit could not read the row it was asked to open. */
-  const [openError, setOpenError] = useState('');
-  /** Only the newest openEdit may open the editor (clicks can overtake reads). */
-  const editSeq = useRef(0);
 
   const [bbox, setBbox] = useState<Bbox | null>(null);
   const [zoom, setZoom] = useState(13);
@@ -94,19 +86,12 @@ export default function PoiPage() {
   const [coverage, setCoverage] = useState<CoverageMode>('effective');
 
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [draft, setDraft] = useState<Draft | null>(null);
   const [tab, setTab] = useState<Tab>('list');
 
   const [scan, setScan] = useState<CoverageScan | null>(null);
   // The published tile set. Held here, not in the panel, because the map draws
   // it and it must survive a tab change — it is the backdrop, not a tab's state.
   const [tiles, setTiles] = useState<TileCoverage | null>(null);
-  /**
-   * Rows written this session. The map shows the SHIPPED set, so an edit is
-   * invisible until the next publish — these ids are flagged rather than
-   * silently diverging from what the pins claim.
-   */
-  const [unpublished, setUnpublished] = useState<Set<number>>(new Set());
 
   const [probe, setProbe] = useState<{ lat: number; lng: number } | null>(null);
   const [probeHit, setProbeHit] = useState<NearestPoiHit | null>(null);
@@ -123,7 +108,7 @@ export default function PoiPage() {
     setFlyTo({ lat, lng, zoom: z, nonce: nonceRef.current });
   }, []);
 
-  const mode = draft ? 'place' : tab === 'probe' ? 'probe' : 'browse';
+  const mode = tab === 'probe' ? 'probe' : 'browse';
 
   // ── Facets ─────────────────────────────────────────────────────────────────
   //
@@ -231,9 +216,8 @@ export default function PoiPage() {
   }, [supabase]);
 
   const onMapClick = useCallback((lat: number, lng: number) => {
-    if (draft) { setDraft((d) => (d ? { ...d, lat, lng } : d)); return; }
     if (tab === 'probe') runProbe(lat, lng);
-  }, [draft, tab, runProbe]);
+  }, [tab, runProbe]);
 
   // ── Name search ────────────────────────────────────────────────────────────
   //
@@ -253,86 +237,10 @@ export default function PoiPage() {
     return () => clearTimeout(t);
   }, [findQ, tierFilter, rows]);
 
-  // ── CRUD plumbing ──────────────────────────────────────────────────────────
-  function openCreate() {
-    if (EDITING_PAUSED) return;
-    const centre = probe ?? (rows[0] ? { lat: rows[0].lat, lng: rows[0].lng } : null);
-    editSeq.current += 1;
-    setOpenError('');
-    setDraft({
-      id: null, name: '', label: '', hidden: false, poi_type: '', tier: 1, source: 'manual',
-      lat: centre?.lat ?? null, lng: centre?.lng ?? null, seedBatch: null,
-    });
-  }
-
-  async function openEdit(p: PoiRow) {
-    const seq = ++editSeq.current;
-    setOpenError('');
-    // A global row (id >= 2^52) is built from OSM/Wikidata into the snapshot
-    // and has no poi_directory row to edit. Changing it means changing the
-    // source and republishing, not typing here.
-    if (isGlobalId(p.id)) {
-      setSelectedId(p.id);
-      fly(p.lat, p.lng);
-      return;
-    }
+  /** Select a place and centre the map on it. */
+  function selectRow(p: PoiRow) {
     setSelectedId(p.id);
     fly(p.lat, p.lng);
-    if (EDITING_PAUSED) return;
-    // Edit the ROW, not the pin. A pin is the shipped copy: its name is
-    // coalesce(label, name) and its source is only 'directory' — saving those
-    // would overwrite the row's real name and source.
-    const { data, error } = await supabase
-      .from('poi_directory')
-      .select('id, name, label, hidden, poi_type, tier, source, lat, lng, seed_batch')
-      .eq('id', p.id)
-      .maybeSingle();
-    if (seq !== editSeq.current) return;   // another row was opened meanwhile
-    if (error || !data) {
-      setOpenError(error
-        ? `Could not open POI ${p.id}: ${error.message}`
-        : `POI ${p.id} is no longer in the directory — it was deleted after the last publish.`);
-      return;
-    }
-    const r = data as PoiRow;
-    setDraft({
-      id: r.id, name: r.name, label: r.label ?? '', hidden: r.hidden ?? false,
-      poi_type: r.poi_type ?? '', tier: r.tier, source: r.source,
-      lat: r.lat, lng: r.lng, seedBatch: r.seed_batch ?? null,
-    });
-  }
-
-  /**
-   * Re-read the viewport after a write. The facet counts follow the rows, so
-   * nothing else needs refreshing — but note a saved edit does NOT appear here
-   * until the tiles are republished: this view is the shipped set, and a write
-   * lands in poi_directory. afterSave() paints the new row locally so the edit
-   * is visible, with the list marking it as not yet published.
-   */
-  const refreshAll = useCallback(() => {
-    if (bbox) loadViewport(bbox);
-  }, [bbox, loadViewport]);
-
-  function afterSave(row: PoiRow) {
-    setDraft(null);
-    setSelectedId(row.id);
-    setRows((prev) => {
-      const i = prev.findIndex((r) => r.id === row.id);
-      if (i === -1) return [...prev, row];
-      const next = [...prev];
-      next[i] = row;
-      return next;
-    });
-    setUnpublished((prev) => new Set(prev).add(row.id));
-    if (probe) runProbe(probe.lat, probe.lng);
-  }
-
-  function afterDelete(id: number) {
-    setDraft(null);
-    setSelectedId(null);
-    setRows((prev) => prev.filter((r) => r.id !== id));
-    setUnpublished((prev) => new Set(prev).add(id));
-    if (probe) runProbe(probe.lat, probe.lng);
   }
 
   const coverageSuppressed =
@@ -351,16 +259,10 @@ export default function PoiPage() {
               Place names behind stop labels, drive endpoints and assistant answers
             </p>
           </div>
-          {EDITING_PAUSED ? (
-            <p className="text-dark-muted text-xs max-w-xs text-right">{PAUSED_NOTE}</p>
-          ) : (
-            <button
-              onClick={openCreate}
-              className="bg-primary hover:bg-primary-dark text-dark-bg font-bold px-4 py-2 rounded-xl text-sm transition-colors"
-            >
-              + New POI
-            </button>
-          )}
+          <p className="text-dark-muted text-xs max-w-xs text-right">
+            {EDIT_NOTE}{' '}
+            <Link href="/admin/poi/feedback/" className="text-primary hover:underline">Place feedback</Link>
+          </p>
         </div>
 
         {/* Tier totals double as the tier filter. */}
@@ -467,9 +369,7 @@ export default function PoiPage() {
             selectedId={selectedId}
             coverage={coverage}
             mode={mode}
-            draft={draft && draft.lat !== null && draft.lng !== null
-              ? { lat: draft.lat, lng: draft.lng, tier: draft.tier }
-              : null}
+            draft={null}
             probe={tab === 'probe' ? probe : null}
             probeHit={probeHit}
             scan={scan}
@@ -484,17 +384,13 @@ export default function PoiPage() {
               if (tab === 'find') setTab('list');
             }}
             onMapClick={onMapClick}
-            onDraftDrag={(lat, lng) => setDraft((d) => (d ? { ...d, lat, lng } : d))}
+            onDraftDrag={() => {}}
           />
 
           {/* Banners live over the map so the map keeps its full height. */}
           <div className="absolute top-3 left-3 right-3 z-[500] space-y-2 pointer-events-none">
-            {mode !== 'browse' && (
-              <Banner tone="info">
-                {mode === 'place'
-                  ? 'Click the map to place this POI, or drag the pin.'
-                  : 'Click anywhere to see what the app would call that point.'}
-              </Banner>
+            {mode === 'probe' && (
+              <Banner tone="info">Click anywhere to see what the app would call that point.</Banner>
             )}
             {coverageSuppressed && (
               <Banner tone="warn">
@@ -517,7 +413,6 @@ export default function PoiPage() {
               </Banner>
             )}
             {loadError && <Banner tone="error">{loadError}</Banner>}
-            {openError && <Banner tone="error">{openError}</Banner>}
           </div>
 
           {/* Legend */}
@@ -554,19 +449,7 @@ export default function PoiPage() {
 
         {/* ── Side panel ── */}
         <div className="w-full lg:w-[360px] shrink-0 bg-dark-surface border border-dark-border rounded-2xl flex flex-col min-h-0">
-          {draft ? (
-            <PoiEditor
-              supabase={supabase}
-              draft={draft}
-              knownTypes={allTypes}
-              knownSources={allSources}
-              onChange={(patch) => setDraft((d) => (d ? { ...d, ...patch } : d))}
-              onClose={() => setDraft(null)}
-              onSaved={afterSave}
-              onDeleted={afterDelete}
-            />
-          ) : (
-            <>
+          <>
               <div className="grid grid-cols-3 gap-1 p-2 border-b border-dark-border shrink-0">
                 {(Object.keys(TAB_LABEL) as Tab[]).map((t) => (
                   <button
@@ -585,9 +468,7 @@ export default function PoiPage() {
                 <ListPanel
                   rows={rows}
                   selectedId={selectedId}
-                  unpublished={unpublished}
-                  onPick={(p) => { setSelectedId(p.id); fly(p.lat, p.lng); }}
-                  onEdit={openEdit}
+                  onPick={selectRow}
                 />
               )}
 
@@ -597,20 +478,6 @@ export default function PoiPage() {
                   hit={probeHit}
                   busy={probeBusy}
                   label={previewLabel}
-                  onEditHit={() => {
-                    const target = rows.find((r) => r.id === probeHit?.id);
-                    if (target) openEdit(target);
-                  }}
-                  hitInView={!!probeHit && rows.some((r) => r.id === probeHit.id)}
-                  onCreateHere={() => {
-                    if (!probe || EDITING_PAUSED) return;
-                    editSeq.current += 1;
-                    setOpenError('');
-                    setDraft({
-                      id: null, name: '', label: '', hidden: false, poi_type: '', tier: 1,
-                      source: 'manual', lat: probe.lat, lng: probe.lng, seedBatch: null,
-                    });
-                  }}
                 />
               )}
 
@@ -620,8 +487,7 @@ export default function PoiPage() {
                   onQ={setFindQ}
                   busy={findBusy}
                   rows={findRows}
-                  onPick={(p) => { setSelectedId(p.id); fly(p.lat, p.lng); }}
-                  onEdit={openEdit}
+                  onPick={selectRow}
                 />
               )}
 
@@ -637,11 +503,9 @@ export default function PoiPage() {
               )}
 
               {tab === 'bulk' && (
-                <BulkPanel supabase={supabase} viewportRows={rows} onImported={refreshAll}
-                  importPaused={EDITING_PAUSED ? PAUSED_NOTE : null} />
+                <BulkPanel viewportRows={rows} />
               )}
-            </>
-          )}
+          </>
         </div>
       </div>
     </div>
@@ -717,13 +581,11 @@ function MultiSelect({
 }
 
 function ListPanel({
-  rows, selectedId, unpublished, onPick, onEdit,
+  rows, selectedId, onPick,
 }: {
   rows: PoiRow[];
   selectedId: number | null;
-  unpublished: Set<number>;
   onPick: (p: PoiRow) => void;
-  onEdit: (p: PoiRow) => void;
 }) {
   if (rows.length === 0) {
     return <p className="text-dark-muted text-sm p-4">No POIs in this view.</p>;
@@ -744,27 +606,17 @@ function ListPanel({
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full shrink-0" style={{ background: s.color }} />
               <span className="text-sm text-dark-text truncate">{p.name}</span>
-              {isGlobalId(p.id) ? (
+              {isGlobalId(p.id) && (
                 <span
                   className="ml-auto text-[11px] text-dark-muted shrink-0"
-                  title="From the global snapshot (OSM / Wikidata). It has no poi_directory row, so it can only change at the next build."
+                  title="From the global snapshot (OSM / Wikidata). It changes only with the next build of that snapshot."
                 >
                   global
                 </span>
-              ) : (
-                <button
-                  onClick={(e) => { e.stopPropagation(); onEdit(p); }}
-                  className="ml-auto text-[11px] text-dark-muted hover:text-primary shrink-0"
-                >
-                  Edit
-                </button>
               )}
             </div>
             <p className="text-[11px] text-dark-muted mt-0.5 pl-4">
               T{p.tier} · {p.poi_type || '—'} · {p.source}
-              {unpublished.has(p.id) && (
-                <span className="text-brand-warning"> · edited, not published</span>
-              )}
             </p>
           </div>
         );
@@ -779,15 +631,12 @@ function ListPanel({
 }
 
 function ProbePanel({
-  probe, hit, busy, label, hitInView, onEditHit, onCreateHere,
+  probe, hit, busy, label,
 }: {
   probe: { lat: number; lng: number } | null;
   hit: NearestPoiHit | null;
   busy: boolean;
   label: string | null;
-  hitInView: boolean;
-  onEditHit: () => void;
-  onCreateHere: () => void;
 }) {
   return (
     <div className="flex-1 overflow-y-auto p-4 space-y-3">
@@ -816,14 +665,9 @@ function ProbePanel({
           <p className="text-sm font-semibold text-dark-text">No POI matched</p>
           <p className="text-xs text-dark-muted mt-1 leading-snug">
             Every tier fell through. The stop shows no place name, and the app falls back to
-            reverse geocoding where that path exists. A coverage hole — consider adding a POI.
+            reverse geocoding where that path exists. A coverage hole — a missing place is added
+            through <Link href="/admin/poi/feedback/" className="text-primary hover:underline">Place feedback</Link>.
           </p>
-          <button
-            onClick={onCreateHere}
-            className="mt-2 w-full bg-primary text-dark-bg font-bold py-2 rounded-xl text-xs"
-          >
-            Add a POI here
-          </button>
         </div>
       )}
 
@@ -860,22 +704,10 @@ function ProbePanel({
             )}
           </div>
 
-          <div className="flex gap-2">
-            <button
-              onClick={onEditHit}
-              disabled={!hitInView}
-              className="flex-1 border border-dark-border text-dark-muted hover:text-dark-text py-2 rounded-xl text-xs disabled:opacity-40"
-              title={hitInView ? '' : 'Pan the map over this POI to edit it'}
-            >
-              Edit this POI
-            </button>
-            <button
-              onClick={onCreateHere}
-              className="flex-1 border border-dark-border text-dark-muted hover:text-dark-text py-2 rounded-xl text-xs"
-            >
-              Add a better one
-            </button>
-          </div>
+          <p className="text-[11px] text-dark-muted leading-snug">
+            A wrong or missing name is changed through{' '}
+            <Link href="/admin/poi/feedback/" className="text-primary hover:underline">Place feedback</Link>.
+          </p>
         </>
       )}
     </div>
@@ -883,14 +715,13 @@ function ProbePanel({
 }
 
 function FindPanel({
-  q, onQ, busy, rows, onPick, onEdit,
+  q, onQ, busy, rows, onPick,
 }: {
   q: string;
   onQ: (s: string) => void;
   busy: boolean;
   rows: PoiRow[];
   onPick: (p: PoiRow) => void;
-  onEdit: (p: PoiRow) => void;
 }) {
   return (
     <div className="flex-1 flex flex-col min-h-0">
@@ -920,15 +751,8 @@ function FindPanel({
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full shrink-0" style={{ background: tierSpec(p.tier).color }} />
               <span className="text-sm text-dark-text truncate">{p.name}</span>
-              {isGlobalId(p.id) ? (
+              {isGlobalId(p.id) && (
                 <span className="ml-auto text-[11px] text-dark-muted shrink-0">global</span>
-              ) : (
-                <button
-                  onClick={(e) => { e.stopPropagation(); onEdit(p); }}
-                  className="ml-auto text-[11px] text-dark-muted hover:text-primary shrink-0"
-                >
-                  Edit
-                </button>
               )}
             </div>
             <p className="text-[11px] text-dark-muted mt-0.5 pl-4">

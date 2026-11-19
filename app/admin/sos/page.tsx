@@ -1,15 +1,22 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAdmin } from '../_lib/adminContext';
 import type { SosAlert } from '../_lib/types';
+
+/**
+ * How often the open page re-reads the alerts. It used to listen to Postgres Changes on sos_alerts,
+ * which stop once the Loxymity migration 0393 empties the supabase_realtime publication; the app's
+ * replacement (Broadcast topics per circle, 0390/0392) admits only the circle's own members, and an
+ * admin is not one. So the page re-reads while it is visible, and at once when it becomes visible.
+ */
+const REFRESH_MS = 20_000;
 
 export default function SosPage() {
   const { supabase } = useAdmin();
   const [activeSos, setActiveSos] = useState<SosAlert[]>([]);
   const [history, setHistory] = useState<SosAlert[]>([]);
   const [loading, setLoading] = useState(true);
-  const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
 
   const loadData = async () => {
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
@@ -38,12 +45,13 @@ export default function SosPage() {
 
   useEffect(() => {
     loadData();
-    channelRef.current = supabase
-      .channel('admin-sos')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'sos_alerts' }, loadData)
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'sos_alerts' }, loadData)
-      .subscribe();
-    return () => { channelRef.current?.unsubscribe(); };
+    const refresh = () => { if (document.visibilityState === 'visible') loadData(); };
+    const timer = setInterval(refresh, REFRESH_MS);
+    document.addEventListener('visibilitychange', refresh);
+    return () => {
+      clearInterval(timer);
+      document.removeEventListener('visibilitychange', refresh);
+    };
   }, [supabase]);
 
   async function resolveAlert(id: string) {
@@ -65,7 +73,7 @@ export default function SosPage() {
     <div className="p-6 space-y-6">
       <div>
         <h1 className="text-xl font-bold text-dark-text">SOS Monitor</h1>
-        <p className="text-dark-muted text-sm">Real-time emergency alerts across all circles</p>
+        <p className="text-dark-muted text-sm">Emergency alerts across all circles · refreshed every 20 seconds</p>
       </div>
 
       {/* Active alerts */}

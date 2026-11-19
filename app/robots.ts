@@ -9,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: '*',
       allow: '/',
       // Private or per-person pages: the dashboard and admin console, invite and share links.
-      disallow: ['/admin/', '/dashboard/', '/join/', '/share/'],
+      disallow: ['/admin/', '/dashboard/', '/join/', '/pair/', '/share/'],
     }],
     sitemap: 'https://loxymity.com/sitemap.xml',
   };

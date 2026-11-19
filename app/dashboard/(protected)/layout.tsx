@@ -33,7 +33,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [loading, setLoading] = useState(true);
   const [ctx, setCtx] = useState<DashboardContextValue | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
+  const channelsRef = useRef<ReturnType<typeof supabase.channel>[]>([]);
+  /** Only the newest subscribe may join (a circle switch can overtake the topic read). */
+  const subSeq = useRef(0);
 
   const loadDashboard = useCallback(async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -140,59 +142,76 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     setLoading(false);
     subscribeRealtime(defaultCircleId, members.map(m => m.user_id));
 
-    function subscribeRealtime(circleId: string, memberIds: string[]) {
-      channelRef.current?.unsubscribe();
+    /**
+     * Live updates through the app's Broadcast topics (Loxymity migrations 0390 / 0392) — the same
+     * private topics the phones join. Postgres Changes stop once 0393 empties the supabase_realtime
+     * publication, so the dashboard must not use them.
+     *   c:<circle>:<epoch>  sos_alerts (INSERT / UPDATE, the whole row)
+     *   l:<circle>:<epoch>  latest_locations (exact rows; only for a member who may see others —
+     *                       the server leaves ghosted, paused and blurred members out, as RLS did)
+     *   rt_epoch            access changed in the circle: read the topics again and rejoin
+     * Who may join is decided by the server (_rt_can_join); get_realtime_topics() names mine.
+     */
+    async function subscribeRealtime(circleId: string, memberIds: string[]) {
+      const seq = ++subSeq.current;
+      leaveChannels();
       if (memberIds.length === 0) return;
 
-      channelRef.current = supabase
-        .channel(`dashboard-${circleId}`)
-        .on(
-          'postgres_changes',
-          {
-            event: '*',
-            schema: 'public',
-            table: 'latest_locations',
-            filter: `user_id=in.(${memberIds.join(',')})`,
-          },
-          (payload: any) => {
-            const updated: LatestLocation = payload.new as LatestLocation;
-            setCtx(prev => {
-              if (!prev) return prev;
-              const members = prev.members.map(m =>
-                m.user_id === updated.user_id
-                  ? { ...m, location: updated, status: getMemberStatus(m.shares_location, updated) }
-                  : m,
-              );
-              return { ...prev, members };
-            });
-          },
-        )
-        .on(
-          'postgres_changes',
-          { event: 'INSERT', schema: 'public', table: 'sos_alerts', filter: `circle_id=eq.${circleId}` },
-          (payload: any) => {
-            setCtx(prev => prev
-              ? { ...prev, activeSosAlerts: [payload.new as SosAlert, ...prev.activeSosAlerts] }
-              : prev);
-          },
-        )
-        .on(
-          'postgres_changes',
-          { event: 'UPDATE', schema: 'public', table: 'sos_alerts', filter: `circle_id=eq.${circleId}` },
-          (payload: any) => {
-            const updated = payload.new as SosAlert;
-            setCtx(prev => prev
-              ? { ...prev, activeSosAlerts: prev.activeSosAlerts.filter(a => a.id !== updated.id || !updated.resolved) }
-              : prev);
-          },
-        )
-        .subscribe();
+      const { data } = await supabase.rpc('get_realtime_topics');
+      if (seq !== subSeq.current) return; // another circle was opened meanwhile
+      const circles = ((data as { circles?: unknown } | null)?.circles ?? []) as { circle_id: string; c: string; l: string | null }[];
+      const topics = circles.find((c) => c.circle_id === circleId);
+      if (!topics) return;
+
+      const onMessage = (msg: { event?: string; payload?: unknown }) => {
+        const change = msg.payload as { op?: string; new?: Record<string, unknown> } | undefined;
+        if (msg.event === 'rt_epoch') { subscribeRealtime(circleId, memberIds); return; }
+        if (!change?.new) return;
+        if (msg.event === 'latest_locations' && change.op !== 'DELETE') {
+          const updated = change.new as unknown as LatestLocation;
+          setCtx(prev => {
+            if (!prev) return prev;
+            const members = prev.members.map(m =>
+              m.user_id === updated.user_id
+                ? { ...m, location: updated, status: getMemberStatus(m.shares_location, updated) }
+                : m,
+            );
+            return { ...prev, members };
+          });
+        }
+        if (msg.event === 'sos_alerts' && change.op === 'INSERT') {
+          const alert = change.new as unknown as SosAlert;
+          setCtx(prev => prev
+            ? { ...prev, activeSosAlerts: [alert, ...prev.activeSosAlerts.filter(a => a.id !== alert.id)] }
+            : prev);
+        }
+        if (msg.event === 'sos_alerts' && change.op === 'UPDATE') {
+          const updated = change.new as unknown as SosAlert;
+          setCtx(prev => prev
+            ? { ...prev, activeSosAlerts: prev.activeSosAlerts.filter(a => a.id !== updated.id || !updated.resolved) }
+            : prev);
+        }
+      };
+
+      for (const topic of [topics.c, topics.l]) {
+        if (!topic) continue;
+        const ch = supabase
+          .channel(topic, { config: { private: true } })
+          .on('broadcast', { event: '*' }, onMessage)
+          .subscribe();
+        channelsRef.current.push(ch);
+      }
     }
   }, [router]);
 
+  function leaveChannels() {
+    for (const ch of channelsRef.current) supabase.removeChannel(ch);
+    channelsRef.current = [];
+  }
+
   useEffect(() => {
     loadDashboard();
-    return () => { channelRef.current?.unsubscribe(); };
+    return () => { subSeq.current += 1; leaveChannels(); };
   }, [loadDashboard]);
 
   if (loading || !ctx) {
