@@ -15,8 +15,9 @@ type Slide = {
 
 // "More than a dot on a map": the smart extras. Deliberately NOTHING that the feature bento on the
 // landing page already shows (map, places, SOS, crash check, no-signal relay, driving, calls) — the
-// old 13 slides repeated almost every card above them. Alexa is NOT here: the skill is paused, so it
-// lives in "Coming soon" (page.tsx), never in a list of things you get today.
+// old 13 slides repeated almost every card above them. Battery (trust strip + FAQ) and "one plan,
+// whole circle" (pricing) were cut 2026-11-19 for the same reason. Alexa is NOT here: the skill is
+// paused, and the site lists only what you get today.
 const SLIDES: Slide[] = [
   {
     tag: 'Ask in WhatsApp',
@@ -51,20 +52,6 @@ const SLIDES: Slide[] = [
     title: 'Names you recognise — and some it never guesses',
     desc: '“Near Victoria Memorial”, not coordinates. And Loxymity is built never to guess that someone is at a hospital, a place of worship or a school — only a place your circle saved itself can say that.',
     iconPath: 'M15 10.5a3 3 0 11-6 0 3 3 0 016 0z M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z',
-    iconColor: 'text-primary-soft', iconBg: 'bg-primary/10',
-  },
-  {
-    tag: 'Battery',
-    title: 'Gentle on battery, quick when it matters',
-    desc: 'No fixed polling. About once a minute while you move, about every ten minutes when you are still, slower on low battery — and faster during an SOS, a trip or Live mode.',
-    iconPath: 'M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z',
-    iconColor: 'text-status-ok', iconBg: 'bg-status-ok/10',
-  },
-  {
-    tag: 'One plan, whole circle',
-    title: 'One person pays. Everyone is covered.',
-    desc: 'Plans cover circles, not seats. Put a circle on a plan and every member gets its longer history, calls and — from Platinum — driving reports, on their own free account.',
-    iconPath: 'M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z',
     iconColor: 'text-primary-soft', iconBg: 'bg-primary/10',
   },
 ];

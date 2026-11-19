@@ -1,224 +1,267 @@
 'use client';
 
 /**
- * Pricing grid: currency × billing period × circles covered.
+ * Pricing: four short cards, then the detail for anyone who wants it.
+ *
+ * Layout (2026-11-19, "less cluttered"): ONE control up front (Monthly / Yearly). The circle count
+ * and the currency are a single line of small text with two native selects ("Prices for 1 circle in
+ * ₹ INR") — both still there, neither in the way. Each card has four lines in the same order
+ * (people · history · places · the tier's headline feature); every other figure is in the
+ * "Compare all plans" table (`COMPARE_ROWS`), and the rules are in "How plans work".
  *
  * WHY THIS IS A CLIENT COMPONENT, and why USD is the SSG default:
- * the site is a STATIC EXPORT (next.config.ts `output: 'export'`), so page.tsx
- * is prerendered once at build time and served from a CDN. Choosing a currency
- * during render would bake ONE region's prices into the HTML that every visitor
- * receives. Detection therefore happens after hydration, on the visitor's own
- * device, with USD as the statically-safe default.
+ * the site is a STATIC EXPORT (next.config.ts `output: 'export'`), so page.tsx is prerendered once
+ * at build time and served from a CDN. Choosing a currency during render would bake ONE region's
+ * prices into the HTML that every visitor receives. Detection therefore happens after hydration,
+ * on the visitor's own device, with USD as the statically-safe default. The manual currency switch
+ * stays: timezone detection fails for VPN users and travellers.
  *
- * The manual currency switch is not decoration: timezone detection fails for VPN
- * users and travellers.
+ * The circles select exists because the circle count is part of the plan (one subscription covers
+ * 1–3 circles), exactly as on the in-app paywall. It shows the store's exact price — never "+$4 per
+ * extra circle": the steps are not equal everywhere (Infinite × 3 yearly in US dollars).
  *
- * The circles selector exists because the circle count is part of the plan (one
- * subscription covers 1–3 circles), exactly as on the in-app paywall. Prices come
- * from `_lib/pricing.ts`, which reads the catalogue generated from the app's.
- *
- * An annual card leads with the BILLED amount; the "≈ …/mo, billed yearly" line sits right under
- * it in the price colour but smaller (see the display rule in `_lib/pricing.ts`).
+ * A yearly card leads with the BILLED amount; "≈ …/mo" sits under it, smaller (display rule in
+ * `_lib/pricing.ts`).
  */
 import { useEffect, useState } from 'react';
 import {
-  PLAN_CARDS, MAX_CIRCLES, FREE_CIRCLES, EXTRA_CIRCLE_PRICE, TRIAL, CURRENCY_OPTIONS, WEB_DISCOUNT_PCT,
-  annualSaving, detectCurrency, formatPrice, perMonthOfAnnual, planPrice,
-  type Currency, type Period,
+  PLAN_CARDS, COMPARE_ROWS, MAX_CIRCLES, FREE_CIRCLES, TRIAL, CURRENCY_OPTIONS,
+  detectCurrency, formatPrice, maxAnnualSaving, perMonthOfAnnual, planPrice,
+  type CompareCell, type Currency, type Period,
 } from '../_lib/pricing';
 
-function CheckIcon() {
+function Check({ className = 'h-4 w-4 text-status-ok' }: { className?: string }) {
   return (
-    <svg className="w-4 h-4 text-status-ok flex-shrink-0" fill="none" viewBox="0 0 24 24"
-         stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg className={`shrink-0 ${className}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M5 13l4 4L19 7" />
     </svg>
   );
 }
 
-function Segmented<T extends string | number>({ label, value, options, onChange }: {
+function Plus() {
+  return (
+    <svg className="faq-plus h-5 w-5 shrink-0 text-dark-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+      <path d="M12 5v14M5 12h14" />
+    </svg>
+  );
+}
+
+/** A small native select that reads as part of the sentence around it. */
+function InlineSelect<T extends string | number>({ label, value, options, onChange }: {
   label: string;
   value: T;
   options: { value: T; label: string }[];
   onChange: (v: T) => void;
 }) {
   return (
-    <div className="flex flex-col items-center gap-1.5">
-      <span className="text-[11px] font-hud uppercase tracking-wide text-dark-muted">{label}</span>
-      <div className="inline-flex rounded-full border border-dark-border p-1 bg-dark-surface" role="group" aria-label={label}>
-        {options.map((o) => (
-          <button
-            key={String(o.value)}
-            type="button"
-            onClick={() => onChange(o.value)}
-            aria-pressed={value === o.value}
-            className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-colors ${
-              value === o.value ? 'bg-primary text-dark-bg' : 'text-dark-muted hover:text-dark-text'
-            }`}
-          >
-            {o.label}
-          </button>
-        ))}
-      </div>
-    </div>
+    <select
+      aria-label={label}
+      value={String(value)}
+      onChange={(e) => {
+        const hit = options.find((o) => String(o.value) === e.target.value);
+        if (hit) onChange(hit.value);
+      }}
+      className="cursor-pointer rounded-lg border border-white/[0.1] bg-dark-surface px-2 py-1 font-semibold text-dark-text hover:border-white/20 focus:border-primary focus:outline-none"
+    >
+      {options.map((o) => (
+        <option key={String(o.value)} value={String(o.value)}>{o.label}</option>
+      ))}
+    </select>
   );
 }
 
+function Cell({ value }: { value: CompareCell }) {
+  if (value === true) return <><Check className="mx-auto h-4 w-4 text-status-ok" /><span className="sr-only">Included</span></>;
+  if (value === false) return <><span aria-hidden="true" className="text-dark-muted/50">—</span><span className="sr-only">Not included</span></>;
+  return <span className="text-dark-text">{value}</span>;
+}
+
 export default function PricingCards() {
-  // USD on the server AND on the first client render, so hydration matches the
-  // prerendered HTML. The switch happens in an effect, one frame later.
+  // USD on the server AND on the first client render, so hydration matches the prerendered HTML.
+  // The switch happens in an effect, one frame later.
   const [currency, setCurrency] = useState<Currency>('USD');
   const [period, setPeriod] = useState<Period>('annual');
   const [circles, setCircles] = useState(1);
 
   useEffect(() => { setCurrency(detectCurrency()); }, []);
 
-  const extra = formatPrice(EXTRA_CIRCLE_PRICE[period][currency], currency);
+  const saving = maxAnnualSaving(circles, currency);
   const per = period === 'annual' ? 'year' : 'month';
 
   return (
     <>
-      <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 mb-10">
-        <Segmented
-          label="Currency"
-          value={currency}
-          onChange={setCurrency}
-          options={CURRENCY_OPTIONS}
-        />
-        <Segmented
-          label="Billing"
-          value={period}
-          onChange={setPeriod}
-          options={[{ value: 'annual', label: 'Annual' }, { value: 'monthly', label: 'Monthly' }]}
-        />
-        <Segmented
-          label="Circles on the plan"
-          value={circles}
-          onChange={setCircles}
-          options={Array.from({ length: MAX_CIRCLES }, (_, i) => ({ value: i + 1, label: String(i + 1) }))}
-        />
+      {/* ── The one control, and the sentence that holds the other two ── */}
+      <div className="flex flex-col items-center gap-3">
+        <div className="inline-flex rounded-full border border-dark-border bg-dark-surface p-1" role="group" aria-label="Billing period">
+          {([['monthly', 'Monthly'], ['annual', 'Yearly']] as const).map(([v, label]) => (
+            <button
+              key={v}
+              type="button"
+              onClick={() => setPeriod(v)}
+              aria-pressed={period === v}
+              className={`rounded-full px-5 py-1.5 text-sm font-semibold transition-colors ${
+                period === v ? 'bg-primary text-dark-bg' : 'text-dark-muted hover:text-dark-text'
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        <p className="flex flex-wrap items-center justify-center gap-x-1.5 gap-y-2 text-sm text-dark-muted">
+          {saving > 0 && (
+            <>
+              <span className="basis-full text-center font-medium text-status-ok sm:basis-auto">Yearly saves up to {saving}%</span>
+              <span aria-hidden="true" className="hidden sm:inline">·</span>
+            </>
+          )}
+          <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
+            Prices for
+            <InlineSelect
+              label="Circles on the plan"
+              value={circles}
+              onChange={setCircles}
+              options={Array.from({ length: MAX_CIRCLES }, (_, i) => ({ value: i + 1, label: i === 0 ? '1 circle' : `${i + 1} circles` }))}
+            />
+            in
+            <InlineSelect label="Currency" value={currency} onChange={setCurrency} options={CURRENCY_OPTIONS} />
+          </span>
+        </p>
       </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+      {/* ── Cards ── */}
+      <div className="mt-10 grid items-stretch gap-5 md:grid-cols-2 lg:grid-cols-4">
         {PLAN_CARDS.map((plan) => {
           const price = plan.id ? planPrice(plan.id, circles, period, currency) : 0;
-          const saving = plan.id ? annualSaving(plan.id, circles, currency) : 0;
           const trial = plan.id === TRIAL.tier && period === TRIAL.period && circles === TRIAL.circles;
           return (
             <div
               key={plan.name}
-              className={`relative flex flex-col rounded-3xl p-7 lift ${
-                plan.highlight
-                  ? 'card-premium border-2 border-primary/50 lg:scale-[1.04] z-10 isolate'
-                  : 'card-premium gradient-border'
+              className={`relative flex flex-col rounded-3xl p-6 ${
+                plan.highlight ? 'card-premium z-10 border-2 border-primary/50' : 'card-premium gradient-border'
               }`}
-              style={plan.highlight ? { boxShadow: '0 30px 80px -20px rgba(124,136,255,0.38), 0 0 0 1px rgba(124,136,255,0.28)' } : undefined}
+              style={plan.highlight ? { boxShadow: '0 30px 80px -20px rgba(124,136,255,0.35), 0 0 0 1px rgba(124,136,255,0.25)' } : undefined}
             >
               {plan.badge && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-dark-bg text-[10px] font-bold uppercase tracking-wide px-3 py-1 rounded-full shadow-lg">
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-dark-bg shadow-lg">
                   {plan.badge}
-                </div>
+                </span>
               )}
-              <p className="font-hud uppercase tracking-wide text-sm font-semibold text-dark-muted mb-1">{plan.name}</p>
-              <p className="text-dark-muted text-xs mb-3">{plan.tagline}</p>
+              <p className="font-hud text-sm font-semibold uppercase tracking-wide text-dark-text">{plan.name}</p>
+              <p className="mt-1 min-h-[2.5rem] text-xs leading-snug text-dark-muted">{plan.tagline}</p>
 
-              {plan.id ? (
-                <>
-                  <p className="flex items-baseline gap-1 mb-1">
-                    <span className="font-semibold tracking-tight text-dark-text text-4xl">{formatPrice(price, currency)}</span>
-                    <span className="text-dark-muted text-sm">/ {per}</span>
-                  </p>
-                  {period === 'annual' && (
-                    <p className="text-dark-text text-lg font-semibold leading-snug">
-                      ≈ {perMonthOfAnnual(plan.id, circles, currency)}/mo
-                      <span className="text-dark-muted text-sm font-normal">, billed yearly</span>
-                    </p>
-                  )}
-                  <p className="text-dark-muted text-xs mt-1 mb-3">
-                    {circles === 1 ? 'Covers 1 circle' : `Covers ${circles} circles`}
-                  </p>
-                  {period === 'annual' && saving > 0 ? (
-                    <p className="self-start text-status-ok text-xs font-semibold bg-status-ok/10 border border-status-ok/20 rounded-lg px-2.5 py-1.5 mb-5">
-                      Save {saving}% vs paying monthly
-                    </p>
-                  ) : (
-                    <div className="mb-5" />
-                  )}
-                </>
-              ) : (
-                <>
-                  <p className="flex items-baseline gap-1 mb-1">
-                    <span className="text-5xl font-semibold tracking-tight text-dark-text">{formatPrice(0, currency)}</span>
-                  </p>
-                  <p className="text-dark-muted text-xs mb-8">Free to use — no card needed</p>
-                </>
-              )}
+              <div className="mt-4 min-h-[4.25rem]">
+                <p className="flex items-baseline gap-1">
+                  <span className="text-4xl font-semibold tracking-tight text-dark-text">{formatPrice(price, currency)}</span>
+                  {plan.id && <span className="text-sm text-dark-muted">/ {per}</span>}
+                </p>
+                <p className="mt-1 text-sm text-dark-muted">
+                  {!plan.id
+                    ? 'No card needed'
+                    : period === 'annual'
+                      ? <>≈ {perMonthOfAnnual(plan.id, circles, currency)} a month</>
+                      : 'Billed monthly'}
+                </p>
+              </div>
 
-              <ul className="flex flex-col gap-2.5 mb-8 flex-1">
+              <ul className="mt-5 flex flex-1 flex-col gap-2.5 border-t border-white/[0.06] pt-5">
                 {plan.features.map((f) => (
                   <li key={f} className="flex items-start gap-2.5 text-sm text-dark-muted">
-                    <span className="mt-0.5"><CheckIcon /></span>
+                    <span className="mt-0.5"><Check /></span>
                     {f}
                   </li>
                 ))}
               </ul>
+
               <a
                 href="#download"
-                className={`block text-center font-semibold px-6 py-3 rounded-xl transition-colors ${
-                  plan.highlight
-                    ? 'bg-primary hover:bg-primary-dark text-dark-bg font-bold'
-                    : 'bg-white/[0.06] hover:bg-white/[0.12] text-dark-text'
+                className={`mt-7 block rounded-xl px-6 py-3 text-center font-semibold transition-colors ${
+                  plan.highlight ? 'bg-primary font-bold text-dark-bg hover:bg-primary-dark' : 'bg-white/[0.06] text-dark-text hover:bg-white/[0.12]'
                 }`}
               >
-                {plan.id ? (trial ? `Try ${plan.name} free for ${TRIAL.days} days` : `Get ${plan.name}`) : 'Start free'}
+                {plan.id ? (trial ? `Try free for ${TRIAL.days} days` : `Get ${plan.name}`) : 'Start free'}
               </a>
             </div>
           );
         })}
       </div>
 
-      <details className="group mt-12 max-w-3xl mx-auto rounded-2xl border border-white/[0.07] bg-dark-surface/60 text-sm text-dark-muted leading-relaxed">
-        <summary className="flex cursor-pointer items-center justify-between gap-4 px-6 py-4 text-dark-text font-semibold">
-          How plans work
-          <svg className="faq-plus h-5 w-5 text-dark-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
-            <path d="M12 5v14M5 12h14" />
-          </svg>
-        </summary>
-        <ul className="space-y-2 list-disc pl-11 pr-6 pb-6">
-          <li>
-            <span className="text-dark-text">A plan covers circles, not people.</span> Everyone in a covered circle
-            gets the plan&apos;s history, driving reports, calls and minutes on their own free account. More
-            places and Vault backup come with the plan for the person who pays. You are never charged per person.
-          </li>
-          <li>
-            Everyone gets {FREE_CIRCLES} free circles. One plan covers 1, 2 or 3 circles at the same tier;
-            each extra circle is {extra} a {per} on every tier. A circle you put on a plan stays on it for the
-            life of the plan.
-          </li>
-          <li>
-            Adding circles or moving to a higher tier starts today. Fewer circles, a lower tier or a different
-            billing period starts at your next renewal.
-          </li>
-          <li>
-            The {TRIAL.days}-day free trial is offered once per store account, on Platinum annual for 1 circle.
-            Cancel in the App Store or Google Play at least 24 hours before it ends and you are not charged.
-          </li>
-          <li>
-            Plans bought in the Loxymity app are billed by the App Store or Google Play. They renew
-            automatically until you cancel, at least 24 hours before the period ends, in your store account.
-            Temporary circles can&apos;t be put on a plan and are free for everyone. Only adults can buy a plan.
-          </li>
-          <li>
-            <span className="tag-soon mr-1.5 align-middle">Coming soon</span> Buying on loxymity.com, in rupees, for
-            about {WEB_DISCOUNT_PCT}% less than in the app — prepaid for a month or a year and never renewed by itself.
-            Not available yet: today plans are bought in the app.
-          </li>
-          <li>
-            Monthly allowances (Street View, assistant questions, video minutes) reset each month and
-            never bill you extra — the feature simply pauses until the next month.
-          </li>
-        </ul>
-      </details>
+      <div className="mt-8 flex flex-wrap justify-center gap-x-8 gap-y-3">
+        {[`${TRIAL.days}-day free trial of Platinum`, 'Cancel any time in your store account', 'No ads, ever'].map((r) => (
+          <div key={r} className="flex items-center gap-2 text-sm text-dark-muted">
+            <Check />
+            {r}
+          </div>
+        ))}
+      </div>
+
+      {/* ── The detail, folded away ── */}
+      <div className="mx-auto mt-10 max-w-4xl space-y-3">
+        <details className="group rounded-2xl border border-white/[0.07] bg-dark-surface/60">
+          <summary className="flex cursor-pointer items-center justify-between gap-4 px-6 py-4 text-base font-semibold text-dark-text">
+            Compare all plans
+            <Plus />
+          </summary>
+          <div className="overflow-x-auto px-2 pb-4 sm:px-4">
+            <table className="w-full min-w-[620px] border-collapse text-sm">
+              <caption className="sr-only">What each plan includes</caption>
+              <thead>
+                <tr className="border-b border-white/[0.07]">
+                  <th scope="col" className="px-3 py-3 text-left font-medium text-dark-muted"><span className="sr-only">Feature</span></th>
+                  {PLAN_CARDS.map((p) => (
+                    <th key={p.name} scope="col" className={`px-3 py-3 text-center font-hud text-xs font-semibold uppercase tracking-wide ${p.highlight ? 'text-primary-soft' : 'text-dark-text'}`}>
+                      {p.name}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {COMPARE_ROWS.map((row) => (
+                  <tr key={row.label} className="border-b border-white/[0.05] last:border-0">
+                    <th scope="row" className="px-3 py-3 text-left font-normal text-dark-muted">
+                      {row.label}{row.payer && <sup className="ml-0.5 text-dark-muted">1</sup>}
+                    </th>
+                    {row.values.map((v, i) => (
+                      <td key={i} className="px-3 py-3 text-center"><Cell value={v} /></td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <p className="px-3 pt-3 text-xs text-dark-muted"><sup>1</sup> Comes with the plan for the person who pays.</p>
+          </div>
+        </details>
+
+        <details className="group rounded-2xl border border-white/[0.07] bg-dark-surface/60 text-sm leading-relaxed text-dark-muted">
+          <summary className="flex cursor-pointer items-center justify-between gap-4 px-6 py-4 text-base font-semibold text-dark-text">
+            How plans work
+            <Plus />
+          </summary>
+          <ul className="list-disc space-y-2 pb-6 pl-11 pr-6">
+            <li>
+              <span className="text-dark-text">A plan covers circles, not people.</span> Everyone in a covered circle
+              gets the plan&apos;s history, calls and driving reports on their own free account. More places, Vault
+              backup and the web dashboard come with the plan for the person who pays. You are never charged per person.
+            </li>
+            <li>
+              Everyone gets {FREE_CIRCLES} free circles. One plan covers 1, 2 or 3 circles at the same tier, and a
+              circle you put on a plan stays on it for the life of the plan.
+            </li>
+            <li>
+              Adding circles or moving to a higher tier starts today. Fewer circles, a lower tier or a different
+              billing period starts at your next renewal.
+            </li>
+            <li>
+              Plans are bought in the Loxymity app and billed by the App Store or Google Play. They renew
+              automatically until you cancel in your store account, at least 24 hours before the period ends.
+              Temporary circles can&apos;t be put on a plan and are free for everyone. Only adults can buy a plan.
+            </li>
+            <li>
+              Monthly allowances (Street View, assistant questions, video minutes) reset each month and never bill
+              you extra — the feature simply pauses until the next month.
+            </li>
+          </ul>
+        </details>
+      </div>
     </>
   );
 }

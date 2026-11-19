@@ -10,14 +10,14 @@ import { StoreButtons } from './StoreButtons';
  * - "Open data" is the ODbL notice (public/open-data/LICENSE-ODbL.txt): place names in the app are
  *   partly derived from OpenStreetMap, and ODbL 4.3 needs a notice that tells people the database
  *   is available and where. It was published but linked from nowhere.
- * - "Coming soon" text on the site is a plan, not a promise — the fine print says so once, here.
+ * - The "Coming soon" section and its fine print were removed 2026-11-19 (the site lists only what the
+ *   app does today). A store button switched off in `_lib/appLinks.ts` still shows "Soon".
  */
 const COLUMNS: { title: string; links: { href: string; label: string; external?: boolean }[] }[] = [
   {
     title: 'Product',
     links: [
       { href: '/#features', label: 'Features' },
-      { href: '/#coming-soon', label: 'Coming soon' },
       { href: '/#pricing', label: 'Pricing' },
       { href: '/#faq', label: 'FAQ' },
       { href: '/places/suggest/', label: 'Suggest a place name' },
@@ -80,8 +80,7 @@ export function SiteFooter({ showStores = true }: { showStores?: boolean }) {
         </p>
         <p>
           Place data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" className="underline hover:text-dark-text">OpenStreetMap contributors</a>.
-          Features marked &ldquo;Coming soon&rdquo; are in development and not yet available; what they include
-          and when they arrive may change. Apple and the Apple logo are trademarks of Apple Inc. App Store
+          Apple and the Apple logo are trademarks of Apple Inc. App Store
           is a service mark of Apple Inc. Google Play and the Google Play logo are trademarks of Google LLC.
         </p>
       </div>

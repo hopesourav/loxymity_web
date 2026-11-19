@@ -5,27 +5,38 @@ import PricingCards from './_components/PricingCards';
 import { SiteFooter } from './_components/SiteFooter';
 import { SiteNav } from './_components/SiteNav';
 import { StoreButtons } from './_components/StoreButtons';
-import { WEB_DISCOUNT_PCT } from './_lib/pricing';
+import { VideoShort } from './_components/VideoShort';
+import { APP_STORE_ID, APP_STORE_URL, PLAY_URL } from './_lib/appLinks';
 
 /*
- * The landing page (2026-11 refresh). One idea per section, each said ONCE:
- *   hero → how it works → features (bento) → more than a dot (carousel) → coming soon → privacy
- *   → pricing → FAQ → organisations → download.
- * The old page said "never sold" about ten times and listed WhatsApp, the offline relay and driving
- * reports four or five times each (feature cards, a checklist, the carousel, safety chips, FAQ).
+ * The landing page. One idea per section, each said ONCE:
+ *   hero → how it works → video → features (bento) → more than a dot (carousel) → privacy → pricing
+ *   → FAQ → organisations → download.
+ * 2026-11-19 (both stores live): the "Coming soon" roadmap section is gone — a visitor acts on what
+ * the app does today, and one of its cards advertised a limitation (the iPhone silent switch, which
+ * the SOS answer in the FAQ still states). Things said twice were cut: the carousel's battery and
+ * "one plan" slides, the trust strip's "one plan", the FAQ's "never sold" and "plan per member".
  *
  * Claims rules (keep them when editing):
- *  - Only what a shipped build does today. Paused or unbuilt things go in COMING_SOON (Alexa is
+ *  - Only what a shipped build does today. Never advertise paused or unbuilt things (Alexa is
  *    paused; web checkout is switched off — and the published Terms say plans are not sold on the
  *    website; iPhone Critical Alerts need Apple's approval).
  *  - No claims about other apps ("they sell your data", "they kill your battery"): unprovable here.
- *  - Never "we review every report" (there is no review screen yet), never "forever" about a price.
+ *  - Never "we review every report" (there is no review screen yet), never "forever" about a price,
+ *    never "never used to train AI" (owner, 2026-11-18 — the line is "Never sold. No ads.").
  *  - The #background-location block is Google Play's required website disclosure — keep its four
  *    parts (collects location / even when closed or not in use / shared with the circle / features).
  */
 
 // Canonical on the home page only (in the root layout it would be inherited by every page).
-export const metadata: Metadata = { alternates: { canonical: '/' } };
+// `itunes` = Safari's Smart App Banner on iPhone (home page only: on /join and /refer it would
+// offer a second install path that skips the page's own invite handling).
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+  ...(APP_STORE_URL ? { itunes: { appId: APP_STORE_ID } } : {}),
+};
+
+const YOUTUBE_CHANNEL = 'https://www.youtube.com/@Loxymity';
 
 const JSON_LD = {
   '@context': 'https://schema.org',
@@ -48,6 +59,7 @@ const JSON_LD = {
       description: 'Private, real-time location sharing for families and close friends.',
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
       publisher: { '@id': 'https://loxymity.com/#org' },
+      sameAs: [APP_STORE_URL, PLAY_URL].filter(Boolean),
     },
   ],
 };
@@ -93,7 +105,7 @@ export default function Home() {
               <StoreButtons align="start" />
             </div>
             <p className="mt-5 text-xs text-dark-muted animate-fade-up" style={{ animationDelay: '0.3s' }}>
-              Free to start · iPhone (iOS 17+) and Android (7.0+) · English for now
+              Free on iPhone and Android
             </p>
           </div>
           <div className="flex w-full flex-1 justify-center">
@@ -104,11 +116,10 @@ export default function Home() {
 
       {/* ── Trust strip ──────────────────────────────────────────────────── */}
       <div className="border-y border-white/[0.06]">
-        <div className="mx-auto grid max-w-5xl grid-cols-2 gap-x-6 gap-y-4 px-6 py-6 md:grid-cols-4">
+        <div className="mx-auto grid max-w-4xl grid-cols-1 gap-x-6 gap-y-3 px-6 py-6 sm:grid-cols-3">
           {[
             { t: 'Never sold. No ads.', p: 'M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z' },
             { t: 'Encrypted on your phone', p: 'M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z' },
-            { t: 'One plan, whole circle', p: 'M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z' },
             { t: 'Gentle on battery', p: 'M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z' },
           ].map(({ t, p }) => (
             <div key={t} className="flex items-center justify-center gap-2.5 text-sm text-dark-muted">
@@ -146,6 +157,33 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Video (click-to-play YouTube Short; see VideoShort for the privacy rule) ── */}
+      <section id="video" className="px-6 pb-24">
+        <div className="mx-auto grid max-w-4xl items-center gap-12 md:grid-cols-[1fr_300px]">
+          <div className="reveal text-center md:text-left">
+            <p className="eyebrow">See it in action</p>
+            <h2 className="mt-4 text-4xl font-semibold tracking-[-0.03em] text-dark-text md:text-5xl">
+              Twenty seconds, <Accent>one less worry</Accent>
+            </h2>
+            <p className="mt-4 text-lg leading-relaxed text-dark-muted">
+              Why families stop texting &ldquo;reached?&rdquo; — an alert when someone gets to school, work or home,
+              and everyone on one private map.
+            </p>
+            <a
+              href={YOUTUBE_CHANNEL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 inline-block text-sm font-semibold text-primary-soft hover:underline"
+            >
+              More videos on YouTube →
+            </a>
+          </div>
+          <div className="reveal">
+            <VideoShort id="MCdmwXiyIdo" poster="/videos/reached-cover.jpg" title="Stop asking “reached?” — Loxymity" />
+          </div>
+        </div>
+      </section>
+
       {/* ── Features (bento) ─────────────────────────────────────────────── */}
       <section id="features" className="px-6 pb-24">
         <div className="mx-auto max-w-6xl">
@@ -177,7 +215,6 @@ export default function Home() {
             <ul className="mx-auto mt-4 flex max-w-4xl flex-wrap justify-center gap-2">
               {[
                 'Day timeline & replay',
-                'History: 2 days free, up to 180',
                 'Family schedule: on time or late',
                 'Live mode for the moments that matter',
                 'Street View on any pin',
@@ -187,8 +224,6 @@ export default function Home() {
                 'Loxy, the in-app assistant',
                 'Vault backup only you can open',
                 'App Lock with Face ID or fingerprint',
-                'Pause sharing any time',
-                'Block & report',
               ].map((t) => (
                 <li key={t} className="rounded-full border border-white/[0.07] bg-white/[0.02] px-3.5 py-1.5 text-[13px] text-dark-muted">
                   {t}
@@ -209,39 +244,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Coming soon ─────────────────────────────────────────────────── */}
-      <section id="coming-soon" className="px-6 pb-24">
-        <div className="mx-auto max-w-6xl">
-          <SectionHead eyebrow="Coming soon" title={<>On <Accent>the way</Accent></>} sub="Not available yet — here’s what we’re building next." />
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {COMING_SOON.map((c) => (
-              <div key={c.title} className="reveal card-premium rounded-3xl p-6">
-                <div className="flex items-center justify-between">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
-                    <svg className="h-5 w-5 text-primary-soft" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <path d={c.icon} />
-                    </svg>
-                  </span>
-                  <span className="tag-soon">Coming soon</span>
-                </div>
-                <h3 className="mt-5 font-semibold text-dark-text">{c.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-dark-muted">{c.body}</p>
-              </div>
-            ))}
-          </div>
-          <p className="mt-6 text-center text-xs text-dark-muted">
-            These features are in development and not part of any plan yet. What they include, and when they arrive, may change.
-          </p>
-        </div>
-      </section>
-
       {/* ── Privacy ─────────────────────────────────────────────────────── */}
       <section id="privacy" className="border-y border-white/[0.06] bg-dark-surface/40 px-6 py-24">
         <div className="mx-auto max-w-6xl">
           <SectionHead eyebrow="Privacy" title={<>Private <Accent>by design</Accent></>} sub="It’s your family’s location. We treat it that way." />
           <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              { t: 'Never sold', d: 'Your location is never sold, never used for ads and never used to train AI.', p: 'M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z' },
+              { t: 'Never sold', d: 'Your location is never sold and never used for ads — and there are no ads in Loxymity.', p: 'M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z' },
               { t: 'You decide who sees you', d: 'Only the circles you join, and anyone you send a share link to. Pause, leave or delete your account at any time. Infinite adds ghost mode.', p: 'M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z M15 12a3 3 0 11-6 0 3 3 0 016 0z' },
               { t: 'Encrypted on your phone', d: 'What the app keeps on your phone is encrypted, App Lock adds Face ID or fingerprint, and Vault backups open only with your password.', p: 'M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z' },
               { t: 'Straight about the limits', d: 'Everything is encrypted on the way and protected on our servers, but not end-to-end encrypted — that is how alerts and SOS work. Calls are not recorded.', p: 'M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z' },
@@ -285,26 +294,15 @@ export default function Home() {
           <SectionHead
             eyebrow="Pricing"
             title={<>One plan covers <Accent>the whole circle</Accent></>}
-            sub="Start free. Plans are priced per circle, never per person — one person pays and everyone in the circle gets the plan on their own free account."
+            sub="Start free. When you need more, one person pays and everyone in the circle gets the plan — never priced per person."
           />
-          <div className="mt-12">
+          <div className="mt-10">
             <PricingCards />
           </div>
-          <div className="mt-10 flex flex-wrap justify-center gap-x-8 gap-y-3">
-            {['Try Platinum free for 7 days', 'Cancel any time in your store account', 'No ads, ever'].map((r) => (
-              <div key={r} className="flex items-center gap-2 text-sm text-dark-muted">
-                <svg className="h-4 w-4 shrink-0 text-status-ok" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M5 13l4 4L19 7" />
-                </svg>
-                {r}
-              </div>
-            ))}
-          </div>
-          <p className="mx-auto mt-6 max-w-3xl text-center text-xs leading-relaxed text-dark-muted">
-            Prices shown in US dollars, rupees, euros and pounds; other regions are billed the store&apos;s local price,
-            with taxes as your store applies them. The free trial is on Platinum annual for one circle, once per store
-            account, and becomes a paid plan unless you cancel at least 24 hours before it ends. Free circles hold 5
-            people, Gold 10, Platinum and Infinite 15. See the <a href="/terms/#plans" className="underline hover:text-dark-text">plan terms</a>.
+          <p className="mx-auto mt-8 max-w-3xl text-center text-xs leading-relaxed text-dark-muted">
+            Other regions pay the store&apos;s local price; taxes as your store applies them. The free trial is on
+            Platinum yearly for one circle, once per store account, and becomes a paid plan unless you cancel at least
+            24 hours before it ends. See the <a href="/terms/#plans" className="underline hover:text-dark-text">plan terms</a>.
           </p>
         </div>
       </section>
@@ -561,29 +559,6 @@ function ChatVisual() {
 
 /* ── Content ──────────────────────────────────────────────────────────── */
 
-const COMING_SOON = [
-  {
-    title: 'Ask Alexa',
-    body: 'Ask out loud where your family is — hands-free, from the kitchen or the car.',
-    icon: 'M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z',
-  },
-  {
-    title: 'SOS through the iPhone silent switch',
-    body: 'Today an iPhone SOS breaks through Focus, but the silent switch can mute it. Ringing on silent needs Apple’s approval — we’re working on it.',
-    icon: 'M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0',
-  },
-  {
-    title: 'Buy on loxymity.com',
-    body: `Pay in rupees by UPI, card or net banking, about ${WEB_DISCOUNT_PCT}% less than in the app — prepaid, and never renewed by itself.`,
-    icon: 'M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z',
-  },
-  {
-    title: 'More languages',
-    body: 'Loxymity in German, French and Spanish first, with more to follow.',
-    icon: 'M10.5 21l5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 016-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 01-3.827-5.802',
-  },
-];
-
 const FAQ: { q: string; a: React.ReactNode }[] = [
   {
     q: 'Is my location always being shared?',
@@ -596,6 +571,10 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
   {
     q: 'Will Loxymity drain my battery?',
     a: 'It is designed not to. There is no fixed polling interval: your phone reports roughly once a minute while you move and about every ten minutes when you are still, and slows down further on low battery unless you are charging or driving. Live mode, an active trip or an SOS report faster for a short time, because that is when it matters.',
+  },
+  {
+    q: 'Which phones does it work on?',
+    a: 'iPhone with iOS 17 or later, and Android phones with Android 7.0 or later. Everyone in a circle can use either. The app is in English for now; more languages are on the way.',
   },
   {
     q: 'What happens when someone sends an SOS?',
@@ -614,10 +593,6 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
     a: 'They are good estimates, not guarantees. A phone’s location can be off by tens or hundreds of metres, late, or missing — when the phone is off, has no signal, is in battery saver, or its maker limits background apps. A “left” alert waits for a second reading outside the place, so it can arrive a little late. Driving scores, speeds and road smoothness are for your own information and must not be used for insurance, work or legal decisions.',
   },
   {
-    q: 'Do I have to buy a plan for every family member?',
-    a: 'No. A plan covers circles, not people. Everyone gets 2 free circles; one plan covers 1, 2 or 3 circles, and everyone in a covered circle gets the plan’s features on their own free account. Plans are bought in the app through the App Store or Google Play.',
-  },
-  {
     q: 'What happens to my history if I lose my phone?',
     a: 'Whatever is within your plan’s window is on our servers and syncs to your new phone. Older history lives only on your old phone — unless you use Vault, a backup encrypted with a password only you know, which comes with a plan for the person who pays. We cannot read it, and we cannot recover it if you forget the password.',
   },
@@ -634,16 +609,6 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
         complying with privacy and employment law, as our <a href="/terms/#your-responsibilities" className="text-primary-soft hover:underline">Terms</a> explain.
         Never track anyone without their knowledge and agreement. For organisations we offer safety services that people
         control, under a written agreement: <a href="/business/" className="text-primary-soft hover:underline">Loxymity for organisations</a>.
-      </>
-    ),
-  },
-  {
-    q: 'Is my data ever sold?',
-    a: (
-      <>
-        Never — and there is no advertising. We use service providers to run the app (for example Supabase, our database
-        in Mumbai, India), and each may use data only to provide its service to us. The full list is in our{' '}
-        <a href="/privacy/#providers" className="text-primary-soft hover:underline">Privacy Policy</a>.
       </>
     ),
   },

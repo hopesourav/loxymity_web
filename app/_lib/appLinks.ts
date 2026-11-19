@@ -3,9 +3,12 @@
  * /refer page linked com.sawsibinfotech.loxymity after the bundle rename) or a placeholder App
  * Store id.
  *
- * The defaults are the real store listings:
+ * The defaults are the real store listings, both public since 2026-11-19 ("Loxymity: Family &
+ * Friends Map"):
  *   Google Play  com.amsekresearch.loxymity (the app's PLAY_STORE_URL, src/lib/updateChecker.ts)
- *   App Store    Apple ID 6818562041 (App Store Connect; the app's APP_STORE_URL)
+ *   App Store    Apple ID 6818562041 (App Store Connect; the app's APP_STORE_URL). No country in
+ *                the path, so Apple sends each visitor to their own storefront; the name part is
+ *                cosmetic (Apple resolves by id).
  *
  * Build-time overrides (Cloudflare Pages env):
  *   NEXT_PUBLIC_PLAY_URL       another Play URL — or `off` to hide every Google Play button
@@ -15,7 +18,9 @@
  * A hidden store button shows "Coming soon" on the landing page instead of a dead link.
  */
 const DEFAULT_PLAY_URL = 'https://play.google.com/store/apps/details?id=com.amsekresearch.loxymity';
-const DEFAULT_APP_STORE_URL = 'https://apps.apple.com/app/loxymity/id6818562041';
+/** Apple ID of the App Store listing — also Safari's Smart App Banner (`itunes` metadata). */
+export const APP_STORE_ID = '6818562041';
+const DEFAULT_APP_STORE_URL = `https://apps.apple.com/app/loxymity-family-friends-map/id${APP_STORE_ID}`;
 
 function pick(env: string | undefined, fallback: string): string | null {
   const v = (env ?? '').trim();

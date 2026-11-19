@@ -249,12 +249,15 @@ export default function PrivacyPolicy() {
 
         <Sub title="2.9 Our website and dashboard">
           <p>
-            loxymity.com uses no advertising or analytics cookies. The dashboard keeps your sign-in session
+            loxymity.com itself uses no advertising or analytics cookies. The dashboard keeps your sign-in session
             in your browser&rsquo;s storage. Maps on the website load tiles from OpenStreetMap, and searching
             for a place on the dashboard sends your search to OpenStreetMap&rsquo;s Nominatim service, so
             your browser shares your IP address with them. Our hosting provider (Cloudflare) processes
             visitors&rsquo; IP addresses to deliver and protect the site, and some forms use Cloudflare
             Turnstile, which reads technical information about your browser to stop automated abuse.
+            Videos on our home page load from YouTube only when you press play; from then on YouTube
+            (Google) receives your IP address and technical information about your browser, and may set its
+            own cookies under Google&rsquo;s privacy policy.
           </p>
         </Sub>
 
@@ -421,6 +424,7 @@ export default function PrivacyPolicy() {
             ['Expo, Google Firebase Cloud Messaging, Apple Push Notification service', 'Delivering notifications', 'Push tokens and notification text — which can include names, place names, battery level and SOS messages'],
             ['Google Firebase Crashlytics', 'Crash reporting', 'Device and app details, an installation identifier, recent diagnostic messages and, once signed in, your account ID'],
             ['Google Maps Platform', 'Maps on Android, Street View, directions, address and place search, place names', 'Map viewport; through our server, a trip’s start and end points, addresses or places you search for, and the coordinates for Street View'],
+            ['Google (YouTube)', 'Playing our videos on loxymity.com — only when you press play', 'Your IP address and technical information about your browser; YouTube may set its own cookies'],
             ['Apple (MapKit and iOS) and Google Play services', 'Maps on iPhone; turning coordinates into place names on your phone', 'Map viewport; the coordinates being named'],
             ['BigDataCloud', 'Place names for assistant answers (fallback)', 'Coordinates'],
             ['OpenWeather, WeatherAPI', 'Weather on the map', 'A location'],

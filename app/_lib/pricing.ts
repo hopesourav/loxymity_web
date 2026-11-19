@@ -91,10 +91,19 @@ export function formatPrice(amount: number, currency: Currency): string {
   }).format(amount);
 }
 
+/** The largest whole-percent saving of yearly over monthly among the paid tiers, for the billing
+ *  toggle's "Yearly saves up to N%" — "up to" because the saving differs by tier and currency. */
+export function maxAnnualSaving(circles: number, currency: Currency): number {
+  return Math.max(...PLAN_TIERS.map((t) => annualSaving(t, circles, currency)));
+}
+
 export type PlanCard = {
   id: PlanId | null;
   name: string;
+  /** One line under the name. Also shown by the dashboard's PlanPicker. */
   tagline: string;
+  /** Exactly four lines, in the SAME order on every card (people · history · places · the tier's
+   *  headline feature), so the cards read across as rows. Everything else is in COMPARE_ROWS. */
   features: string[];
   highlight?: boolean;
   badge?: string;
@@ -122,6 +131,10 @@ export type PlanCard = {
  *  - location blur — it is applied on the viewer's phone, so it must never read as "hidden".
  * "Ghost mode" is Privacy Shield's ghost mode; pausing your own sharing is free on every plan.
  * The web dashboard follows the payer's own plan (`hasDashboardAccess`), not circle coverage.
+ *
+ * Layout (2026-11-19, "less cluttered pricing"): the cards carry four aligned lines each; every
+ * other figure lives once, in COMPARE_ROWS (the "Compare all plans" table). The badge says
+ * "Recommended", not "Most popular" — a popularity claim needs sales data to back it.
  */
 export const PLAN_CARDS: PlanCard[] = [
   {
@@ -129,14 +142,10 @@ export const PLAN_CARDS: PlanCard[] = [
     name: 'Free',
     tagline: 'Everything you need to start',
     features: [
-      `${FREE_CIRCLES} circles of up to 5 people each`,
-      'Live map, a loud SOS & crash check',
-      'Circle chat and one-tap “Arrived safely”',
-      'Today’s and yesterday’s history',
-      '2 places with arrival & leave alerts',
-      `1 temporary circle of up to ${EVENT_CIRCLE_MEMBERS} people, for up to 24 hours`,
-      'Battery level & live share links for people without the app',
-      'Street View 5 · assistant 10 a month',
+      `${FREE_CIRCLES} circles, up to 5 people each`,
+      '2 days of history',
+      '2 places with alerts',
+      'SOS, crash check & chat',
     ],
   },
   {
@@ -144,28 +153,23 @@ export const PLAN_CARDS: PlanCard[] = [
     name: 'Gold',
     tagline: 'Everything in Free, for bigger families',
     features: [
+      'Up to 10 people per circle',
+      '30 days of history',
+      '10 places with alerts',
       'Unlimited voice calls',
-      'Up to 10 members in each covered circle',
-      '30 days of location history',
-      '10 places with arrival & leave alerts',
-      'Up to 5 temporary circles, one lasting up to 30 days',
-      'Street View 10 · assistant 100 a month',
-      'Web dashboard for the person who pays',
     ],
   },
   {
     id: 'platinum',
     name: 'Platinum',
-    tagline: 'Everything in Gold, plus the full toolkit',
+    tagline: 'Everything in Gold, plus driving reports',
     highlight: true,
-    badge: 'Most popular',
+    badge: 'Recommended',
     features: [
-      'Up to 15 members in each covered circle',
-      '90 days of location history',
-      'Driving reports & road smoothness',
-      '50 places with arrival & leave alerts',
-      'Video calls — 60 minutes a month',
-      'Street View 30 · assistant 300 a month',
+      'Up to 15 people per circle',
+      '90 days of history',
+      '50 places with alerts',
+      'Driving reports & video calls',
     ],
   },
   {
@@ -173,14 +177,39 @@ export const PLAN_CARDS: PlanCard[] = [
     name: 'Infinite',
     tagline: 'Everything in Platinum, plus privacy control',
     features: [
-      '180 days of location history',
-      '100 places with arrival & leave alerts',
-      'Privacy Shield — see who viewed your location',
-      'Ghost mode and automatic history clean-up',
-      'Video calls — 100 minutes a month',
-      'Street View 60 a month',
+      'Up to 15 people per circle',
+      '180 days of history',
+      '100 places with alerts',
+      'Ghost mode & Privacy Shield',
     ],
   },
+];
+
+/** A cell of the comparison table: text, or true (included) / false (not included). */
+export type CompareCell = string | boolean;
+
+/**
+ * "Compare all plans": every figure the old cards listed, once, in one table (Free · Gold ·
+ * Platinum · Infinite). Same sources and rules as PLAN_CARDS above — change both together.
+ * `payer` rows come with the plan for the person who pays, not for every member (D-2/D-6).
+ */
+export const COMPARE_ROWS: { label: string; payer?: boolean; values: [CompareCell, CompareCell, CompareCell, CompareCell] }[] = [
+  { label: 'People in each circle', values: ['5', '10', '15', '15'] },
+  { label: 'Location history', values: ['2 days', '30 days', '90 days', '180 days'] },
+  { label: 'Places with arrival & leave alerts', payer: true, values: ['2', '10', '50', '100'] },
+  {
+    label: `Temporary circles at a time (up to ${EVENT_CIRCLE_MEMBERS} people)`,
+    values: ['1 · up to 24 hours', '5 · one up to 30 days', '5 · one up to 30 days', '5 · one up to 30 days'],
+  },
+  { label: 'Live map, SOS, crash check, chat & share links', values: [true, true, true, true] },
+  { label: 'Voice calls', values: ['Answer only', 'Unlimited', 'Unlimited', 'Unlimited'] },
+  { label: 'Video calls', values: [false, false, '60 min a month', '100 min a month'] },
+  { label: 'Driving reports & road smoothness', values: [false, false, true, true] },
+  { label: 'Street View', values: ['5 a month', '10 a month', '30 a month', '60 a month'] },
+  { label: 'Questions to Loxy, the assistant', values: ['10 a month', '100 a month', '300 a month', '300 a month'] },
+  { label: 'Ghost mode, Privacy Shield & automatic history clean-up', values: [false, false, false, true] },
+  { label: 'Vault backup', payer: true, values: [false, true, true, true] },
+  { label: 'Web dashboard', payer: true, values: [false, true, true, true] },
 ];
 
 /** Timezone beats navigator.language here: a phone set to en-GB but sitting in Kolkata should see
