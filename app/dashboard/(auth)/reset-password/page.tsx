@@ -1,13 +1,22 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { readAuthLink, authLinkErrorMessage, NO_AUTH_LINK, type AuthLink } from '../../_lib/authLink';
 import { supabase } from '../../_lib/client';
 import { IconEye, IconEyeOff, IconCheck } from '../../_components/Icons';
 
 // = app src/lib/validation.ts and the Supabase Auth minimum (set to 8 on 2026-10-18).
 const PASSWORD_MIN_LENGTH = 8;
 
-type Stage = 'request' | 'new-password' | 'done' | 'error';
+type Stage = 'request' | 'verifying' | 'new-password' | 'done';
+
+/**
+ * The link this page was OPENED with, read at module load — before the Supabase client uses the
+ * recovery token and clears the hash. Its PASSWORD_RECOVERY event fires once, and could fire before
+ * the listener below existed: the page then stayed on "Send reset link". Taken once per load, so a
+ * later visit in the same tab does not replay it.
+ */
+let linkAtLoad: AuthLink = readAuthLink();
 
 export default function ResetPasswordPage() {
   const [stage, setStage]   = useState<Stage>('request');
@@ -16,19 +25,45 @@ export default function ResetPasswordPage() {
   const [pw2, setPw2]       = useState('');
   const [showPw, setShowPw] = useState(false);
   const [message, setMessage] = useState('');
+  /** Why the emailed link could not be used (expired, already used). Shown above the request form. */
+  const [linkError, setLinkError] = useState('');
   const [loading, setLoading] = useState(false);
+  // A ref keeps this mount's link through React's development double-mount.
+  const link = useRef(linkAtLoad);
 
   // Supabase redirects with #access_token=...&type=recovery in the hash.
-  // onAuthStateChange fires PASSWORD_RECOVERY when the token is consumed.
+  // onAuthStateChange fires PASSWORD_RECOVERY when the token is consumed — the listener stays for
+  // the case where it fires after this; getSession() covers the case where it fired before.
   useEffect(() => {
+    linkAtLoad = NO_AUTH_LINK;
+    let live = true;
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === 'PASSWORD_RECOVERY') setStage('new-password');
+      if (event === 'PASSWORD_RECOVERY') setStage(s => (s === 'done' ? s : 'new-password'));
     });
-    return () => subscription.unsubscribe();
+
+    const l = link.current;
+    if (l.errorCode) {
+      setLinkError(authLinkErrorMessage(l, 'reset'));
+    } else if (l.recovery) {
+      setStage(s => (s === 'request' ? 'verifying' : s));
+      // Resolves once the client has finished with the URL (it waits for its own start-up).
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (!live) return;
+        // Only the session this link opened (the client keeps an earlier one if the token failed).
+        if (session && l.recoveryUserId && session.user.id === l.recoveryUserId) {
+          setStage(s => (s === 'done' ? s : 'new-password'));
+        } else {
+          setStage(s => (s === 'verifying' ? 'request' : s));
+          setLinkError('This link could not be used. It may have expired or been used already. Request a new one.');
+        }
+      });
+    }
+    return () => { live = false; subscription.unsubscribe(); };
   }, []);
 
   async function handleRequest(e: React.FormEvent) {
     e.preventDefault();
+    setLinkError('');
     setLoading(true);
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/dashboard/reset-password/`,
@@ -60,8 +95,16 @@ export default function ResetPasswordPage() {
         </div>
 
         <div className="bg-dark-surface border border-dark-border rounded-2xl p-6">
+          {stage === 'verifying' && (
+            <div className="flex flex-col items-center gap-3 py-6">
+              <div className="w-7 h-7 border-2 border-dark-border border-t-primary rounded-full animate-spin" />
+              <p className="text-sm text-dark-muted">Checking your link…</p>
+            </div>
+          )}
+
           {stage === 'request' && (
             <form onSubmit={handleRequest} className="space-y-4">
+              {linkError && <p className="text-sm text-brand-danger">{linkError}</p>}
               <div>
                 <label className="block text-xs font-medium text-dark-muted mb-1.5">Email</label>
                 <input
