@@ -249,17 +249,31 @@ export default function ConfigPage() {
           assumption it is a dry run. */}
       <div className="bg-brand-danger/10 border border-brand-danger/30 rounded-3xl p-4">
         <p className="text-sm text-brand-danger font-medium">These controls are live</p>
-        <p className="text-sm text-dark-muted mt-1">
-          A change reaches a phone only when someone opens the app on it while signed in;
-          its background tasks follow from then on. A phone nobody opens keeps its previous
-          value, and an expired change stays in force on phones that have not opened the app
-          since. Apps older than <strong>v0.8.865</strong> fetch and log these values but do
-          not apply them, and a switch only exists on builds that include it.
+        {/* Per build, from the app repo's docs/KILL_SWITCHES.md section 2. Keep the two in step. */}
+        <ul className="text-sm text-dark-muted mt-1 space-y-1 list-disc pl-5">
+          <li>
+            <strong>0.8.927 and older</strong> fetch a change only when the app is opened while
+            signed in. A phone nobody opens keeps its previous value, and an expired change stays
+            in force on those phones until the app is next opened.
+          </li>
+          <li>
+            <strong>0.8.928</strong> also fetches in the background (about every 6 hours) and on
+            the signed-out screens. When a kill expires, the feature turns back <strong>on</strong> by itself.
+          </li>
+          <li>
+            <strong>The next app build:</strong> a native emergency kill (sent from SQL) holds until
+            the phone gets a config newer than the kill.
+          </li>
+        </ul>
+        <p className="text-sm text-dark-muted mt-2">
+          Apps older than <strong>v0.8.865</strong> do not apply these values, and a switch
+          exists only on builds that include it.
         </p>
         <p className="text-sm text-dark-muted mt-2">
           Kill switches can only turn a feature <strong>off</strong>, never on. Read the
           description first: for a few switches, off also turns off safety behaviour.
-          Every change is reversible from this page and, unless you chose otherwise, expires
+          Clearing a kill turns the feature back on but does not undo what happened while it was
+          off (for example deletions or erased data). Unless you choose otherwise, a change expires
           on its own.
         </p>
       </div>
