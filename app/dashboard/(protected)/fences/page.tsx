@@ -17,14 +17,44 @@ function debounce<T extends (...args: any[]) => any>(fn: T, ms: number): T {
 
 type DrawerMode = 'create' | 'edit';
 
+/** PostgREST answers a write that RLS filtered out with 200 and no rows: the app's `not_permitted`. */
+const NOT_CREATOR = 'Only the person who created this place can change it.';
+
+/**
+ * A failed place write in words a person can act on (the app's placeDisplay.saveErrorMessage).
+ * The quota trigger (P0001 'quota_exceeded: allows max N active geofences') counts the creator's
+ * active places in ALL their circles; 42501 = RLS (0306: active membership of the place's circle).
+ */
+function placeErrorMessage(e: { code?: string; message?: string }, mode: DrawerMode): string {
+  const msg = e.message ?? '';
+  if (/quota_exceeded/.test(msg)) {
+    const n = Number(msg.match(/max (\d+)/)?.[1]);
+    return Number.isFinite(n) && n > 0
+      ? `Your plan allows ${n} active ${n === 1 ? 'place' : 'places'} across all your circles. Pause or delete one, or upgrade.`
+      : 'You have reached your plan\'s limit of active places across all your circles. Pause or delete one, or upgrade.';
+  }
+  if (e.code === '42501') {
+    return mode === 'create'
+      ? 'Only active members of this circle can add places.'
+      : 'Only active members of this circle can change its places.';
+  }
+  return msg || 'Could not save. Check your connection and try again.';
+}
+
 export default function FencesPage() {
-  const { supabase, activeCircleId, userId } = useDashboard();
+  const { supabase, activeCircleId, userId, members } = useDashboard();
+  // The app's placeAccess: owners and admins add places; only a place's creator edits or deletes
+  // it (the database allows nobody else). The role is read from the circle's live member list.
+  const myRole = members.find(m => m.user_id === userId)?.role;
+  const canAdd = myRole === 'owner' || myRole === 'admin';
   const [fences, setFences]   = useState<GeofenceRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [drawer, setDrawer]   = useState<{ mode: DrawerMode; fence?: GeofenceRow } | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [saving, setSaving]   = useState(false);
   const [error, setError]     = useState('');
+  const [deleteError, setDeleteError] = useState('');
+  const [deleting, setDeleting] = useState(false);
 
   // Map
   const mapRef    = useRef<HTMLDivElement>(null);
@@ -154,15 +184,17 @@ export default function FencesPage() {
     setSaving(true); setError('');
     if (drawer?.mode === 'create') {
       const { error: e } = await supabase.from('geofences').insert({
-        circle_id: activeCircleId, created_by: userId,
+        circle_id: activeCircleId, owner_id: userId,
         name: formName.trim(), lat: formLat, lng: formLng, radius_m: formRadius,
       });
-      if (e) { setError(e.message); setSaving(false); return; }
+      if (e) { setError(placeErrorMessage(e, 'create')); setSaving(false); return; }
     } else if (drawer?.fence) {
-      const { error: e } = await supabase.from('geofences')
+      const { data, error: e } = await supabase.from('geofences')
         .update({ name: formName.trim(), lat: formLat, lng: formLng, radius_m: formRadius })
-        .eq('id', drawer.fence.id);
-      if (e) { setError(e.message); setSaving(false); return; }
+        .eq('id', drawer.fence.id)
+        .select('id');
+      if (e) { setError(placeErrorMessage(e, 'edit')); setSaving(false); return; }
+      if ((data ?? []).length === 0) { setError(NOT_CREATOR); setSaving(false); return; }
     }
     setSaving(false);
     closeDrawer();
@@ -170,7 +202,11 @@ export default function FencesPage() {
   }
 
   async function handleDelete(id: string) {
-    await supabase.from('geofences').delete().eq('id', id);
+    setDeleting(true); setDeleteError('');
+    const { data, error: e } = await supabase.from('geofences').delete().eq('id', id).select('id');
+    setDeleting(false);
+    if (e) { setDeleteError(placeErrorMessage(e, 'edit')); return; }
+    if ((data ?? []).length === 0) { setDeleteError(NOT_CREATOR); return; }
     setDeleteId(null);
     await loadFences();
   }
@@ -185,13 +221,15 @@ export default function FencesPage() {
               <IconFence size={17} className="text-primary" />
               <h1 className="text-sm font-semibold text-dark-text">Geofences</h1>
             </div>
-            <button
-              onClick={openCreate}
-              className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center hover:opacity-90 transition-opacity"
-              aria-label="Create fence"
-            >
-              <IconPlus size={14} className="text-dark-bg" />
-            </button>
+            {canAdd && (
+              <button
+                onClick={openCreate}
+                className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center hover:opacity-90 transition-opacity"
+                aria-label="Create fence"
+              >
+                <IconPlus size={14} className="text-dark-bg" />
+              </button>
+            )}
           </div>
         </div>
 
@@ -203,7 +241,9 @@ export default function FencesPage() {
           ) : fences.length === 0 ? (
             <div className="text-center py-10 px-4">
               <IconFence size={28} className="text-dark-muted mx-auto mb-2" />
-              <p className="text-dark-muted text-xs">No geofences yet. Create one to get started.</p>
+              <p className="text-dark-muted text-xs">
+                {canAdd ? 'No geofences yet. Create one to get started.' : 'No geofences yet. Circle owners and admins can add them.'}
+              </p>
             </div>
           ) : (
             <ul className="divide-y divide-dark-border">
@@ -213,14 +253,16 @@ export default function FencesPage() {
                     <p className="text-sm font-medium text-dark-text truncate">{f.name}</p>
                     <p className="text-xs text-dark-muted">{f.radius_m} m radius</p>
                   </div>
-                  <div className="flex items-center gap-1.5 shrink-0">
-                    <button onClick={() => openEdit(f)} className="p-1 text-dark-muted hover:text-dark-text transition-colors" aria-label="Edit">
-                      <IconEdit size={13} />
-                    </button>
-                    <button onClick={() => setDeleteId(f.id)} className="p-1 text-dark-muted hover:text-brand-danger transition-colors" aria-label="Delete">
-                      <IconTrash size={13} />
-                    </button>
-                  </div>
+                  {f.owner_id === userId && (
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <button onClick={() => openEdit(f)} className="p-1 text-dark-muted hover:text-dark-text transition-colors" aria-label="Edit">
+                        <IconEdit size={13} />
+                      </button>
+                      <button onClick={() => { setDeleteError(''); setDeleteId(f.id); }} className="p-1 text-dark-muted hover:text-brand-danger transition-colors" aria-label="Delete">
+                        <IconTrash size={13} />
+                      </button>
+                    </div>
+                  )}
                 </li>
               ))}
             </ul>
@@ -323,12 +365,13 @@ export default function FencesPage() {
             <div className="bg-dark-surface border border-dark-border rounded-2xl p-6 max-w-xs w-full shadow-2xl text-center">
               <p className="text-sm font-semibold text-dark-text mb-1">Delete geofence?</p>
               <p className="text-xs text-dark-muted mb-5">This will permanently remove the fence and all related events.</p>
+              {deleteError && <p className="text-xs text-brand-danger mb-4">{deleteError}</p>}
               <div className="flex gap-3">
-                <button onClick={() => setDeleteId(null)} className="flex-1 py-2 border border-dark-border rounded-xl text-sm text-dark-muted hover:text-dark-text transition-colors">
+                <button onClick={() => { setDeleteId(null); setDeleteError(''); }} className="flex-1 py-2 border border-dark-border rounded-xl text-sm text-dark-muted hover:text-dark-text transition-colors">
                   Cancel
                 </button>
-                <button onClick={() => handleDelete(deleteId)} className="flex-1 py-2 bg-brand-danger text-white rounded-xl text-sm font-semibold hover:opacity-90 transition-opacity">
-                  Delete
+                <button onClick={() => handleDelete(deleteId)} disabled={deleting} className="flex-1 py-2 bg-brand-danger text-white rounded-xl text-sm font-semibold hover:opacity-90 disabled:opacity-50 transition-opacity">
+                  {deleting ? 'Deleting…' : 'Delete'}
                 </button>
               </div>
             </div>
