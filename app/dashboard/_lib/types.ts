@@ -29,6 +29,8 @@ export type LatestLocation = {
   is_charging: boolean | null;
   shares_location: boolean;
   reported_at: string;
+  /** Set only on a latest_locations_approx row (0349): the position is on a grid of this size. */
+  approx_m?: number | null;
 };
 
 export type DashboardMember = {
@@ -47,6 +49,8 @@ export type SosAlert = {
   circle_id: string;
   message: string | null;
   resolved: boolean;
+  /** Set when the sender dismissed it as a false alarm (0115). Not selected by every reader. */
+  dismissed_at?: string | null;
   created_at: string;
   profiles: { display_name: string | null } | null;
 };

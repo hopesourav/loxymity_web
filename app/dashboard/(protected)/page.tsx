@@ -6,7 +6,7 @@ import LiveMap from '../_components/LiveMap';
 import MemberSidebar from '../_components/MemberSidebar';
 
 export default function DashboardPage() {
-  const { members } = useDashboard();
+  const { members, activeCircleId } = useDashboard();
   const [focusMemberId, setFocusMemberId] = useState<string | null>(null);
 
   const onlineCnt = members.filter(m => m.status === 'online').length;
@@ -26,7 +26,7 @@ export default function DashboardPage() {
             {onlineCnt} of {members.length} online
           </span>
         </div>
-        <LiveMap members={members} focusMemberId={focusMemberId} />
+        <LiveMap members={members} focusMemberId={focusMemberId} circleId={activeCircleId} />
       </div>
 
       {/* Member sidebar */}

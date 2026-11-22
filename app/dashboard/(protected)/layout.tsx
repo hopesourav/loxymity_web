@@ -12,9 +12,16 @@ import type {
   LatestLocation, CircleMemberRow,
 } from '../_lib/types';
 import { hasDashboardAccess } from '../../_lib/tiers';
+import { mergeLatestWithApprox, makeLiveRowFilter } from '../_lib/approxLocations';
+import { activeSos, isActiveSos, SOS_ACTIVE_WINDOW_MS } from '../_lib/sosActive';
 import Sidebar from '../_components/Sidebar';
 import SOSBanner from '../_components/SOSBanner';
 import { IconMenu } from '../_components/Icons';
+
+/** A roster change re-reads the members once, after the burst (joins, leaves, an epoch move). */
+const ROSTER_RELOAD_MS = 1000;
+/** How often the SOS banner drops alerts that passed their 24 h. */
+const SOS_REFILTER_MS = 60_000;
 
 function getMemberStatus(
   sharesLocation: boolean,
@@ -36,6 +43,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const channelsRef = useRef<ReturnType<typeof supabase.channel>[]>([]);
   /** Only the newest subscribe may join (a circle switch can overtake the topic read). */
   const subSeq = useRef(0);
+  /** The pending roster re-read (debounced); cleared on a circle switch and on unmount. */
+  const rosterTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const loadDashboard = useCallback(async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -69,9 +78,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     if (circles.length === 0) { router.replace('/dashboard/plan/'); return; }
 
     const defaultCircleId = circles[0].id;
+    const myUid = session.user.id;
 
-    async function loadMembers(circleId: string): Promise<DashboardMember[]> {
-      const { data: memberRows } = await supabase
+    /**
+     * The circle's active members with their last position. `complete` is false when the member
+     * list or the exact positions could not be read — a roster re-read then keeps what is shown.
+     */
+    async function loadMembers(circleId: string): Promise<{ members: DashboardMember[]; complete: boolean }> {
+      const { data: memberRows, error: membersErr } = await supabase
         .from('circle_members')
         .select('user_id,role,shares_location,profiles!inner(display_name,avatar_url,google_avatar_url)')
         .eq('circle_id', circleId)
@@ -80,18 +94,25 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       const rows: CircleMemberRow[] = (memberRows as any[]) ?? [];
       const memberIds = rows.map(r => r.user_id);
 
-      const { data: locations } = memberIds.length
-        ? await supabase
-          .from('latest_locations')
-          .select('*')
-          .in('user_id', memberIds)
-        : { data: [] };
+      // Both location tables (0349): a member with approximate location is only in the copy. A
+      // failed read of the copy keeps the exact rows (those members show no pin until they move).
+      let locations: LatestLocation[] = [];
+      let locationsErr = false;
+      if (memberIds.length) {
+        const [exact, approx] = await Promise.all([
+          supabase.from('latest_locations').select('*').in('user_id', memberIds),
+          supabase.from('latest_locations_approx').select('*').in('user_id', memberIds),
+        ]);
+        locationsErr = !!exact.error;
+        locations = mergeLatestWithApprox(
+          (exact.data ?? []) as LatestLocation[],
+          approx.error ? [] : (approx.data ?? []) as LatestLocation[],
+        );
+      }
 
-      const locMap = new Map<string, LatestLocation>(
-        (locations ?? []).map((l: LatestLocation) => [l.user_id, l]),
-      );
+      const locMap = new Map<string, LatestLocation>(locations.map(l => [l.user_id, l]));
 
-      return rows.map(r => {
+      const members = rows.map(r => {
         const loc = locMap.get(r.user_id) ?? null;
         const p = r.profiles as any;
         return {
@@ -104,18 +125,47 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           status: getMemberStatus(r.shares_location, loc),
         };
       });
+      return { members, complete: !membersErr && !locationsErr };
     }
 
+    /** Someone else's SOS that is still active (the app's rule, ../_lib/sosActive). */
     async function loadSos(circleId: string): Promise<SosAlert[]> {
+      const since = new Date(Date.now() - SOS_ACTIVE_WINDOW_MS).toISOString();
       const { data } = await supabase
         .from('sos_alerts')
-        .select('id,sender_id,circle_id,message,resolved,created_at,profiles!sender_id(display_name)')
+        .select('id,sender_id,circle_id,message,resolved,dismissed_at,created_at,profiles!sender_id(display_name)')
         .eq('circle_id', circleId)
-        .eq('resolved', false);
-      return (data ?? []) as unknown as SosAlert[];
+        .eq('resolved', false)
+        .is('dismissed_at', null)
+        .gte('created_at', since)
+        .neq('sender_id', myUid)
+        .order('created_at', { ascending: false });
+      return activeSos((data ?? []) as unknown as SosAlert[], myUid);
     }
 
-    const [members, sosAlerts] = await Promise.all([
+    function scheduleRosterReload(circleId: string) {
+      if (rosterTimerRef.current) clearTimeout(rosterTimerRef.current);
+      rosterTimerRef.current = setTimeout(async () => {
+        rosterTimerRef.current = null;
+        const { members: fresh, complete } = await loadMembers(circleId);
+        if (!complete) return;
+        setCtx(prev => {
+          if (!prev || prev.activeCircleId !== circleId) return prev; // another circle is open now
+          // A live position that arrived while reading is newer than the one read: keep it.
+          const shown = new Map(prev.members.map(m => [m.user_id, m.location]));
+          const members = fresh.map(m => {
+            const live = shown.get(m.user_id);
+            if (live && m.location && Date.parse(live.reported_at) > Date.parse(m.location.reported_at)) {
+              return { ...m, location: live, status: getMemberStatus(m.shares_location, live) };
+            }
+            return m;
+          });
+          return { ...prev, members };
+        });
+      }, ROSTER_RELOAD_MS);
+    }
+
+    const [{ members }, sosAlerts] = await Promise.all([
       loadMembers(defaultCircleId),
       loadSos(defaultCircleId),
     ]);
@@ -128,7 +178,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       circles,
       activeCircleId: defaultCircleId,
       setActiveCircleId: async (id: string) => {
-        const [newMembers, newSos] = await Promise.all([
+        cancelRosterReload();
+        const [{ members: newMembers }, newSos] = await Promise.all([
           loadMembers(id), loadSos(id),
         ]);
         setCtx(prev => prev ? { ...prev, activeCircleId: id, members: newMembers, activeSosAlerts: newSos } : prev);
@@ -146,10 +197,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
      * Live updates through the app's Broadcast topics (Loxymity migrations 0390 / 0392) — the same
      * private topics the phones join. Postgres Changes stop once 0393 empties the supabase_realtime
      * publication, so the dashboard must not use them.
-     *   c:<circle>:<epoch>  sos_alerts (INSERT / UPDATE, the whole row)
-     *   l:<circle>:<epoch>  latest_locations (exact rows; only for a member who may see others —
-     *                       the server leaves ghosted, paused and blurred members out, as RLS did)
-     *   rt_epoch            access changed in the circle: read the topics again and rejoin
+     *   c:<circle>:<epoch>  sos_alerts (INSERT / UPDATE, the whole row); circle_members (any roster
+     *                       change: the members are read again)
+     *   l:<circle>:<epoch>  latest_locations (exact rows) and latest_locations_approx (the rounded
+     *                       copy of a member with approximate location — their exact row instead
+     *                       while their SOS is open in this circle, 0350); only for a member who may
+     *                       see others. Ghosted members and members not sharing are left out, as RLS does.
+     *   rt_epoch            access changed in the circle: read the topics again, rejoin, and read
+     *                       the members again
      * Who may join is decided by the server (_rt_can_join); get_realtime_topics() names mine.
      */
     async function subscribeRealtime(circleId: string, memberIds: string[]) {
@@ -163,14 +218,23 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       const topics = circles.find((c) => c.circle_id === circleId);
       if (!topics) return;
 
+      // Exact beats the rounded copy of the same upload (during an SOS both arrive). Per subscription.
+      const acceptRow = makeLiveRowFilter();
+
       const onMessage = (msg: { event?: string; payload?: unknown }) => {
         const change = msg.payload as { op?: string; new?: Record<string, unknown> } | undefined;
-        if (msg.event === 'rt_epoch') { subscribeRealtime(circleId, memberIds); return; }
+        if (msg.event === 'rt_epoch') {
+          subscribeRealtime(circleId, memberIds);
+          scheduleRosterReload(circleId);
+          return;
+        }
+        if (msg.event === 'circle_members') { scheduleRosterReload(circleId); return; }
         if (!change?.new) return;
-        if (msg.event === 'latest_locations' && change.op !== 'DELETE') {
+        if ((msg.event === 'latest_locations' || msg.event === 'latest_locations_approx') && change.op !== 'DELETE') {
           const updated = change.new as unknown as LatestLocation;
+          if (!updated.user_id || !acceptRow(updated)) return;
           setCtx(prev => {
-            if (!prev) return prev;
+            if (!prev || prev.activeCircleId !== circleId) return prev;
             const members = prev.members.map(m =>
               m.user_id === updated.user_id
                 ? { ...m, location: updated, status: getMemberStatus(m.shares_location, updated) }
@@ -179,17 +243,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             return { ...prev, members };
           });
         }
-        if (msg.event === 'sos_alerts' && change.op === 'INSERT') {
-          const alert = change.new as unknown as SosAlert;
-          setCtx(prev => prev
-            ? { ...prev, activeSosAlerts: [alert, ...prev.activeSosAlerts.filter(a => a.id !== alert.id)] }
-            : prev);
-        }
-        if (msg.event === 'sos_alerts' && change.op === 'UPDATE') {
-          const updated = change.new as unknown as SosAlert;
-          setCtx(prev => prev
-            ? { ...prev, activeSosAlerts: prev.activeSosAlerts.filter(a => a.id !== updated.id || !updated.resolved) }
-            : prev);
+        if (msg.event === 'sos_alerts' && (change.op === 'INSERT' || change.op === 'UPDATE')) {
+          const row = change.new as unknown as SosAlert;
+          if (!row.id) return;
+          setCtx(prev => {
+            if (!prev || prev.activeCircleId !== circleId) return prev;
+            const existing = prev.activeSosAlerts.find(a => a.id === row.id);
+            // The broadcast row has no joined profile: keep the one already read, if any.
+            const merged: SosAlert = { ...existing, ...row, profiles: existing?.profiles ?? null };
+            const others = prev.activeSosAlerts.filter(a => a.id !== row.id);
+            // Added only while active (not resolved, not dismissed, not mine, within 24 h): an
+            // UPDATE that resolves or dismisses it drops it, one that un-dismisses it brings it back.
+            const next = isActiveSos(merged, myUid) ? activeSos([merged, ...others], myUid) : others;
+            return { ...prev, activeSosAlerts: next };
+          });
         }
       };
 
@@ -209,10 +276,26 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     channelsRef.current = [];
   }
 
+  function cancelRosterReload() {
+    if (rosterTimerRef.current) { clearTimeout(rosterTimerRef.current); rosterTimerRef.current = null; }
+  }
+
   useEffect(() => {
     loadDashboard();
-    return () => { subSeq.current += 1; leaveChannels(); };
+    return () => { subSeq.current += 1; leaveChannels(); cancelRosterReload(); };
   }, [loadDashboard]);
+
+  // An SOS nobody resolved stops being active after 24 h: drop it from the banner on time.
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCtx(prev => {
+        if (!prev) return prev;
+        const next = activeSos(prev.activeSosAlerts, prev.userId);
+        return next.length === prev.activeSosAlerts.length ? prev : { ...prev, activeSosAlerts: next };
+      });
+    }, SOS_REFILTER_MS);
+    return () => clearInterval(timer);
+  }, []);
 
   if (loading || !ctx) {
     return (

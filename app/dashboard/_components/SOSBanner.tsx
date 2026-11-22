@@ -5,11 +5,15 @@ import { useDashboard } from '../_lib/context';
 import { IconAlert } from './Icons';
 
 export default function SOSBanner() {
-  const { activeSosAlerts } = useDashboard();
+  const { activeSosAlerts, members } = useDashboard();
   if (activeSosAlerts.length === 0) return null;
 
-  const first = activeSosAlerts[0];
-  const sender = first.profiles?.display_name ?? 'A member';
+  // The layout keeps only active alerts (someone else's, not resolved or dismissed, < 24 h);
+  // the newest is named. A live alert carries no joined profile: the circle's member list names it.
+  const first = [...activeSosAlerts].sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at))[0];
+  const sender = members.find(m => m.user_id === first.sender_id)?.display_name
+    ?? first.profiles?.display_name
+    ?? 'A member';
 
   return (
     <div className="flex items-center gap-3 bg-brand-danger px-4 py-2.5 z-50">
