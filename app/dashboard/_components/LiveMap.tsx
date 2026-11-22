@@ -4,6 +4,7 @@ import { useEffect, useRef, useCallback } from 'react';
 import type { Map as LeafletMap, Marker } from 'leaflet';
 import type { DashboardMember } from '../_lib/types';
 import { MAP_TILE_URL, mapTileOptions } from '../../_lib/mapTiles';
+import { escapeHtml, httpsUrlOrNull } from '../../_lib/escapeHtml';
 
 // Status → pin ring colour (matches Tailwind config brand colours)
 const STATUS_COLOR: Record<DashboardMember['status'], string> = {
@@ -15,8 +16,10 @@ const STATUS_COLOR: Record<DashboardMember['status'], string> = {
 
 function makeIcon(L: typeof import('leaflet'), member: DashboardMember) {
   const color = STATUS_COLOR[member.status];
-  const initial = (member.display_name ?? '?').charAt(0).toUpperCase();
+  const initial = escapeHtml((member.display_name ?? '?').charAt(0).toUpperCase());
   const opacity = member.status === 'offline' || member.status === 'sharing_off' ? '0.5' : '1';
+  // The avatar URL is user data: only an https: URL, escaped for the attribute (else initials).
+  const avatar = httpsUrlOrNull(member.avatar_url);
 
   return L.divIcon({
     html: `
@@ -28,8 +31,8 @@ function makeIcon(L: typeof import('leaflet'), member: DashboardMember) {
         box-shadow:0 2px 8px rgba(0,0,0,0.5);
         opacity:${opacity};
         font-family:var(--font-inter),system-ui,sans-serif;
-      ">${member.avatar_url
-        ? `<img src="${member.avatar_url}" style="width:100%;height:100%;border-radius:50%;object-fit:cover" />`
+      ">${avatar
+        ? `<img src="${escapeHtml(avatar)}" alt="" style="width:100%;height:100%;border-radius:50%;object-fit:cover" />`
         : initial
       }</div>`,
     iconSize: [36, 36],
@@ -78,7 +81,7 @@ export default function LiveMap({ members, focusMemberId }: Props) {
       const marker = L.marker([m.location.lat, m.location.lng], { icon })
         .addTo(map)
         .bindPopup(
-          `<b>${m.display_name ?? 'Unknown'}</b><br/>` +
+          `<b>${escapeHtml(m.display_name ?? 'Unknown')}</b><br/>` +
           `${m.status === 'online' ? 'Online' : m.status === 'stale' ? 'Last seen recently' : 'Offline'}` +
           (m.location.battery_level != null
             ? `<br/>Battery: ${Math.round(m.location.battery_level * 100)}%`

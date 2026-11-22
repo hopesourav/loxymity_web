@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useAdmin } from '../_lib/adminContext';
 import type { BeaconToken, GeofenceRow } from '../_lib/types';
 import { MAP_TILE_URL, mapTileOptions } from '../../_lib/mapTiles';
+import { escapeHtml } from '../../_lib/escapeHtml';
 
 type Stats = {
   totalBeacons: number;
@@ -97,7 +98,7 @@ export default function NetworkPage() {
         const lastSeen = b.last_seen_at ? new Date(b.last_seen_at).toLocaleString() : 'Never';
         L.marker([b.lat!, b.lng!], { icon: beaconIcon })
           .addTo(map)
-          .bindPopup(`<b>${b.name}</b><br/>Minor: ${b.minor}<br/>Last seen: ${lastSeen}`);
+          .bindPopup(`<b>${escapeHtml(String(b.name ?? ''))}</b><br/>Minor: ${escapeHtml(String(b.minor))}<br/>Last seen: ${escapeHtml(lastSeen)}`);
         L.circle([b.lat!, b.lng!], {
           radius: 30,
           color: '#5C6BF8',
@@ -116,7 +117,7 @@ export default function NetworkPage() {
           weight: 1.5,
         })
           .addTo(map)
-          .bindPopup(`<b>${g.name}</b><br/>Radius: ${g.radius_m}m<br/>${g.active ? 'Active' : 'Paused'}`);
+          .bindPopup(`<b>${escapeHtml(String(g.name ?? ''))}</b><br/>Radius: ${escapeHtml(String(g.radius_m))}m<br/>${g.active ? 'Active' : 'Paused'}`);
       }
 
       if (withLocation.length > 0) {

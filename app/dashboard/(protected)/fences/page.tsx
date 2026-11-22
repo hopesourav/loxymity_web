@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useDashboard } from '../../_lib/context';
 import type { GeofenceRow } from '../../_lib/types';
 import { MAP_TILE_URL, mapTileOptions } from '../../../_lib/mapTiles';
+import { escapeHtml } from '../../../_lib/escapeHtml';
 import { IconFence, IconPlus, IconEdit, IconTrash, IconSearch, IconX, IconCheck } from '../../_components/Icons';
 
 const MIN_RADIUS = 50;
@@ -80,7 +81,7 @@ export default function FencesPage() {
     fences.forEach(f => {
       const c = L.circle([f.lat, f.lng], {
         radius: f.radius_m, color: '#7C88FF', fillColor: '#7C88FF', fillOpacity: 0.1, weight: 2,
-      }).addTo(map).bindTooltip(f.name);
+      }).addTo(map).bindTooltip(escapeHtml(f.name)); // Leaflet sets tooltip strings as HTML
       circlesRef.current.set(f.id, c);
     });
 

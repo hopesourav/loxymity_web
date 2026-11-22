@@ -21,6 +21,7 @@ import { useEffect, useRef } from 'react';
 import { TIERS, tierSpec } from '../_lib/poiTiers';
 import { labelFor } from '../_lib/poiTiers';
 import { MAP_TILE_URL, mapTileOptions } from '../../../_lib/mapTiles';
+import { escapeHtml } from '../../../_lib/escapeHtml';
 import { TILE_HUE, densityOpacity, formatBytes, tileBounds } from '../_lib/tiles';
 import type {
   Bbox, CoverageMode, CoverageScan, MapMode, NearestPoiHit, PoiRow, TileCoverage,
@@ -395,9 +396,4 @@ export default function PoiMap({
   }, [flyTo?.nonce]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return <div ref={hostRef} className="w-full h-full" />;
-}
-
-function escapeHtml(s: string): string {
-  return s.replace(/[&<>"']/g, (c) =>
-    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!));
 }

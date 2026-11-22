@@ -20,8 +20,10 @@
   X-Robots-Tag: noindex
   Cache-Control: no-store
 
+# The console shows people's data: never keep a copy in the browser or a shared cache.
 /admin/*
   X-Robots-Tag: noindex
+  Cache-Control: no-store
 /dashboard/*
   X-Robots-Tag: noindex
 
