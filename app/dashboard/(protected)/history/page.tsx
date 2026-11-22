@@ -13,12 +13,23 @@ function fmt(iso: string) {
   return new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 }
 
-function todayISO() { return new Date().toISOString().slice(0, 10); }
+/**
+ * Days are the viewer's LOCAL calendar days, like the app's day view. toISOString() gave the UTC
+ * date — before 05:30 in India "today" was still yesterday, and the day was read 00:00–23:59 UTC.
+ */
+function localYmd(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+function todayISO() { return localYmd(new Date()); }
 function minDate(retentionDays: number) {
   const d = new Date();
   d.setDate(d.getDate() - retentionDays);
-  return d.toISOString().slice(0, 10);
+  return localYmd(d);
 }
+
+/** Rows per read (PostgREST answers at most 1000) and how many reads one day may take. */
+const PAGE_ROWS = 720;
+const MAX_PAGES = 10;
 
 export default function HistoryPage() {
   const { supabase, members, profile } = useDashboard();
@@ -31,6 +42,12 @@ export default function HistoryPage() {
   const [points, setPoints]    = useState<LocationHistoryPoint[]>([]);
   const [loading, setLoading]  = useState(false);
   const [error, setError]      = useState('');
+  /** Set when the day had more points than one load reads (MAX_PAGES full pages). */
+  const [capped, setCapped]    = useState(false);
+  /** The member + day the shown points belong to (null = nothing loaded yet). */
+  const [loadedKey, setLoadedKey] = useState<string | null>(null);
+  /** Only the newest Load may write its answer (a slow one must not replace a newer one). */
+  const loadSeq = useRef(0);
 
   // Playback
   const [cursor, setCursor]  = useState(0);   // index into points
@@ -108,20 +125,49 @@ export default function HistoryPage() {
 
   async function fetchHistory() {
     if (!selectedMemberId) { setError('Select a member first.'); return; }
-    setLoading(true); setError(''); setPlaying(false); setCursor(0);
-    const from = `${date}T00:00:00.000Z`;
-    const to   = `${date}T23:59:59.999Z`;
-    const { data, error: err } = await supabase
-      .from('location_history')
-      .select('id,lat,lng,speed_mps,activity_type,recorded_at')
-      .eq('user_id', selectedMemberId)
-      .gte('recorded_at', from)
-      .lte('recorded_at', to)
-      .order('recorded_at', { ascending: true })
-      .limit(1000);
+    const seq = ++loadSeq.current;
+    const memberId = selectedMemberId;
+    const day = date;
+    setLoading(true); setError(''); setPlaying(false); setCursor(0); setCapped(false);
+    // The local day, from its first to its last millisecond, sent as UTC instants.
+    const from = new Date(`${day}T00:00:00`).toISOString();
+    const to   = new Date(`${day}T23:59:59.999`).toISOString();
+
+    // Paged like the app's getHistoryRange: each page continues after the last row it got. One
+    // capped read used to cut the rest of a busy day off without saying so.
+    const out: LocationHistoryPoint[] = [];
+    let after: string | null = null;
+    let full = false;
+    let partialError = '';
+    for (let page = 0; page < MAX_PAGES; page++) {
+      let q = supabase
+        .from('location_history')
+        .select('id,lat,lng,speed_mps,activity_type,recorded_at')
+        .eq('user_id', memberId)
+        .lte('recorded_at', to)
+        .order('recorded_at', { ascending: true })
+        .limit(PAGE_ROWS);
+      q = after ? q.gt('recorded_at', after) : q.gte('recorded_at', from);
+      const { data, error: err } = await q;
+      if (seq !== loadSeq.current) return; // a newer Load took over
+      if (err) {
+        if (page === 0) { setLoading(false); setError(err.message); return; }
+        partialError = err.message;
+        break;
+      }
+      const rows = (data ?? []) as LocationHistoryPoint[];
+      out.push(...rows);
+      full = rows.length === PAGE_ROWS;
+      if (!full) break;
+      // The raw value (no Date round trip, which drops microseconds). As in the app, a second row
+      // with exactly this instant, cut off by the page end, is not read.
+      after = rows[rows.length - 1].recorded_at;
+    }
     setLoading(false);
-    if (err) { setError(err.message); return; }
-    setPoints((data ?? []) as LocationHistoryPoint[]);
+    setPoints(out);
+    setLoadedKey(`${memberId}|${day}`);
+    setCapped(!partialError && full);
+    if (partialError) setError(`Could not read the whole day (${partialError}). Showing the first ${out.length} points.`);
   }
 
   const currentPt = points[cursor];
@@ -170,6 +216,9 @@ export default function HistoryPage() {
           </button>
         </div>
         {error && <p className="text-xs text-brand-danger mt-2">{error}</p>}
+        {capped && points.length > 0 && (
+          <p className="text-xs text-dark-muted mt-2">Showing the first {points.length} points of this day.</p>
+        )}
       </div>
 
       {/* Map */}
@@ -181,7 +230,11 @@ export default function HistoryPage() {
           <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
             <div className="text-center bg-dark-surface/80 backdrop-blur rounded-2xl px-6 py-8 border border-dark-border">
               <IconHistory size={28} className="text-dark-muted mx-auto mb-2" />
-              <p className="text-dark-muted text-sm">Select a member and date, then tap Load.</p>
+              <p className="text-dark-muted text-sm">
+                {loadedKey === `${selectedMemberId}|${date}`
+                  ? 'No points for this day.'
+                  : 'Select a member and date, then tap Load.'}
+              </p>
             </div>
           </div>
         )}
