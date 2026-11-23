@@ -7,11 +7,13 @@ import { MobileMenu } from './MobileMenu';
  * Links are absolute (`/#pricing`) so they work from any page. `back` replaces the section links
  * with one "← Home" link (legal pages read better without them).
  */
+// Pricing and Help are pages of their own (2026-11-23), so every page links to them by URL — a
+// page that answers one question is what search engines and AI assistants quote.
 const LINKS = [
   { href: '/#features', label: 'Features' },
   { href: '/#privacy', label: 'Privacy' },
-  { href: '/#pricing', label: 'Pricing' },
-  { href: '/#faq', label: 'FAQ' },
+  { href: '/pricing/', label: 'Pricing' },
+  { href: '/help/', label: 'Help' },
   { href: '/business/', label: 'Business' },
 ];
 
