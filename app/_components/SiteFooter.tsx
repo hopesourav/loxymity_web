@@ -20,7 +20,7 @@ const COLUMNS: { title: string; links: { href: string; label: string; external?:
   {
     title: 'Product',
     links: [
-      { href: '/#features', label: 'Features' },
+      { href: '/features/', label: 'Features' },
       { href: '/pricing/', label: 'Pricing' },
       { href: '/help/', label: 'Help centre' },
       { href: '/places/suggest/', label: 'Suggest a place name' },

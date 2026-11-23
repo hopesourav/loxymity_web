@@ -10,7 +10,7 @@ import { MobileMenu } from './MobileMenu';
 // Pricing and Help are pages of their own (2026-11-23), so every page links to them by URL — a
 // page that answers one question is what search engines and AI assistants quote.
 const LINKS = [
-  { href: '/#features', label: 'Features' },
+  { href: '/features/', label: 'Features' },
   { href: '/#privacy', label: 'Privacy' },
   { href: '/pricing/', label: 'Pricing' },
   { href: '/help/', label: 'Help' },
