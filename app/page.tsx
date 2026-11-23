@@ -6,7 +6,9 @@ import { SiteFooter } from './_components/SiteFooter';
 import { SiteNav } from './_components/SiteNav';
 import { StoreButtons } from './_components/StoreButtons';
 import { VideoShort } from './_components/VideoShort';
-import { APP_STORE_ID, APP_STORE_URL, PLAY_URL } from './_lib/appLinks';
+import { JsonLd } from './_components/JsonLd';
+import { APP_STORE_ID, APP_STORE_URL } from './_lib/appLinks';
+import { APP_NODE, ORG_ID, ORG_NODE, SITE_URL, SOCIAL_LINKS, WEBSITE_NODE } from './_lib/seo';
 
 /*
  * The landing page. One idea per section, each said ONCE:
@@ -36,38 +38,30 @@ export const metadata: Metadata = {
   ...(APP_STORE_URL ? { itunes: { appId: APP_STORE_ID } } : {}),
 };
 
-const YOUTUBE_CHANNEL = 'https://www.youtube.com/@Loxymity';
+const YOUTUBE_CHANNEL = SOCIAL_LINKS.youtube;
 
-const JSON_LD = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'Organization',
-      '@id': 'https://loxymity.com/#org',
-      name: 'AMSEK RESEARCH LABS LLP',
-      brand: { '@type': 'Brand', name: 'Loxymity' },
-      url: 'https://loxymity.com',
-      logo: 'https://loxymity.com/icon.png',
-      email: 'support@loxymity.com',
-    },
-    {
-      '@type': 'MobileApplication',
-      name: 'Loxymity',
-      url: 'https://loxymity.com',
-      operatingSystem: 'iOS 17 or later, Android 7.0 or later',
-      applicationCategory: 'LifestyleApplication',
-      description: 'Private, real-time location sharing for families and close friends.',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-      publisher: { '@id': 'https://loxymity.com/#org' },
-      sameAs: [APP_STORE_URL, PLAY_URL].filter(Boolean),
-    },
-  ],
+// The embedded Short, described for search engines. uploadDate is YouTube's own (watch page,
+// 2026-11-18 18:01:25 PT) — change it with the video.
+const VIDEO_NODE = {
+  '@type': 'VideoObject',
+  name: 'Stop asking “reached?” — Loxymity',
+  description:
+    'Why families stop texting “reached?”: an alert when someone gets to school, work or home, and everyone on one private map.',
+  thumbnailUrl: `${SITE_URL}/videos/reached-cover.jpg`,
+  uploadDate: '2026-11-18T18:01:25-08:00',
+  embedUrl: 'https://www.youtube.com/embed/MCdmwXiyIdo',
+  url: 'https://www.youtube.com/shorts/MCdmwXiyIdo',
+  publisher: { '@id': ORG_ID },
 };
+
+// The FAQ below is marked up as FAQPage on /help/ (which answers every one of these questions), not
+// here: Google asks for one marked-up copy of a repeated question.
+const JSON_LD_NODES = [ORG_NODE, WEBSITE_NODE, APP_NODE, VIDEO_NODE];
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-dark-bg">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }} />
+      <JsonLd nodes={JSON_LD_NODES} />
       <SiteNav />
 
       {/* ── Hero ────────────────────────────────────────────────────────── */}
@@ -201,7 +195,7 @@ export default function Home() {
             <Tile visual={<SosVisual />} title="An SOS that gets heard"
               body="One press alerts your whole circle with your exact location — on Android it rings through silent mode. See who has seen it and who is on the way; if nobody answers in 3 minutes, everyone is alerted again." />
             <Tile visual={<CrashVisual />} title="Crash check"
-              body="If your phone senses a crash while you’re moving, it asks “Are you OK?”. No answer in 30 seconds, and your circle gets an SOS with your location." />
+              body="If your phone senses a crash while you’re moving, it asks “Are you OK?”. No answer in 30 seconds, and your circle gets an urgent “Possible crash” alert so they can check on you." />
             <Tile visual={<RelayVisual />} title="Gets through with no signal"
               body="Out of coverage or data? Nearby Loxymity phones can carry your encrypted location — or your SOS — until one of them is online. They can’t read what they carry." />
             <Tile visual={<DriveVisual />} badge="Platinum" title="Honest driving reports"
@@ -304,6 +298,9 @@ export default function Home() {
             Platinum yearly for one circle, once per store account, and becomes a paid plan unless you cancel at least
             24 hours before it ends. See the <a href="/terms/#plans" className="underline hover:text-dark-text">plan terms</a>.
           </p>
+          <p className="mt-4 text-center">
+            <a href="/pricing/" className="text-sm font-semibold text-primary-soft hover:underline">Full pricing, in every currency →</a>
+          </p>
         </div>
       </section>
 
@@ -324,6 +321,9 @@ export default function Home() {
               </details>
             ))}
           </div>
+          <p className="mt-8 text-center">
+            <a href="/help/" className="text-sm font-semibold text-primary-soft hover:underline">More answers in the Help centre →</a>
+          </p>
         </div>
       </section>
 
@@ -582,7 +582,7 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: 'What is the crash check?',
-    a: 'If your phone senses a crash while you are moving, Loxymity asks “Are you OK?” with a 30-second countdown. Tap “I’m OK” and nothing is sent; if you don’t answer, your circle gets an SOS with your location. If notifications are off for Loxymity it cannot ask, so it sends straight away. It is on by default and you can turn it off in Settings. It relies on your phone’s motion sensors, so it can miss a crash or react to a hard knock.',
+    a: 'If your phone senses a crash while you are moving, Loxymity asks “Are you OK?” with a 30-second countdown. Tap “I’m OK” and nothing is sent; if you don’t answer, your circle gets an urgent “Possible crash” alert so they can check on you. If notifications are off for Loxymity it cannot ask, so it sends straight away. It is on by default and you can turn it off in Settings. It relies on your phone’s motion sensors, so it can miss a crash or react to a hard knock.',
   },
   {
     q: 'How does it work when my phone has no signal?',

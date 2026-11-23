@@ -3,6 +3,7 @@ import BusinessEnquiryForm from '../_components/BusinessEnquiryForm';
 import { SiteFooter } from '../_components/SiteFooter';
 import { SiteNav } from '../_components/SiteNav';
 import { BUSINESS_EMAIL } from '../_lib/business';
+import { pageMeta } from '../_lib/seo';
 
 /**
  * loxymity.com/business/ — "For businesses" (business review 2026-10-19, plan §6 C).
@@ -13,11 +14,13 @@ import { BUSINESS_EMAIL } from '../_lib/business';
  * page sells safety the person controls and partnerships under a signed agreement — never tracking
  * employees. Do not promise BS 8484, a monitoring centre or legal compliance until one exists.
  */
-export const metadata: Metadata = {
+// pageMeta adds the canonical URL and this page's own social preview (it used to share as the home page).
+export const metadata: Metadata = pageMeta({
   title: 'Loxymity for organisations — safety people control',
   description:
     'Lone-worker safety, an employee and family safety benefit, care organisations, and partnerships with insurers and banks. Location is shared by the person, for their safety — never sold. Talk to us.',
-};
+  path: '/business/',
+});
 
 const OFFERS = [
   {

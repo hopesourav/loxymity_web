@@ -1,0 +1,38 @@
+# Loxymity
+
+> Loxymity is a private, real-time location-sharing app for families and close friends, on iPhone (iOS 17 or later) and Android (7.0 or later). People in a private, invite-only circle see each other on a live map, get alerts when someone arrives at or leaves a saved place, and can send an SOS to the whole circle. Free to start. Your location is never sold, and there are no ads. Made by AMSEK RESEARCH LABS LLP, West Bengal, India.
+
+Key facts:
+
+- Free plan: 2 circles of up to 5 people, 2 places with arrival and leave alerts, 2 days of history, SOS, crash check, chat and share links.
+- Paid plans: Gold, Platinum and Infinite. One person pays and everyone in the covered circle gets the plan; a plan covers 1 to 3 circles; never priced per person. Plans are bought in the app through the App Store or Google Play, not on the website. Current prices: https://loxymity.com/pricing/
+- Safety: an SOS alerts the whole circle with the sender's exact location (on Android it rings through silent mode); a crash check asks "Are you OK?" for 30 seconds and, with no answer, sends the circle an urgent "Possible crash" alert; nearby Loxymity phones can carry a location or an SOS over Bluetooth when there is no signal.
+- Also: driving reports (Platinum and Infinite), circle chat, voice and video calls, trip sharing, share links for people without the app, a family schedule, and asking where someone is in WhatsApp.
+- Privacy: never sold, no ads. Data is encrypted in transit and on the phone, but Loxymity is not end-to-end encrypted. In-app calls are not recorded. Loxymity is not an emergency service.
+- Language: English.
+
+## Pages
+
+- [Home](https://loxymity.com/): what Loxymity does, features, privacy and the main FAQ
+- [Pricing](https://loxymity.com/pricing/): plans and prices in US dollars, Indian rupees, euros and British pounds
+- [Help centre](https://loxymity.com/help/): answers about circles, location, places, SOS, crash check, driving, WhatsApp and privacy
+- [About](https://loxymity.com/about/): who makes Loxymity and what it stands for
+- [For organisations](https://loxymity.com/business/): lone-worker safety, family-safety benefits, care organisations and partnerships
+
+## Policies
+
+- [Privacy Policy](https://loxymity.com/privacy/)
+- [Terms of Service](https://loxymity.com/terms/)
+- [Delete your account](https://loxymity.com/delete-account/)
+
+## Get the app
+
+- [App Store](https://apps.apple.com/app/loxymity-family-friends-map/id6818562041)
+- [Google Play](https://play.google.com/store/apps/details?id=com.amsekresearch.loxymity)
+
+## Optional
+
+- [YouTube](https://www.youtube.com/@Loxymity)
+- [Instagram](https://www.instagram.com/loxymity/)
+- [Facebook](https://www.facebook.com/loxymity)
+- Contact: support@loxymity.com (support), business@loxymity.com (organisations)
