@@ -108,6 +108,7 @@ const GROUPS: Group[] = [
         id: 'battery',
         q: 'Will Loxymity drain my battery?',
         text: 'It is designed not to. There is no fixed polling interval: your phone reports roughly once a minute while you move and about every ten minutes when you are still, and slows down further on low battery unless you are charging or driving. Live mode, an active trip or an SOS report faster for a short time, because that is when it matters.',
+        more: { href: '/features/live-location-sharing/', label: 'How live location sharing works' },
       },
       {
         id: 'old-location',
@@ -144,6 +145,7 @@ const GROUPS: Group[] = [
         id: 'what-is-a-place',
         q: 'What is a place?',
         text: 'A saved area on the map, such as Home, School or Work. Loxymity tells your circle when someone arrives at or leaves it, so nobody has to text “reached?”. The free plan includes 2 places; Gold 10, Platinum 50 and Infinite 100. Places come with the plan of the person who pays.',
+        more: { href: '/features/place-alerts/', label: 'How place alerts work' },
       },
       {
         id: 'school-or-work',
@@ -175,16 +177,19 @@ const GROUPS: Group[] = [
         id: 'sos',
         q: 'What happens when someone sends an SOS?',
         text: 'Everyone in the circle gets an urgent alert with the sender’s exact location, even if the app is closed. On Android it uses an alarm channel that rings through silent mode; on iPhone it is a time-sensitive alert that breaks through Focus, but the ring/silent switch can still silence it. Members tap “On my way”, call, or open the map, and the sender sees who has seen it. If nobody responds within three minutes, the circle is alerted again. Loxymity is not an emergency service — always call your local emergency number too.',
+        more: { href: '/features/sos/', label: 'SOS and crash check' },
       },
       {
         id: 'crash-check',
         q: 'What is the crash check?',
         text: 'If your phone senses a crash while you are moving, Loxymity asks “Are you OK?” with a 30-second countdown. Tap “I’m OK” and nothing is sent; if you don’t answer, your circle gets an urgent “Possible crash” alert so they can check on you. If notifications are off for Loxymity it cannot ask, so it sends straight away. It is on by default and you can turn it off in Settings. It relies on your phone’s motion sensors, so it can miss a crash or react to a hard knock.',
+        more: { href: '/features/sos/', label: 'SOS and crash check' },
       },
       {
         id: 'no-signal',
         q: 'How does it work when my phone has no signal?',
         text: 'Other Loxymity phones nearby can carry your location — or your SOS — over Bluetooth until one of them gets online. The phone carrying it cannot read it; our server opens it and delivers it only to your circles. It needs another Loxymity phone close by, works best between Android phones, and while backgrounded an iPhone can only be found by other iPhones. You can turn it off in Settings.',
+        more: { href: '/features/offline-location-sharing/', label: 'How the no-signal relay works' },
       },
       {
         id: 'emergency-service',
@@ -206,6 +211,7 @@ const GROUPS: Group[] = [
         id: 'driving-reports',
         q: 'How do driving reports work?',
         text: 'With Platinum or Infinite, for everyone in a covered circle, Loxymity notices drives by itself and keeps a report of each one: the route, distance, top speed and time stuck in traffic kept apart from time moving, plus a road-smoothness reading. Speeds, scores and smoothness are estimates for your own information and must not be used for insurance, work or legal decisions.',
+        more: { href: '/features/driving-reports/', label: 'How driving reports work' },
       },
       {
         id: 'drive-sharing',
@@ -243,6 +249,7 @@ const GROUPS: Group[] = [
         id: 'whatsapp',
         q: 'Can I ask where someone is from WhatsApp?',
         text: 'Yes. Link WhatsApp in the app (Settings → Integrations), then send a question such as “Where is Mum?” and get the answer from your circle’s live map. It never answers about someone in ghost mode, someone who has paused sharing, or someone either of you has blocked.',
+        more: { href: '/features/whatsapp-location/', label: 'Asking in WhatsApp' },
       },
       {
         id: 'employees',

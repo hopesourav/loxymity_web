@@ -19,6 +19,18 @@ Key facts:
 - [About](https://loxymity.com/about/): who makes Loxymity and what it stands for
 - [For organisations](https://loxymity.com/business/): lone-worker safety, family-safety benefits, care organisations and partnerships
 
+## Features
+
+- [All features](https://loxymity.com/features/)
+- [Live location sharing](https://loxymity.com/features/live-location-sharing/): the private live map, place names, day timeline and replay, LIVE mode
+- [Place alerts](https://loxymity.com/features/place-alerts/): arrival and leave alerts for home, school and work
+- [SOS and crash check](https://loxymity.com/features/sos/): an SOS the whole circle hears; a crash check that asks "Are you OK?" first
+- [No-signal relay](https://loxymity.com/features/offline-location-sharing/): location and SOS carried over Bluetooth by nearby Loxymity phones
+- [Driving reports](https://loxymity.com/features/driving-reports/): route, distance, top speed, traffic kept apart, road smoothness (Platinum and Infinite)
+- [Ask in WhatsApp](https://loxymity.com/features/whatsapp-location/): ask where someone is in plain words
+- [Trips, flights and share links](https://loxymity.com/features/trip-sharing/): live ETA, flights on the family map, live links for people without the app
+- [Weather and official alerts](https://loxymity.com/features/official-alerts/): official warnings matched to where your circle is
+
 ## Policies
 
 - [Privacy Policy](https://loxymity.com/privacy/)

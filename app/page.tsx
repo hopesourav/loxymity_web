@@ -190,19 +190,23 @@ export default function Home() {
           {/* Old links to /#safety (the previous page had a Safety section) land on the safety tiles. */}
           <span id="safety" className="block scroll-mt-24" aria-hidden="true" />
           <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            <Tile className="md:col-span-2 lg:row-span-2" visualClass="min-h-[300px]" visual={<MapVisual />} title="A live map, and places that tell you"
+            <Tile className="md:col-span-2 lg:row-span-2" visualClass="min-h-[300px]" visual={<MapVisual />} href="/features/place-alerts/" title="A live map, and places that tell you"
               body="See everyone who shares with you, updated as they move. Save home, school or work and get an alert when someone arrives or leaves — 2 places free, up to 100 with a plan." />
-            <Tile visual={<SosVisual />} title="An SOS that gets heard"
+            <Tile visual={<SosVisual />} href="/features/sos/" title="An SOS that gets heard"
               body="One press alerts your whole circle with your exact location — on Android it rings through silent mode. See who has seen it and who is on the way; if nobody answers in 3 minutes, everyone is alerted again." />
-            <Tile visual={<CrashVisual />} title="Crash check"
+            <Tile visual={<CrashVisual />} href="/features/sos/" title="Crash check"
               body="If your phone senses a crash while you’re moving, it asks “Are you OK?”. No answer in 30 seconds, and your circle gets an urgent “Possible crash” alert so they can check on you." />
-            <Tile visual={<RelayVisual />} title="Gets through with no signal"
+            <Tile visual={<RelayVisual />} href="/features/offline-location-sharing/" title="Gets through with no signal"
               body="Out of coverage or data? Nearby Loxymity phones can carry your encrypted location — or your SOS — until one of them is online. They can’t read what they carry." />
-            <Tile visual={<DriveVisual />} badge="Platinum" title="Honest driving reports"
+            <Tile visual={<DriveVisual />} badge="Platinum" href="/features/driving-reports/" title="Honest driving reports"
               body="Every drive scored, with time stuck in traffic kept apart from time moving — so a jam never costs the driver. Plus a road-smoothness reading." />
             <Tile visual={<ChatVisual />} title="Chat and calls, built in"
               body="Circle chat, private messages, and “On my way” or “Arrived safely” in one tap. Call anyone in your circle by name — voice with any plan, video from Platinum." />
           </div>
+
+          <p className="mt-8 text-center">
+            <a href="/features/" className="text-sm font-semibold text-primary-soft hover:underline">See every feature →</a>
+          </p>
 
           <div className="reveal mt-10">
             <p className="text-center text-sm font-medium text-dark-text">Also included</p>
@@ -385,8 +389,9 @@ function SectionHead({ eyebrow, title, sub }: { eyebrow: string; title: React.Re
 
 // `reveal` (an animation that owns `transform`) sits on the wrapper and `lift` (a hover transform)
 // on the card inside it — on one element the animation's fill would cancel the hover lift.
-function Tile({ title, body, visual, badge, className = '', visualClass = 'min-h-[170px]' }: {
-  title: string; body: string; visual: React.ReactNode; badge?: string; className?: string; visualClass?: string;
+// `href` = the feature's own page (/features/…), linked under the text.
+function Tile({ title, body, visual, badge, href, className = '', visualClass = 'min-h-[170px]' }: {
+  title: string; body: string; visual: React.ReactNode; badge?: string; href?: string; className?: string; visualClass?: string;
 }) {
   return (
     <div className={`reveal ${className}`}>
@@ -402,6 +407,11 @@ function Tile({ title, body, visual, badge, className = '', visualClass = 'min-h
             )}
           </div>
           <p className="mt-2 text-sm leading-relaxed text-dark-muted">{body}</p>
+          {href && (
+            <a href={href} className="mt-3 inline-block text-sm font-semibold text-primary-soft hover:underline">
+              How it works<span className="sr-only">: {title}</span> →
+            </a>
+          )}
         </div>
       </div>
     </div>

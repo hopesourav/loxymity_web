@@ -11,6 +11,8 @@ type Slide = {
   iconPath: string;
   iconColor: string;
   iconBg: string;
+  /** The feature's own page (/features/…). */
+  href: string;
 };
 
 // "More than a dot on a map": the smart extras. Deliberately NOTHING that the feature bento on the
@@ -21,6 +23,7 @@ type Slide = {
 const SLIDES: Slide[] = [
   {
     tag: 'Ask in WhatsApp',
+    href: '/features/whatsapp-location/',
     title: '“Where’s mum?” — asked in WhatsApp',
     desc: 'Link your number once, then ask in plain words. You get the place, how long ago and the battery — without opening the app. Opt-in, and it respects ghost mode, paused sharing and blocks.',
     iconPath: 'M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z',
@@ -28,6 +31,7 @@ const SLIDES: Slide[] = [
   },
   {
     tag: 'Trips',
+    href: '/features/trip-sharing/',
     title: 'Share the trip, skip the texts',
     desc: 'Start a trip and your circle sees a live ETA on the map, then gets one “arrived” alert. No more “are you there yet?”.',
     iconPath: 'M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z',
@@ -35,6 +39,7 @@ const SLIDES: Slide[] = [
   },
   {
     tag: 'Flights',
+    href: '/features/trip-sharing/',
     title: 'Watch their flight come in',
     desc: 'Add a flight number and the plane appears on the same map as everyone else. The whole circle hears when it lands.',
     iconPath: 'M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5',
@@ -42,6 +47,7 @@ const SLIDES: Slide[] = [
   },
   {
     tag: 'Official alerts',
+    href: '/features/official-alerts/',
     title: 'Government warnings, filtered to your people',
     desc: 'Cyclone, flood, heat and storm warnings from the official feeds in India and the US, matched to where your circle actually is — with the authority’s own instructions, never rewritten.',
     iconPath: 'M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z',
@@ -49,6 +55,7 @@ const SLIDES: Slide[] = [
   },
   {
     tag: 'Place names',
+    href: '/features/live-location-sharing/',
     title: 'Names you recognise — and some it never guesses',
     desc: '“Near Victoria Memorial”, not coordinates. And Loxymity is built never to guess that someone is at a hospital, a place of worship or a school — only a place your circle saved itself can say that.',
     iconPath: 'M15 10.5a3 3 0 11-6 0 3 3 0 016 0z M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z',
@@ -141,6 +148,14 @@ export function DifferentiatorCarousel() {
                 <span className="eyebrow mb-4">{s.tag}</span>
                 <h3 className="text-2xl md:text-3xl font-semibold tracking-tight text-dark-text mb-4 text-balance">{s.title}</h3>
                 <p className="text-dark-muted text-base md:text-lg leading-relaxed">{s.desc}</p>
+                {/* Out of the tab order while its slide is hidden (the slide is aria-hidden). */}
+                <a
+                  href={s.href}
+                  tabIndex={i === index ? 0 : -1}
+                  className="mt-5 text-sm font-semibold text-primary-soft hover:underline"
+                >
+                  How it works<span className="sr-only">: {s.tag}</span> →
+                </a>
               </div>
             </div>
           ))}

@@ -94,15 +94,22 @@ export const APP_NODE = {
   sameAs: [APP_STORE_URL, PLAY_URL].filter(Boolean),
 };
 
-/** schema.org BreadcrumbList for a page one level below the home page. */
-export function breadcrumb(name: string, path: string) {
+/** schema.org BreadcrumbList: Home, then each level given (paths start and end with a slash). */
+export function breadcrumbTrail(levels: { name: string; path: string }[]) {
   return {
     '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
-      { '@type': 'ListItem', position: 2, name, item: `${SITE_URL}${path}` },
-    ],
+    itemListElement: [{ name: 'Home', path: '/' }, ...levels].map((l, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: l.name,
+      item: `${SITE_URL}${l.path}`,
+    })),
   };
+}
+
+/** schema.org BreadcrumbList for a page one level below the home page. */
+export function breadcrumb(name: string, path: string) {
+  return breadcrumbTrail([{ name, path }]);
 }
 
 /** schema.org FAQPage from question/answer pairs (answers as plain text). */
